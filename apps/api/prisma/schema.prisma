@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Content {
+  contentId         String   @id
+  merchantId        String
+  merchantName      String
+  productId         String
+  productTitle      String
+  title             String
+  copy              String
+  videoUrl          String
+  sellingPointsJson String
+  targetAudience    String
+  version           Int
+  status            String
+  submittedAt       DateTime
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  reviews           Review[]
+
+  @@index([status, submittedAt])
+  @@index([merchantId])
+}
+
+model Review {
+  reviewId       String   @id
+  contentId      String
+  decision       String
+  reasonCode     String?
+  comment        String?
+  reviewerId     String
+  reviewerName   String
+  reviewedAt     DateTime @default(now())
+  contentVersion Int
+  previousStatus String
+  nextStatus     String
+  content        Content  @relation(fields: [contentId], references: [contentId], onDelete: Restrict)
+
+  @@unique([contentId, contentVersion])
+  @@index([contentId, reviewedAt])
+}
+
