@@ -52,8 +52,6 @@ importers:
         specifier: 3.2.4
         version: 3.2.4(@types/node@24.10.1)(jiti@2.7.0)(tsx@4.20.6)
 
-  apps/mock-api: {}
-
   apps/web:
     dependencies:
       '@wotao/contracts':
