@@ -4,11 +4,14 @@
   "version": "0.1.0",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./openapi": "./openapi.json",
+    "./runtime": "./src/runtime.mjs"
   },
   "scripts": {
     "build": "tsc --noEmit",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check:openapi": "node ../../scripts/validate-contract.mjs"
   },
   "devDependencies": {
     "typescript": "5.9.3"

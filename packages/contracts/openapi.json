@@ -1,0 +1,1264 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "我淘淘最小 MVP 公共契约",
+    "version": "1.0.0",
+    "description": "T0 公共契约。所有字段使用 camelCase，时间使用 ISO 8601 UTC，业务错误使用稳定 errorCode。"
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:4010",
+      "description": "本地模拟服务"
+    }
+  ],
+  "tags": [
+    { "name": "Product", "description": "商家商品" },
+    { "name": "Content", "description": "AI 内容" },
+    { "name": "Review", "description": "运营审核" },
+    { "name": "Publishing", "description": "授权账号与发布" },
+    { "name": "Storefront", "description": "公开浏览" },
+    { "name": "Inquiry", "description": "询盘与来源追踪" }
+  ],
+  "paths": {
+    "/products": {
+      "post": {
+        "tags": ["Product"],
+        "summary": "创建商品",
+        "description": "商家创建自己的商品。服务端生成全局唯一 productId。",
+        "x-roles": ["MERCHANT"],
+        "parameters": [
+          { "$ref": "#/components/parameters/RoleHeader" },
+          { "$ref": "#/components/parameters/MerchantHeader" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateProductInput" },
+              "example": {
+                "name": "便携式咖啡机",
+                "description": "适合差旅使用的便携咖啡机",
+                "imageUrls": ["https://example.test/products/coffee-maker.jpg"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "创建成功",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProductResponse" },
+                "example": {
+                  "data": {
+                    "productId": "product_01JXYZ",
+                    "merchantId": "merchant_demo",
+                    "name": "便携式咖啡机",
+                    "description": "适合差旅使用的便携咖啡机",
+                    "imageUrls": ["https://example.test/products/coffee-maker.jpg"],
+                    "isPublic": false,
+                    "createdAt": "2026-07-30T04:00:00Z",
+                    "updatedAt": "2026-07-30T04:00:00Z"
+                  },
+                  "requestId": "req_example"
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "403": { "$ref": "#/components/responses/Forbidden" }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "tags": ["Product"],
+        "summary": "获取商品详情",
+        "description": "商家只能访问自己的商品；运营可只读；买家只能访问公开商品。",
+        "x-roles": ["MERCHANT", "OPERATOR", "BUYER"],
+        "parameters": [
+          { "$ref": "#/components/parameters/IdPath" },
+          { "$ref": "#/components/parameters/RoleHeader" },
+          { "$ref": "#/components/parameters/OptionalMerchantHeader" }
+        ],
+        "responses": {
+          "200": {
+            "description": "商品详情",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProductResponse" },
+                "example": {
+                  "data": {
+                    "productId": "product_demo_001",
+                    "merchantId": "merchant_demo",
+                    "name": "便携式咖啡机",
+                    "description": "适合差旅使用的便携咖啡机",
+                    "imageUrls": ["https://example.test/products/coffee-maker.jpg"],
+                    "isPublic": true,
+                    "createdAt": "2026-07-30T04:00:00Z",
+                    "updatedAt": "2026-07-30T04:00:00Z"
+                  },
+                  "requestId": "req_example"
+                }
+              }
+            }
+          },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/contents/generate": {
+      "post": {
+        "tags": ["Content"],
+        "summary": "基于商品生成内容",
+        "description": "MVP 模拟服务立即返回 GENERATED 内容。",
+        "x-roles": ["MERCHANT"],
+        "parameters": [
+          { "$ref": "#/components/parameters/RoleHeader" },
+          { "$ref": "#/components/parameters/MerchantHeader" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/GenerateContentInput" },
+              "example": { "productId": "product_demo_001" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "生成成功",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ContentResponse" },
+                "example": {
+                  "data": {
+                    "contentId": "content_01JXYZ",
+                    "merchantId": "merchant_demo",
+                    "productId": "product_demo_001",
+                    "caption": "随时随地，喝一杯现磨咖啡。",
+                    "videoUrl": "https://example.test/content/demo.mp4",
+                    "status": "GENERATED",
+                    "createdAt": "2026-07-30T04:00:00Z",
+                    "updatedAt": "2026-07-30T04:00:00Z"
+                  },
+                  "requestId": "req_example"
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/contents/{id}": {
+      "put": {
+        "tags": ["Content"],
+        "summary": "修改内容",
+        "description": "商家只能修改自己的 GENERATED 或 REJECTED 内容。",
+        "x-roles": ["MERCHANT"],
+        "parameters": [
+          { "$ref": "#/components/parameters/IdPath" },
+          { "$ref": "#/components/parameters/RoleHeader" },
+          { "$ref": "#/components/parameters/MerchantHeader" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateContentInput" },
+              "example": { "caption": "差旅也能喝到现磨咖啡。" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "修改成功",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ContentResponse" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "409": { "$ref": "#/components/responses/InvalidState" }
+        }
+      }
+    },
+    "/contents/{id}/submit-review": {
+      "post": {
+        "tags": ["Content"],
+        "summary": "提交审核",
+        "description": "GENERATED 或 REJECTED 内容进入 PENDING_REVIEW。",
+        "x-roles": ["MERCHANT"],
+        "parameters": [
+          { "$ref": "#/components/parameters/IdPath" },
+          { "$ref": "#/components/parameters/RoleHeader" },
+          { "$ref": "#/components/parameters/MerchantHeader" }
+        ],
+        "responses": {
+          "200": {
+            "description": "提交成功",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ContentResponse" }
+              }
+            }
+          },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "409": { "$ref": "#/components/responses/InvalidState" }
+        }
+      }
+    },
+    "/reviews/pending": {
+      "get": {
+        "tags": ["Review"],
+        "summary": "查询待审核内容",
+        "description": "仅运营人员可访问。",
+        "x-roles": ["OPERATOR"],
+        "parameters": [
+          { "$ref": "#/components/parameters/RoleHeader" },
+          { "$ref": "#/components/parameters/Page" },
+          { "$ref": "#/components/parameters/PageSize" }
+        ],
+        "responses": {
+          "200": {
+            "description": "待审核分页列表",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ContentPageResponse" },
+                "example": {
+                  "data": {
+                    "items": [],
+                    "page": 1,
+                    "pageSize": 20,
+                    "total": 0
+                  },
+                  "requestId": "req_example"
+                }
+              }
+            }
+          },
+          "403": { "$ref": "#/components/responses/Forbidden" }
+        }
+      }
+    },
+    "/reviews/{id}/approve": {
+      "post": {
+        "tags": ["Review"],
+        "summary": "审核通过",
+        "description": "仅运营人员可将 PENDING_REVIEW 内容变更为 APPROVED，并记录审计。",
+        "x-roles": ["OPERATOR"],
+        "parameters": [
+          { "$ref": "#/components/parameters/IdPath" },
+          { "$ref": "#/components/parameters/RoleHeader" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ApproveReviewInput" },
+              "example": {
+                "contentVersion": 1,
+                "comment": "素材和表述符合要求"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "审核通过",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ReviewDecisionResponse" }
+              }
+            }
+          },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "409": { "$ref": "#/components/responses/InvalidState" }
+        }
+      }
+    },
+    "/reviews/{id}/reject": {
+      "post": {
+        "tags": ["Review"],
+        "summary": "审核驳回",
+        "description": "仅运营人员可驳回 PENDING_REVIEW 内容；reason 必填。",
+        "x-roles": ["OPERATOR"],
+        "parameters": [
+          { "$ref": "#/components/parameters/IdPath" },
+          { "$ref": "#/components/parameters/RoleHeader" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/RejectReviewInput" },
+              "example": {
+                "contentVersion": 1,
+                "reasonCode": "INCOMPLETE_INFORMATION",
+                "comment": "画面中的商品信息不完整"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "审核驳回",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ReviewDecisionResponse" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "409": { "$ref": "#/components/responses/InvalidState" }
+        }
+      }
+    },
+    "/authorized-accounts": {
+      "get": {
+        "tags": ["Publishing"],
+        "summary": "查询授权账号",
+        "description": "仅运营人员可访问；响应不包含令牌、Cookie、密码或内部凭证。",
+        "x-roles": ["OPERATOR"],
+        "parameters": [
+          { "$ref": "#/components/parameters/RoleHeader" },
+          {
+            "name": "channel",
+            "in": "query",
+            "schema": { "$ref": "#/components/schemas/Channel" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "脱敏授权账号列表",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AccountListResponse" },
+                "example": {
+                  "data": [
+                    {
+                      "accountId": "account_douyin_demo",
+                      "channel": "DOUYIN",
+                      "displayName": "我淘淘演示账号",
+                      "available": true
+                    }
+                  ],
+                  "requestId": "req_example"
+                }
+              }
+            }
+          },
+          "403": { "$ref": "#/components/responses/Forbidden" }
+        }
+      }
+    },
+    "/publications": {
+      "post": {
+        "tags": ["Publishing"],
+        "summary": "创建发布任务",
+        "description": "仅 APPROVED 内容可发布。同一 idempotencyKey 重复请求返回原记录，不产生重复发布。",
+        "x-roles": ["OPERATOR"],
+        "parameters": [
+          { "$ref": "#/components/parameters/RoleHeader" },
+          { "$ref": "#/components/parameters/IdempotencyKeyHeader" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreatePublicationInput" },
+              "examples": {
+                "success": {
+                  "value": {
+                    "contentId": "content_demo_approved",
+                    "accountId": "account_douyin_demo",
+                    "channel": "DOUYIN",
+                    "scenario": "SUCCESS"
+                  }
+                },
+                "failure": {
+                  "value": {
+                    "contentId": "content_demo_approved",
+                    "accountId": "account_xhs_demo",
+                    "channel": "XIAOHONGSHU",
+                    "scenario": "FAILURE"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "创建成功",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PublicationResponse" }
+              }
+            }
+          },
+          "200": {
+            "description": "幂等重放，返回原发布记录",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PublicationResponse" }
+              }
+            }
+          },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "409": { "$ref": "#/components/responses/InvalidState" }
+        }
+      }
+    },
+    "/publications/callback": {
+      "post": {
+        "tags": ["Publishing"],
+        "summary": "接收发布回调",
+        "description": "校验 x-callback-signature；callbackEventId 用于回调去重和追踪。",
+        "x-roles": ["PUBLISHING_SERVICE"],
+        "parameters": [
+          {
+            "name": "x-callback-signature",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "mock-valid-signature"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/PublicationCallbackInput" },
+              "example": {
+                "callbackEventId": "callback_demo_001",
+                "publicationId": "publication_demo_processing",
+                "status": "SUCCEEDED",
+                "externalWorkId": "douyin_work_001",
+                "externalWorkUrl": "https://example.test/douyin/work/001"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "处理成功；重复事件返回同一结果",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PublicationResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/publications/{id}/retry": {
+      "post": {
+        "tags": ["Publishing"],
+        "summary": "人工重试发布",
+        "description": "仅运营人员可重试 FAILED 记录，并记录操作者及前后状态。",
+        "x-roles": ["OPERATOR"],
+        "parameters": [
+          { "$ref": "#/components/parameters/IdPath" },
+          { "$ref": "#/components/parameters/RoleHeader" }
+        ],
+        "responses": {
+          "200": {
+            "description": "已重新入队",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PublicationResponse" }
+              }
+            }
+          },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "409": { "$ref": "#/components/responses/InvalidState" }
+        }
+      }
+    },
+    "/feed": {
+      "get": {
+        "tags": ["Storefront"],
+        "summary": "公开视频商品流",
+        "description": "无需登录，只返回发布成功且商品公开的内容。",
+        "x-roles": ["PUBLIC"],
+        "parameters": [
+          { "$ref": "#/components/parameters/Page" },
+          { "$ref": "#/components/parameters/PageSize" }
+        ],
+        "responses": {
+          "200": {
+            "description": "公开视频流",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/FeedPageResponse" },
+                "example": {
+                  "data": {
+                    "items": [],
+                    "page": 1,
+                    "pageSize": 20,
+                    "total": 0
+                  },
+                  "requestId": "req_example"
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" }
+        }
+      }
+    },
+    "/storefront/products/{id}": {
+      "get": {
+        "tags": ["Storefront"],
+        "summary": "公开商品详情",
+        "description": "无需登录，只返回公开商品及企业基本信息。",
+        "x-roles": ["PUBLIC"],
+        "parameters": [
+          { "$ref": "#/components/parameters/IdPath" }
+        ],
+        "responses": {
+          "200": {
+            "description": "公开商品详情",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/StorefrontProductResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/inquiries": {
+      "post": {
+        "tags": ["Inquiry"],
+        "summary": "提交询盘",
+        "description": "买家提交询盘。服务端根据 publicationId 校验并保存完整来源链路。",
+        "x-roles": ["BUYER"],
+        "parameters": [
+          { "$ref": "#/components/parameters/RoleHeader" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateInquiryInput" },
+              "example": {
+                "publicationId": "publication_demo_success",
+                "buyerName": "采购张先生",
+                "contact": "138****0000",
+                "message": "希望了解 500 台的报价"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "询盘创建成功",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/InquiryResponse" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/merchant/inquiries": {
+      "get": {
+        "tags": ["Inquiry"],
+        "summary": "查询商家询盘",
+        "description": "商家只可查询自己的询盘；运营可指定 merchantId 只读查询。",
+        "x-roles": ["MERCHANT", "OPERATOR"],
+        "parameters": [
+          { "$ref": "#/components/parameters/RoleHeader" },
+          { "$ref": "#/components/parameters/MerchantHeader" },
+          { "$ref": "#/components/parameters/Page" },
+          { "$ref": "#/components/parameters/PageSize" }
+        ],
+        "responses": {
+          "200": {
+            "description": "询盘分页列表",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/InquiryPageResponse" }
+              }
+            }
+          },
+          "403": { "$ref": "#/components/responses/Forbidden" }
+        }
+      }
+    },
+    "/inquiries/{id}/status": {
+      "patch": {
+        "tags": ["Inquiry"],
+        "summary": "更新询盘状态",
+        "description": "仅归属商家可按允许的状态机更新，运营在 MVP 内只读。",
+        "x-roles": ["MERCHANT"],
+        "parameters": [
+          { "$ref": "#/components/parameters/IdPath" },
+          { "$ref": "#/components/parameters/RoleHeader" },
+          { "$ref": "#/components/parameters/MerchantHeader" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateInquiryStatusInput" },
+              "example": { "status": "CONTACTED" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "状态更新成功",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/InquiryResponse" }
+              }
+            }
+          },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "409": { "$ref": "#/components/responses/InvalidState" }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "IdPath": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" }
+      },
+      "RoleHeader": {
+        "name": "x-role",
+        "in": "header",
+        "required": true,
+        "schema": { "$ref": "#/components/schemas/Role" }
+      },
+      "MerchantHeader": {
+        "name": "x-merchant-id",
+        "in": "header",
+        "required": true,
+        "schema": { "type": "string" }
+      },
+      "OptionalMerchantHeader": {
+        "name": "x-merchant-id",
+        "in": "header",
+        "required": false,
+        "schema": { "type": "string" }
+      },
+      "IdempotencyKeyHeader": {
+        "name": "idempotency-key",
+        "in": "header",
+        "required": true,
+        "schema": { "type": "string", "minLength": 8, "maxLength": 128 }
+      },
+      "Page": {
+        "name": "page",
+        "in": "query",
+        "schema": { "type": "integer", "minimum": 1, "default": 1 }
+      },
+      "PageSize": {
+        "name": "pageSize",
+        "in": "query",
+        "schema": { "type": "integer", "minimum": 1, "maximum": 100, "default": 20 }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "请求参数错误",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+            "example": {
+              "errorCode": "VALIDATION_ERROR",
+              "message": "请求参数不完整",
+              "requestId": "req_example",
+              "details": { "field": "name" }
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "身份或回调签名无效",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+            "example": {
+              "errorCode": "INVALID_CALLBACK_SIGNATURE",
+              "message": "回调签名无效",
+              "requestId": "req_example",
+              "details": {}
+            }
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "角色无权访问或商家数据越权",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+            "example": {
+              "errorCode": "FORBIDDEN",
+              "message": "无权执行此操作",
+              "requestId": "req_example",
+              "details": {}
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "资源不存在",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+            "example": {
+              "errorCode": "RESOURCE_NOT_FOUND",
+              "message": "资源不存在",
+              "requestId": "req_example",
+              "details": {}
+            }
+          }
+        }
+      },
+      "InvalidState": {
+        "description": "状态不允许执行该操作",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+            "example": {
+              "errorCode": "INVALID_STATE_TRANSITION",
+              "message": "当前状态不允许执行此操作",
+              "requestId": "req_example",
+              "details": { "currentStatus": "APPROVED" }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "ContentStatus": {
+        "type": "string",
+        "enum": ["DRAFT", "GENERATED", "PENDING_REVIEW", "APPROVED", "REJECTED"]
+      },
+      "PublicationStatus": {
+        "type": "string",
+        "enum": ["QUEUED", "PUBLISHING", "SUCCEEDED", "FAILED"]
+      },
+      "InquiryStatus": {
+        "type": "string",
+        "enum": ["NEW", "CONTACTED", "QUOTED", "WON", "LOST"]
+      },
+      "Channel": {
+        "type": "string",
+        "enum": ["DOUYIN", "XIAOHONGSHU"]
+      },
+      "Role": {
+        "type": "string",
+        "enum": ["MERCHANT", "OPERATOR", "BUYER"]
+      },
+      "MockPublicationScenario": {
+        "type": "string",
+        "enum": ["SUCCESS", "PROCESSING", "FAILURE"]
+      },
+      "AuditFields": {
+        "type": "object",
+        "required": ["createdAt", "updatedAt"],
+        "properties": {
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" },
+          "createdBy": { "type": "string" },
+          "updatedBy": { "type": "string" }
+        }
+      },
+      "Product": {
+        "type": "object",
+        "required": [
+          "productId",
+          "merchantId",
+          "name",
+          "description",
+          "imageUrls",
+          "isPublic",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "productId": { "type": "string" },
+          "merchantId": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "imageUrls": {
+            "type": "array",
+            "items": { "type": "string", "format": "uri" }
+          },
+          "isPublic": { "type": "boolean" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" },
+          "createdBy": { "type": "string" },
+          "updatedBy": { "type": "string" }
+        }
+      },
+      "Content": {
+        "type": "object",
+        "required": [
+          "contentId",
+          "merchantId",
+          "productId",
+          "caption",
+          "videoUrl",
+          "status",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "contentId": { "type": "string" },
+          "merchantId": { "type": "string" },
+          "productId": { "type": "string" },
+          "caption": { "type": "string" },
+          "videoUrl": { "type": "string", "format": "uri" },
+          "status": { "$ref": "#/components/schemas/ContentStatus" },
+          "rejectionReason": { "type": "string" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" },
+          "createdBy": { "type": "string" },
+          "updatedBy": { "type": "string" }
+        }
+      },
+      "AuthorizedAccount": {
+        "type": "object",
+        "required": ["accountId", "channel", "displayName", "available"],
+        "properties": {
+          "accountId": { "type": "string" },
+          "channel": { "$ref": "#/components/schemas/Channel" },
+          "displayName": { "type": "string" },
+          "available": { "type": "boolean" }
+        }
+      },
+      "Publication": {
+        "type": "object",
+        "required": [
+          "publicationId",
+          "merchantId",
+          "productId",
+          "contentId",
+          "accountId",
+          "channel",
+          "status",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "publicationId": { "type": "string" },
+          "merchantId": { "type": "string" },
+          "productId": { "type": "string" },
+          "contentId": { "type": "string" },
+          "accountId": { "type": "string" },
+          "channel": { "$ref": "#/components/schemas/Channel" },
+          "status": { "$ref": "#/components/schemas/PublicationStatus" },
+          "externalWorkId": { "type": "string" },
+          "externalWorkUrl": { "type": "string", "format": "uri" },
+          "failureReason": { "type": "string" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" },
+          "createdBy": { "type": "string" },
+          "updatedBy": { "type": "string" }
+        }
+      },
+      "Inquiry": {
+        "type": "object",
+        "required": [
+          "inquiryId",
+          "merchantId",
+          "productId",
+          "contentId",
+          "publicationId",
+          "channel",
+          "accountId",
+          "buyerName",
+          "contact",
+          "message",
+          "status",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "inquiryId": { "type": "string" },
+          "merchantId": { "type": "string" },
+          "productId": { "type": "string" },
+          "contentId": { "type": "string" },
+          "publicationId": { "type": "string" },
+          "channel": { "$ref": "#/components/schemas/Channel" },
+          "accountId": { "type": "string" },
+          "buyerName": { "type": "string" },
+          "contact": { "type": "string" },
+          "message": { "type": "string" },
+          "status": { "$ref": "#/components/schemas/InquiryStatus" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" },
+          "createdBy": { "type": "string" },
+          "updatedBy": { "type": "string" }
+        }
+      },
+      "FeedItem": {
+        "type": "object",
+        "required": [
+          "publicationId",
+          "productId",
+          "contentId",
+          "merchantId",
+          "channel",
+          "caption",
+          "videoUrl",
+          "externalWorkUrl",
+          "productName"
+        ],
+        "properties": {
+          "publicationId": { "type": "string" },
+          "productId": { "type": "string" },
+          "contentId": { "type": "string" },
+          "merchantId": { "type": "string" },
+          "channel": { "$ref": "#/components/schemas/Channel" },
+          "caption": { "type": "string" },
+          "videoUrl": { "type": "string", "format": "uri" },
+          "externalWorkUrl": { "type": "string", "format": "uri" },
+          "productName": { "type": "string" }
+        }
+      },
+      "StorefrontProduct": {
+        "type": "object",
+        "required": ["product", "merchantName"],
+        "properties": {
+          "product": { "$ref": "#/components/schemas/Product" },
+          "merchantName": { "type": "string" }
+        }
+      },
+      "CreateProductInput": {
+        "type": "object",
+        "required": ["name", "description", "imageUrls"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+          "description": { "type": "string", "minLength": 1, "maxLength": 5000 },
+          "imageUrls": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "format": "uri" }
+          }
+        }
+      },
+      "GenerateContentInput": {
+        "type": "object",
+        "required": ["productId"],
+        "properties": {
+          "productId": { "type": "string" }
+        }
+      },
+      "UpdateContentInput": {
+        "type": "object",
+        "properties": {
+          "caption": { "type": "string", "minLength": 1, "maxLength": 2000 },
+          "videoUrl": { "type": "string", "format": "uri" }
+        },
+        "minProperties": 1
+      },
+      "ApproveReviewInput": {
+        "type": "object",
+        "required": ["contentVersion"],
+        "properties": {
+          "contentVersion": { "type": "integer", "minimum": 1 },
+          "comment": { "type": "string", "maxLength": 1000 }
+        }
+      },
+      "RejectReviewInput": {
+        "type": "object",
+        "required": ["contentVersion", "comment"],
+        "properties": {
+          "contentVersion": { "type": "integer", "minimum": 1 },
+          "reasonCode": {
+            "type": "string",
+            "enum": [
+              "MISLEADING_CLAIM",
+              "INCOMPLETE_INFORMATION",
+              "MEDIA_QUALITY",
+              "PLATFORM_POLICY",
+              "OTHER"
+            ]
+          },
+          "comment": { "type": "string", "minLength": 1, "maxLength": 1000 }
+        }
+      },
+      "CreatePublicationInput": {
+        "type": "object",
+        "required": ["contentId", "accountId", "channel"],
+        "properties": {
+          "contentId": { "type": "string" },
+          "accountId": { "type": "string" },
+          "channel": { "$ref": "#/components/schemas/Channel" },
+          "scenario": { "$ref": "#/components/schemas/MockPublicationScenario" }
+        }
+      },
+      "PublicationCallbackInput": {
+        "type": "object",
+        "required": ["callbackEventId", "publicationId", "status"],
+        "properties": {
+          "callbackEventId": { "type": "string" },
+          "publicationId": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["SUCCEEDED", "FAILED"]
+          },
+          "externalWorkId": { "type": "string" },
+          "externalWorkUrl": { "type": "string", "format": "uri" },
+          "failureReason": { "type": "string" }
+        }
+      },
+      "CreateInquiryInput": {
+        "type": "object",
+        "required": ["publicationId", "buyerName", "contact", "message"],
+        "properties": {
+          "publicationId": { "type": "string" },
+          "buyerName": { "type": "string", "minLength": 1, "maxLength": 100 },
+          "contact": { "type": "string", "minLength": 3, "maxLength": 200 },
+          "message": { "type": "string", "minLength": 1, "maxLength": 2000 }
+        }
+      },
+      "UpdateInquiryStatusInput": {
+        "type": "object",
+        "required": ["status"],
+        "properties": {
+          "status": { "$ref": "#/components/schemas/InquiryStatus" }
+        }
+      },
+      "PageInfo": {
+        "type": "object",
+        "required": ["page", "pageSize", "total"],
+        "properties": {
+          "page": { "type": "integer" },
+          "pageSize": { "type": "integer" },
+          "total": { "type": "integer" }
+        }
+      },
+      "ProductResponse": {
+        "type": "object",
+        "required": ["data", "requestId"],
+        "properties": {
+          "data": { "$ref": "#/components/schemas/Product" },
+          "requestId": { "type": "string" }
+        }
+      },
+      "ContentResponse": {
+        "type": "object",
+        "required": ["data", "requestId"],
+        "properties": {
+          "data": { "$ref": "#/components/schemas/Content" },
+          "requestId": { "type": "string" }
+        }
+      },
+      "PublicationResponse": {
+        "type": "object",
+        "required": ["data", "requestId"],
+        "properties": {
+          "data": { "$ref": "#/components/schemas/Publication" },
+          "requestId": { "type": "string" }
+        }
+      },
+      "InquiryResponse": {
+        "type": "object",
+        "required": ["data", "requestId"],
+        "properties": {
+          "data": { "$ref": "#/components/schemas/Inquiry" },
+          "requestId": { "type": "string" }
+        }
+      },
+      "AccountListResponse": {
+        "type": "object",
+        "required": ["data", "requestId"],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AuthorizedAccount" }
+          },
+          "requestId": { "type": "string" }
+        }
+      },
+      "ReviewContentSummary": {
+        "type": "object",
+        "required": [
+          "contentId",
+          "merchantId",
+          "merchantName",
+          "productId",
+          "productTitle",
+          "title",
+          "status",
+          "contentVersion",
+          "submittedAt"
+        ],
+        "properties": {
+          "contentId": { "type": "string" },
+          "merchantId": { "type": "string" },
+          "merchantName": { "type": "string" },
+          "productId": { "type": "string" },
+          "productTitle": { "type": "string" },
+          "title": { "type": "string" },
+          "status": { "$ref": "#/components/schemas/ContentStatus" },
+          "contentVersion": { "type": "integer", "minimum": 1 },
+          "submittedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "ReviewRecord": {
+        "type": "object",
+        "required": [
+          "reviewId",
+          "contentId",
+          "decision",
+          "reasonCode",
+          "comment",
+          "reviewerId",
+          "reviewerName",
+          "reviewedAt",
+          "contentVersion",
+          "previousStatus",
+          "nextStatus"
+        ],
+        "properties": {
+          "reviewId": { "type": "string" },
+          "contentId": { "type": "string" },
+          "decision": {
+            "type": "string",
+            "enum": ["APPROVED", "REJECTED"]
+          },
+          "reasonCode": { "type": ["string", "null"] },
+          "comment": { "type": ["string", "null"] },
+          "reviewerId": { "type": "string" },
+          "reviewerName": { "type": "string" },
+          "reviewedAt": { "type": "string", "format": "date-time" },
+          "contentVersion": { "type": "integer", "minimum": 1 },
+          "previousStatus": { "$ref": "#/components/schemas/ContentStatus" },
+          "nextStatus": { "$ref": "#/components/schemas/ContentStatus" }
+        }
+      },
+      "ReviewDecisionResult": {
+        "type": "object",
+        "required": ["content", "review"],
+        "properties": {
+          "content": { "$ref": "#/components/schemas/ReviewContentSummary" },
+          "review": { "$ref": "#/components/schemas/ReviewRecord" }
+        }
+      },
+      "ContentPage": {
+        "type": "object",
+        "required": ["items", "page", "pageSize", "total"],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ReviewContentSummary" }
+          },
+          "page": { "type": "integer" },
+          "pageSize": { "type": "integer" },
+          "total": { "type": "integer" }
+        }
+      },
+      "InquiryPage": {
+        "type": "object",
+        "required": ["items", "page", "pageSize", "total"],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Inquiry" }
+          },
+          "page": { "type": "integer" },
+          "pageSize": { "type": "integer" },
+          "total": { "type": "integer" }
+        }
+      },
+      "FeedPage": {
+        "type": "object",
+        "required": ["items", "page", "pageSize", "total"],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/FeedItem" }
+          },
+          "page": { "type": "integer" },
+          "pageSize": { "type": "integer" },
+          "total": { "type": "integer" }
+        }
+      },
+      "ContentPageResponse": {
+        "type": "object",
+        "required": ["data", "requestId"],
+        "properties": {
+          "data": { "$ref": "#/components/schemas/ContentPage" },
+          "requestId": { "type": "string" }
+        }
+      },
+      "ReviewDecisionResponse": {
+        "type": "object",
+        "required": ["data", "requestId"],
+        "properties": {
+          "data": { "$ref": "#/components/schemas/ReviewDecisionResult" },
+          "requestId": { "type": "string" }
+        }
+      },
+      "InquiryPageResponse": {
+        "type": "object",
+        "required": ["data", "requestId"],
+        "properties": {
+          "data": { "$ref": "#/components/schemas/InquiryPage" },
+          "requestId": { "type": "string" }
+        }
+      },
+      "FeedPageResponse": {
+        "type": "object",
+        "required": ["data", "requestId"],
+        "properties": {
+          "data": { "$ref": "#/components/schemas/FeedPage" },
+          "requestId": { "type": "string" }
+        }
+      },
+      "StorefrontProductResponse": {
+        "type": "object",
+        "required": ["data", "requestId"],
+        "properties": {
+          "data": { "$ref": "#/components/schemas/StorefrontProduct" },
+          "requestId": { "type": "string" }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "required": ["errorCode", "message", "requestId", "details"],
+        "properties": {
+          "errorCode": { "type": "string" },
+          "message": { "type": "string" },
+          "requestId": { "type": "string" },
+          "details": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      }
+    }
+  }
+}
