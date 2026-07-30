@@ -1,13 +1,12 @@
 import type { FastifyRequest } from "fastify";
-import { ROLES, type Role } from "@wotao/contracts";
+import {
+  ROLES,
+  type ActorContext,
+  type Role,
+} from "@wotao/contracts";
 import { AppError } from "./app-error.js";
 
-export interface Actor {
-  role: Role;
-  userId: string;
-  userName: string;
-  merchantId: string | null;
-}
+export type Actor = ActorContext;
 
 function readHeader(request: FastifyRequest, name: string): string | undefined {
   const value = request.headers[name];

@@ -1,6 +1,13 @@
-# 我淘淘内容审核模块 MVP
+# 我淘淘最小 MVP
 
-本仓库实现 `04_内容审核模块_研发要求.pdf` 的最小可运行版本：运营待审核队列、审核详情、通过、驳回、商家可见驳回原因、追加式审核记录、状态/版本门禁和角色权限检查。
+当前业务实现仍是 `04_内容审核模块_研发要求.pdf` 的最小可运行版本：
+运营待审核队列、审核详情、通过、驳回、商家可见驳回原因、追加式审核记录、
+状态/版本门禁和角色权限检查。其他业务模块尚未实现。
+
+`packages/contracts` 已提供模块 01-08 的最小共享 TypeScript 契约和可执行接口
+清单，供各模块并行开发和接入 `integration`。完整依赖、状态、Mock 边界、
+验收清单和 PR 规则见
+[`docs/MVP_INTEGRATION_CONTRACT.md`](docs/MVP_INTEGRATION_CONTRACT.md)。
 
 ## 技术栈
 
@@ -9,7 +16,8 @@
 - 数据库：SQLite、Prisma
 - 测试：Vitest、Fastify inject
 
-`apps/web` 是运营审核界面，`apps/api` 是审核模块 API，`packages/contracts` 保存共享状态和接口类型。
+`apps/web` 是运营审核界面，`apps/api` 是审核模块 API，`packages/contracts`
+保存共享类型、接口清单和最小契约校验器。
 
 ## 本地启动
 
@@ -41,7 +49,8 @@ pnpm test
 pnpm build
 ```
 
-接口测试会重建独立的 `test.db`，不会修改本地演示数据库。
+测试先运行共享契约校验，再重建独立的 `test.db` 运行模块 04 接口测试，不会
+修改本地演示数据库。
 
 ## API
 
