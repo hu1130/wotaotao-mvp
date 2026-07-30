@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light">
+    <title>企业控制台登录</title>
+    <link rel="stylesheet" href="control-login.css">
+</head>
+
+<body class="login-body">
+    <main class="login-shell">
+        <section class="login-context" aria-label="登录说明">
+            <span class="context-index">TENANT CONTROL / 01</span>
+            <h1>每一家企业，<br>只看见自己的数据。</h1>
+            <p>租户身份由云端会话锁定。员工、人脸、设备和企业文档在同一边界内管理，页面参数无法切换数据范围。</p>
+            <ul>
+                <li><span>01</span>企业人员与人脸向量独立</li>
+                <li><span>02</span>采集任务只下发到本企业设备</li>
+                <li><span>03</span>知识文档与向量索引独立</li>
+            </ul>
+        </section>
+        <section class="login-panel">
+            <div class="login-title">
+                <span class="login-mark">CV</span>
+                <div>
+                    <h2>企业数字人控制台</h2>
+                    <p>使用交付给贵公司的租户管理员账号</p>
+                </div>
+            </div>
+            <form id="control-login-form" class="login-form" autocomplete="on">
+                <label>
+                    <span>企业租户 ID</span>
+                    <input id="control-login-tenant" name="tenant" type="text" autocomplete="organization" placeholder="例如 sdjx_company" required>
+                </label>
+                <label>
+                    <span>用户名</span>
+                    <input id="control-login-username" name="username" type="text" autocomplete="username" required>
+                </label>
+                <label>
+                    <span>密码</span>
+                    <input id="control-login-password" name="password" type="password" autocomplete="current-password" required>
+                </label>
+                <button id="control-login-button" type="submit">登录控制台</button>
+                <div id="control-login-status" aria-live="polite"></div>
+            </form>
+            <p class="login-security-note"><span aria-hidden="true">●</span> 会话令牌仅保存在 HttpOnly Cookie，前端无法读取</p>
+        </section>
+    </main>
+    <script src="control-login.js"></script>
+</body>
+
+</html>

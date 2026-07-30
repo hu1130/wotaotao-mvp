@@ -1,0 +1,16 @@
+{
+  "config/camera.py": "服务端远程识别参数与客户端本地摄像头/推理参数不同",
+  "config/database.py": "服务端容器数据库连接池与客户端可选直连配置不同",
+  "config/voice.py": "服务端承载语音 Agent 和客户端任务配置，客户端仅保留本地交互配置",
+  "core/api_client.py": "两端 API 默认地址、超时和调用职责不同",
+  "core/dialog_chat.py": "服务端提供正式 RAG/LLM 对话，客户端保留本地兼容实现",
+  "core/knowledge/loaders.py": "服务端需要部署目录和 Markdown 增强加载，客户端保留本地加载范围",
+  "core/knowledge/service.py": "服务端是知识库权威服务，客户端仅保留本地兼容服务",
+  "core/local_enroll.py": "服务端执行路径安全校验，客户端支持本地照片录入",
+  "core/recognition_cache.py": "服务端需要录入后按员工和临时陌生人定向清理",
+  "core/remote_recognition.py": "服务端执行匹配/签到状态机，客户端执行特征上传和结果适配",
+  "core/speech_streaming/pipeline.py": "服务端接入命令、Agent 动作和客户端任务，客户端保留基础语音管线",
+  "core/vector_db.py": "服务端提供远程底库增量同步能力，客户端保留本地兼容访问",
+  "core/vote.py": "服务端需要录入后定向和全量清理投票状态"
+}
+

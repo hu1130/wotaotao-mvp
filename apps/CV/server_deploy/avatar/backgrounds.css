@@ -1,0 +1,1221 @@
+/* ============================================
+   日式动漫风格数字人背景系统
+   角色专属 · 多层动画 · 氛围渲染
+   ============================================ */
+
+/* ---- 全局容器 ---- */
+.bg-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+/* ============================================
+   Epsilon - 梦幻校园·活力青春
+   关键词：清新、活泼、少女心、光斑
+   ============================================ */
+body.theme-epsilon {
+    background: linear-gradient(135deg, #ffeef4 0%, #e8f4ff 35%, #fff5e6 70%, #fce4ff 100%);
+}
+
+/* 渐变光晕底层 */
+.theme-epsilon .bg-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.45;
+    animation: epsilonGlowPulse 6s ease-in-out infinite;
+}
+
+.theme-epsilon .bg-glow.g1 {
+    width: 350px;
+    height: 350px;
+    background: #ffb6d9;
+    top: 8%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.theme-epsilon .bg-glow.g2 {
+    width: 400px;
+    height: 400px;
+    background: #a8d4ff;
+    top: 45%;
+    right: 8%;
+    animation-delay: -2s;
+}
+
+.theme-epsilon .bg-glow.g3 {
+    width: 280px;
+    height: 280px;
+    background: #fff0a8;
+    bottom: 12%;
+    left: 35%;
+    animation-delay: -4s;
+}
+
+@keyframes epsilonGlowPulse {
+
+    0%,
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 0.45;
+    }
+
+    50% {
+        transform: scale(1.15) translateY(-20px);
+        opacity: 0.6;
+    }
+}
+
+/* 漂浮光斑 */
+.epsilon-orb {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(255, 182, 217, 0.3) 50%, transparent 70%);
+    animation: epsilonOrbFloat 8s ease-in-out infinite;
+}
+
+.epsilon-orb.o1 {
+    width: 16px;
+    height: 16px;
+    top: 15%;
+    left: 20%;
+    animation-delay: 0s;
+}
+
+.epsilon-orb.o2 {
+    width: 22px;
+    height: 22px;
+    top: 65%;
+    left: 75%;
+    animation-delay: -2.5s;
+}
+
+.epsilon-orb.o3 {
+    width: 12px;
+    height: 12px;
+    top: 40%;
+    left: 55%;
+    animation-delay: -4s;
+}
+
+.epsilon-orb.o4 {
+    width: 18px;
+    height: 18px;
+    top: 80%;
+    left: 25%;
+    animation-delay: -1.5s;
+}
+
+.epsilon-orb.o5 {
+    width: 14px;
+    height: 14px;
+    top: 25%;
+    left: 80%;
+    animation-delay: -5.5s;
+}
+
+.epsilon-orb.o6 {
+    width: 20px;
+    height: 20px;
+    top: 55%;
+    left: 10%;
+    animation-delay: -3.5s;
+}
+
+@keyframes epsilonOrbFloat {
+
+    0%,
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 0.7;
+    }
+
+    25% {
+        transform: translateY(-25px) scale(1.1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateY(-10px) scale(0.95);
+        opacity: 0.8;
+    }
+
+    75% {
+        transform: translateY(-30px) scale(1.05);
+        opacity: 0.9;
+    }
+}
+
+/* 流星划过 */
+.epsilon-star {
+    position: absolute;
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.95), rgba(255, 220, 255, 0.6), transparent);
+    border-radius: 2px;
+    animation: epsilonStarFall 4s linear infinite;
+    opacity: 0;
+}
+
+@keyframes epsilonStarFall {
+    0% {
+        transform: translateX(-100px) translateY(0) rotate(-25deg);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.9;
+    }
+
+    90% {
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: translateX(calc(100vw + 100px)) translateY(150px) rotate(-25deg);
+        opacity: 0;
+    }
+}
+
+/* 漂浮小气泡 */
+.epsilon-bubble {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.8), rgba(255, 182, 217, 0.2));
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    animation: epsilonBubbleRise 7s ease-in-out infinite;
+}
+
+@keyframes epsilonBubbleRise {
+    0% {
+        transform: translateY(0) scale(0.6);
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 0.6;
+    }
+
+    50% {
+        transform: translateY(-180px) scale(1);
+        opacity: 0.8;
+    }
+
+    85% {
+        opacity: 0.4;
+    }
+
+    100% {
+        transform: translateY(-320px) scale(1.1);
+        opacity: 0;
+    }
+}
+
+/* 底部柔光波纹 */
+.theme-epsilon .bg-wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 200px;
+    background: linear-gradient(to top, rgba(255, 230, 245, 0.5), transparent);
+    animation: epsilonWave 5s ease-in-out infinite;
+}
+
+@keyframes epsilonWave {
+
+    0%,
+    100% {
+        transform: scaleY(1);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: scaleY(1.15);
+        opacity: 0.7;
+    }
+}
+
+
+/* ============================================
+   HaruGreeter - 温馨和风·樱花祭典
+   关键词：樱花、暖色、祭典、温馨
+   ============================================ */
+body.theme-haru {
+    background: linear-gradient(to bottom, #fff0e8 0%, #ffe4ec 35%, #ffdce8 70%, #f8e0f0 100%);
+}
+
+/* 暖色光晕 */
+.theme-haru .bg-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(55px);
+    opacity: 0.4;
+    animation: haruGlowPulse 7s ease-in-out infinite;
+}
+
+.theme-haru .bg-glow.g1 {
+    width: 380px;
+    height: 380px;
+    background: #ffc8a8;
+    top: 5%;
+    right: 12%;
+    animation-delay: 0s;
+}
+
+.theme-haru .bg-glow.g2 {
+    width: 320px;
+    height: 320px;
+    background: #ffaabb;
+    bottom: 20%;
+    left: 8%;
+    animation-delay: -3s;
+}
+
+.theme-haru .bg-glow.g3 {
+    width: 260px;
+    height: 260px;
+    background: #ffe088;
+    top: 55%;
+    right: 25%;
+    animation-delay: -5s;
+}
+
+@keyframes haruGlowPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.38;
+    }
+
+    50% {
+        transform: scale(1.12);
+        opacity: 0.55;
+    }
+}
+
+/* 樱花花瓣 */
+.haru-sakura {
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    background: radial-gradient(ellipse at 30% 30%, #ffc0cb, #ff91a4);
+    border-radius: 50% 0 50% 50%;
+    opacity: 0;
+    pointer-events: none;
+    animation: haruSakuraFall linear infinite;
+}
+
+.haru-sakura::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 3px;
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+}
+
+@keyframes haruSakuraFall {
+    0% {
+        transform: translateY(-20px) translateX(0) rotate(0deg) scale(0.7);
+        opacity: 0;
+    }
+
+    8% {
+        opacity: 0.85;
+    }
+
+    50% {
+        transform: translateY(50vh) translateX(40px) rotate(180deg) scale(1);
+        opacity: 0.75;
+    }
+
+    90% {
+        opacity: 0.4;
+    }
+
+    100% {
+        transform: translateY(calc(100vh + 30px)) translateX(80px) rotate(360deg) scale(0.85);
+        opacity: 0;
+    }
+}
+
+/* 金色光点 */
+.haru-sparkle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: radial-gradient(circle, #fff 0%, #ffd700 50%, transparent 70%);
+    border-radius: 50%;
+    animation: haruSparkle 3s ease-in-out infinite;
+}
+
+@keyframes haruSparkle {
+
+    0%,
+    100% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 0.9;
+    }
+}
+
+/* 和风灯笼光影 */
+.theme-haru .bg-lantern {
+    position: absolute;
+    width: 50px;
+    height: 70px;
+    background: radial-gradient(ellipse, rgba(255, 120, 80, 0.18), transparent 70%);
+    border-radius: 8px;
+    animation: haruLanternSway 4s ease-in-out infinite;
+}
+
+.theme-haru .bg-lantern.l1 {
+    top: 8%;
+    left: 15%;
+    animation-delay: 0s;
+}
+
+.theme-haru .bg-lantern.l2 {
+    top: 12%;
+    right: 18%;
+    animation-delay: -1.5s;
+}
+
+@keyframes haruLanternSway {
+
+    0%,
+    100% {
+        transform: rotate(-4deg) translateX(0);
+    }
+
+    50% {
+        transform: rotate(4deg) translateX(8px);
+    }
+}
+
+/* 底部暖色雾气 */
+.theme-haru .bg-mist {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 180px;
+    background: linear-gradient(to top, rgba(255, 220, 210, 0.45), transparent);
+    animation: haruMist 6s ease-in-out infinite;
+}
+
+@keyframes haruMist {
+
+    0%,
+    100% {
+        transform: translateX(0) scaleX(1);
+        opacity: 0.45;
+    }
+
+    50% {
+        transform: translateX(20px) scaleX(1.05);
+        opacity: 0.6;
+    }
+}
+
+
+/* ============================================
+   Hiyori - 清新治愈·星空物语
+   关键词：星空、萤火虫、宁静、神秘
+   ============================================ */
+body.theme-hiyori {
+    background: linear-gradient(to bottom, #1a1a3e 0%, #2d2a5e 30%, #3d3560 60%, #4a3f6e 100%);
+}
+
+/* 星云光晕 */
+.theme-hiyori .bg-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.25;
+    animation: hiyoriNebula 10s ease-in-out infinite;
+}
+
+.theme-hiyori .bg-glow.g1 {
+    width: 450px;
+    height: 300px;
+    background: #6366f1;
+    top: 10%;
+    left: 20%;
+    animation-delay: 0s;
+}
+
+.theme-hiyori .bg-glow.g2 {
+    width: 380px;
+    height: 380px;
+    background: #a855f7;
+    top: 40%;
+    right: 10%;
+    animation-delay: -4s;
+}
+
+.theme-hiyori .bg-glow.g3 {
+    width: 300px;
+    height: 250px;
+    background: #06b6d4;
+    bottom: 15%;
+    left: 40%;
+    animation-delay: -7s;
+}
+
+@keyframes hiyoriNebula {
+
+    0%,
+    100% {
+        transform: scale(1) translateX(0);
+        opacity: 0.22;
+    }
+
+    33% {
+        transform: scale(1.08) translateX(15px);
+        opacity: 0.32;
+    }
+
+    66% {
+        transform: scale(1.04) translateX(-10px);
+        opacity: 0.26;
+    }
+}
+
+/* 闪烁星星 */
+.hiyori-star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.6);
+    animation: hiyoriStarTwinkle ease-in-out infinite;
+}
+
+.hiyori-star.s-small {
+    width: 2px;
+    height: 2px;
+    box-shadow: 0 0 3px 1px rgba(255, 255, 255, 0.4);
+}
+
+.hiyori-star.s-large {
+    width: 4px;
+    height: 4px;
+    box-shadow: 0 0 8px 3px rgba(200, 220, 255, 0.7);
+}
+
+@keyframes hiyoriStarTwinkle {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.3;
+    }
+
+    50% {
+        transform: scale(1.4);
+        opacity: 1;
+    }
+}
+
+/* 萤火虫 */
+.hiyori-firefly {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(circle, #fef08a 0%, rgba(254, 240, 138, 0.4) 40%, transparent 70%);
+    border-radius: 50%;
+    animation: hiyoriFireflyFly 12s ease-in-out infinite;
+}
+
+@keyframes hiyoriFireflyFly {
+    0% {
+        transform: translate(0, 0) scale(0.6);
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 0.9;
+    }
+
+    25% {
+        transform: translate(60px, -80px) scale(1.1);
+        opacity: 1;
+    }
+
+    40% {
+        transform: translate(-30px, -140px) scale(0.8);
+        opacity: 0.7;
+    }
+
+    55% {
+        transform: translate(80px, -60px) scale(1);
+        opacity: 0.95;
+    }
+
+    70% {
+        transform: translate(20px, -180px) scale(0.9);
+        opacity: 0.6;
+    }
+
+    85% {
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translate(0, 0) scale(0.6);
+        opacity: 0;
+    }
+}
+
+/* 流动极光带 */
+.theme-hiyori .bg-aurora {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background: linear-gradient(135deg,
+            transparent 0%,
+            rgba(99, 102, 241, 0.08) 20%,
+            rgba(168, 85, 247, 0.06) 40%,
+            rgba(6, 182, 212, 0.08) 60%,
+            transparent 100%);
+    animation: hiyoriAurora 15s ease-in-out infinite;
+    filter: blur(30px);
+}
+
+@keyframes hiyoriAurora {
+
+    0%,
+    100% {
+        transform: translateX(-5%) skewX(-2deg);
+        opacity: 0.5;
+    }
+
+    33% {
+        transform: translateX(3%) skewX(1deg);
+        opacity: 0.7;
+    }
+
+    66% {
+        transform: translateX(-2%) skewX(-1deg);
+        opacity: 0.55;
+    }
+}
+
+/* 微风粒子 */
+.hiyori-particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: rgba(200, 220, 255, 0.6);
+    border-radius: 50%;
+    animation: hiyParticleDrift 15s linear infinite;
+}
+
+@keyframes hiyParticleDrift {
+    0% {
+        transform: translate(0, 0);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.6;
+    }
+
+    90% {
+        opacity: 0.4;
+    }
+
+    100% {
+        transform: translate(150px, calc(100vh + 50px));
+        opacity: 0;
+    }
+}
+
+/* 底部月光反射 */
+.theme-hiyori .bg-moonlight {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 160px;
+    background: linear-gradient(to top, rgba(99, 102, 241, 0.15), transparent);
+    animation: hiyoriMoonlight 8s ease-in-out infinite;
+}
+
+@keyframes hiyoriMoonlight {
+
+    0%,
+    100% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 0.65;
+    }
+}
+
+
+/* ============================================
+   Chitose - 现代都市·沉稳可靠
+   关键词：都市、稳重、科技感、冷静
+   ============================================ */
+body.theme-chitose {
+    background: linear-gradient(160deg, #1a2332 0%, #243447 30%, #2a3f55 60%, #1e2d40 100%);
+}
+
+/* 城市霓虹光晕 */
+.theme-chitose .bg-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(70px);
+    opacity: 0.22;
+    animation: chitoseGlowPulse 8s ease-in-out infinite;
+}
+
+.theme-chitose .bg-glow.g1 {
+    width: 420px;
+    height: 280px;
+    background: #4a90d9;
+    top: 8%;
+    left: 15%;
+    animation-delay: 0s;
+}
+
+.theme-chitose .bg-glow.g2 {
+    width: 350px;
+    height: 350px;
+    background: #5b6c8a;
+    bottom: 20%;
+    right: 10%;
+    animation-delay: -3s;
+}
+
+.theme-chitose .bg-glow.g3 {
+    width: 280px;
+    height: 200px;
+    background: #7eb8da;
+    top: 50%;
+    left: 45%;
+    animation-delay: -5.5s;
+}
+
+@keyframes chitoseGlowPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.18;
+    }
+
+    33% {
+        transform: scale(1.06);
+        opacity: 0.28;
+    }
+
+    66% {
+        transform: scale(1.03);
+        opacity: 0.22;
+    }
+}
+
+/* 城市光斑（窗户反射） */
+.chitose-bokeh {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(120, 180, 230, 0.35), rgba(74, 144, 217, 0.08) 60%, transparent 70%);
+    filter: blur(3px);
+    animation: chitoseBokehFloat 10s ease-in-out infinite;
+}
+
+.chitose-bokeh.b1 {
+    width: 35px;
+    height: 35px;
+    top: 12%;
+    left: 25%;
+    animation-delay: 0s;
+}
+
+.chitose-bokeh.b2 {
+    width: 25px;
+    height: 25px;
+    top: 45%;
+    right: 20%;
+    animation-delay: -3s;
+}
+
+.chitose-bokeh.b3 {
+    width: 42px;
+    height: 42px;
+    top: 70%;
+    left: 15%;
+    animation-delay: -6s;
+}
+
+.chitose-bokeh.b4 {
+    width: 20px;
+    height: 20px;
+    top: 25%;
+    left: 65%;
+    animation-delay: -1.5s;
+}
+
+.chitose-bokeh.b5 {
+    width: 30px;
+    height: 30px;
+    top: 58%;
+    left: 78%;
+    animation-delay: -4.5s;
+}
+
+@keyframes chitoseBokehFloat {
+
+    0%,
+    100% {
+        transform: translateY(0) translateX(0);
+        opacity: 0.5;
+    }
+
+    33% {
+        transform: translateY(-15px) translateX(8px);
+        opacity: 0.75;
+    }
+
+    66% {
+        transform: translateY(-8px) translateX(-5px);
+        opacity: 0.55;
+    }
+}
+
+/* 几何装饰线 */
+.chitose-line {
+    position: absolute;
+    background: linear-gradient(90deg, transparent, rgba(100, 160, 220, 0.15), transparent);
+    height: 1px;
+    animation: chitoseLineSlide 12s ease-in-out infinite;
+}
+
+.chitose-line.l1 {
+    top: 20%;
+    left: 0;
+    width: 30%;
+    animation-delay: 0s;
+}
+
+.chitose-line.l2 {
+    top: 48%;
+    right: 0;
+    width: 25%;
+    animation-delay: -4s;
+}
+
+.chitose-line.l3 {
+    top: 72%;
+    left: 10%;
+    width: 35%;
+    animation-delay: -7s;
+}
+
+@keyframes chitoseLineSlide {
+
+    0%,
+    100% {
+        transform: scaleX(0.6);
+        opacity: 0.3;
+    }
+
+    50% {
+        transform: scaleX(1);
+        opacity: 0.7;
+    }
+}
+
+/* 数据粒子流 */
+.chitose-particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: rgba(126, 184, 218, 0.6);
+    border-radius: 50%;
+    animation: chitoseParticleFlow 14s linear infinite;
+}
+
+@keyframes chitoseParticleFlow {
+    0% {
+        transform: translateY(100vh) translateX(0);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.6;
+    }
+
+    80% {
+        opacity: 0.4;
+    }
+
+    100% {
+        transform: translateY(-20vh) translateX(40px);
+        opacity: 0;
+    }
+}
+
+/* 底部城市剪影雾气 */
+.theme-chitose .bg-mist {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 150px;
+    background: linear-gradient(to top, rgba(26, 35, 50, 0.7), transparent);
+    animation: chitoseMist 9s ease-in-out infinite;
+}
+
+@keyframes chitoseMist {
+
+    0%,
+    100% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 0.85;
+    }
+}
+
+
+/* ============================================
+   Natori - 雅致书房·知性从容
+   关键词：书香、雅致、沉稳、智慧
+   ============================================ */
+body.theme-natori {
+    background: linear-gradient(145deg, #2c2416 0%, #3d3022 25%, #4a3828 55%, #352a1e 100%);
+}
+
+/* 温暖灯光光晕 */
+.theme-natori .bg-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(65px);
+    opacity: 0.28;
+    animation: natoriGlowPulse 7s ease-in-out infinite;
+}
+
+.theme-natori .bg-glow.g1 {
+    width: 380px;
+    height: 380px;
+    background: #d4956a;
+    top: 5%;
+    right: 15%;
+    animation-delay: 0s;
+}
+
+.theme-natori .bg-glow.g2 {
+    width: 300px;
+    height: 250px;
+    background: #c9a86c;
+    bottom: 25%;
+    left: 12%;
+    animation-delay: -2.5s;
+}
+
+.theme-natori .bg-glow.g3 {
+    width: 250px;
+    height: 320px;
+    background: #e8c88b;
+    top: 40%;
+    left: 50%;
+    animation-delay: -5s;
+}
+
+@keyframes natoriGlowPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.26;
+    }
+
+    50% {
+        transform: scale(1.08);
+        opacity: 0.36;
+    }
+}
+
+/* 书页飘落效果 */
+.natori-page {
+    position: absolute;
+    width: 18px;
+    height: 24px;
+    background: linear-gradient(135deg, #f5ecd7 0%, #ebe0c8 50%, #ddd2b8 100%);
+    border-radius: 1px 3px 3px 1px;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    animation: natoriPageFall linear infinite;
+}
+
+.natori-page::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 3px;
+    right: 3px;
+    height: 1px;
+    background: rgba(180, 160, 130, 0.3);
+    box-shadow: 0 4px 0 rgba(180, 160, 130, 0.25), 0 8px 0 rgba(180, 160, 1300.2), 0 12px 0 rgba(180, 160, 130, 0.15);
+}
+
+@keyframes natoriPageFall {
+    0% {
+        transform: translateY(-30px) translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+
+    8% {
+        opacity: 0.75;
+    }
+
+    50% {
+        transform: translateY(50vh) translateX(50px) rotate(15deg);
+        opacity: 0.6;
+    }
+
+    90% {
+        opacity: 0.3;
+    }
+
+    100% {
+        transform: translateY(calc(100vh + 40px)) translateX(90px) rotate(25deg);
+        opacity: 0;
+    }
+}
+
+/* 墨迹粒子 */
+.natori-ink {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: radial-gradient(circle, rgba(80, 60, 40, 0.5), transparent 70%);
+    border-radius: 50%;
+    animation: natoriInkDrift 16s ease-in-out infinite;
+}
+
+@keyframes natoriInkDrift {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: translate(40px, -60px) scale(1.5);
+        opacity: 0.35;
+    }
+
+    80% {
+        opacity: 0.25;
+    }
+
+    100% {
+        transform: translate(80px, -100px) scale(0.8);
+        opacity: 0;
+    }
+}
+
+/* 金色尘埃 */
+.natori-dust {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: rgba(232, 200, 139, 0.7);
+    border-radius: 50%;
+    animation: natoriDustFloat 11s ease-in-out infinite;
+}
+
+@keyframes natoriDustFloat {
+
+    0%,
+    100% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+    }
+
+    25% {
+        opacity: 0.8;
+        transform: translateY(-40px) translateX(15px);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: translateY(-20px) translateX(-10px);
+    }
+
+    75% {
+        opacity: 0.7;
+        transform: translateY(-55px) translateX(20px);
+    }
+}
+
+/* 台灯光影 */
+.theme-natori .bg-lamp {
+    position: absolute;
+    width: 120px;
+    height: 180px;
+    background: radial-gradient(ellipse at 50% 0%, rgba(232, 168, 80, 0.12), transparent 70%);
+    border-radius: 8px;
+    animation: natoriLampFlicker 5s ease-in-out infinite;
+}
+
+.theme-natori .bg-lamp.lp1 {
+    top: 0;
+    right: 8%;
+    animation-delay: 0s;
+}
+
+.theme-natori .bg-lamp.lp2 {
+    top: 5%;
+    left: 5%;
+    animation-delay: -2s;
+}
+
+@keyframes natoriLampFlicker {
+
+    0%,
+    100% {
+        opacity: 0.7;
+        transform: scaleX(1);
+    }
+
+    40% {
+        opacity: 0.9;
+        transform: scaleX(1.03);
+    }
+
+    60% {
+        opacity: 0.75;
+        transform: scaleX(0.98);
+    }
+
+    80% {
+        opacity: 0.85;
+    }
+}
+
+/* 底部书架暗影 */
+.theme-natori .bg-shelf {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 140px;
+    background: linear-gradient(to top,
+            rgba(44, 36, 22, 0.8),
+            rgba(61, 48, 34, 0.4) 40%,
+            transparent);
+    animation: natoriShelf 10s ease-in-out infinite;
+}
+
+@keyframes natoriShelf {
+
+    0%,
+    100% {
+        opacity: 0.9;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+
+/* ============================================
+   默认回退背景（兼容旧逻辑）
+   ============================================ */
+body.theme-default,
+body:not([class*="theme-"]) {
+    background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 50%, #fdf2ff 100%);
+}
+
+
+/* ============================================
+   主题切换过渡动画
+   ============================================ */
+body {
+    transition: background 0.8s ease;
+}
+
+.bg-layer>* {
+    will-change: transform, opacity;
+}
+
+/* ============================================
+   公司墙统一背景
+   所有数字人共享公司实拍墙面。背景图经过裁切、柔化、亮度均衡、
+   底部环境阴影和边缘暗角处理，用来降低屏幕与真实墙面之间的割裂感。
+   ============================================ */
+:root {
+    --company-wall-background: url("assets/backgrounds/company-wall-blend.jpg");
+}
+
+body.theme-company-wall,
+body.theme-epsilon,
+body.theme-haru,
+body.theme-hiyori,
+body.theme-chitose,
+body.theme-natori,
+body.theme-default,
+body:not([class*="theme-"]) {
+    background-color: #c9cecc;
+    background-image: var(--company-wall-background);
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.company-wall-stage {
+    mix-blend-mode: normal;
+}
+
+.company-wall-stage .wall-screen-wash,
+.company-wall-stage .wall-floor-shadow,
+.company-wall-stage .wall-edge-mask {
+    position: absolute;
+    inset: 0;
+}
+
+.company-wall-stage .wall-screen-wash {
+    background:
+        radial-gradient(ellipse at 50% 40%, rgba(255, 255, 255, 0.20), rgba(255, 255, 255, 0.04) 42%, transparent 68%),
+        linear-gradient(180deg, rgba(246, 248, 245, 0.10), rgba(210, 214, 210, 0.08));
+}
+
+.company-wall-stage .wall-floor-shadow {
+    background:
+        radial-gradient(ellipse at 50% 96%, rgba(40, 44, 44, 0.26), rgba(72, 76, 76, 0.12) 36%, transparent 66%),
+        linear-gradient(180deg, transparent 56%, rgba(34, 38, 38, 0.12));
+}
+
+.company-wall-stage .wall-edge-mask {
+    background:
+        linear-gradient(90deg, rgba(20, 24, 24, 0.12), transparent 18%, transparent 82%, rgba(20, 24, 24, 0.12)),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 35%, rgba(22, 24, 24, 0.12));
+}

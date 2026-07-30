@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数字人 Epsilon</title>
+    <link rel="stylesheet" href="styles.css?v=20260721-hide-empty-status">
+    <link rel="stylesheet" href="backgrounds.css">
+</head>
+
+<body>
+    <div id="bg-container" class="bg-layer"></div>
+
+    <canvas id="canvas"></canvas>
+    <div id="model-transition" aria-live="polite">
+        <div id="model-transition-name"></div>
+        <div id="model-transition-text"></div>
+    </div>
+
+    <div id="loading">
+        <div class="spinner"></div>
+        <div>正在加载数字人...</div>
+    </div>
+
+    <div id="status" class="status-hidden" aria-live="polite" aria-atomic="true"></div>
+    <div id="subtitle" aria-live="polite"></div>
+
+    <div id="voice-chat-panel">
+        <button id="voice-chat-button" type="button">开始说话</button>
+        <div id="voice-chat-text">语音对话待命</div>
+    </div>
+
+    <div id="face-name-dialog" class="face-name-dialog" hidden>
+        <form id="face-name-form" class="face-name-panel" autocomplete="off">
+            <label for="face-name-input">员工姓名</label>
+            <input id="face-name-input" type="text" name="name" maxlength="40" placeholder="请输入姓名" autocomplete="off">
+            <div id="face-name-status" aria-live="polite">准备下发人脸录入任务</div>
+            <div class="face-name-actions">
+                <button id="face-name-cancel" type="button">取消</button>
+                <button id="face-name-submit" type="submit">提交</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="lib/live2dcubismcore.min.js"></script>
+    <script src="node_modules/pixi.js/dist/browser/pixi.min.js"></script>
+    <script src="node_modules/pixi-live2d-display/dist/cubism4.min.js"></script>
+    <script src="backgrounds.js"></script>
+    <script src="voice_turn_policy.js?v=20260728-dialog-silence-full-status"></script>
+    <script src="avatar.js?v=20260728-dialog-silence-scene-sync"></script>
+</body>
+
+</html>

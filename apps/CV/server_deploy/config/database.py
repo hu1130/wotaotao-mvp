@@ -1,0 +1,39 @@
+"""MySQL、PostgreSQL、Redis 与消息队列配置。"""
+
+import os
+
+from .common import get_float, get_int
+
+MYSQL_HOST = os.getenv("MYSQL_HOST", "127.0.0.1")
+MYSQL_PORT = get_int("MYSQL_PORT", 3306)
+MYSQL_USER = os.getenv("MYSQL_USER", "root")
+MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD", "")
+MYSQL_DATABASE = os.getenv("MYSQL_DATABASE", "attendance")
+MYSQL_CHARSET = os.getenv("MYSQL_CHARSET", "utf8mb4")
+MYSQL_TIME_ZONE = os.getenv("MYSQL_TIME_ZONE", "+08:00")
+MYSQL_POOL_SIZE = get_int("MYSQL_POOL_SIZE", 20)
+MYSQL_POOL_ACQUIRE_TIMEOUT_SECONDS = get_float(
+    "MYSQL_POOL_ACQUIRE_TIMEOUT_SECONDS", 3.0
+)
+
+PG_HOST = os.getenv("PG_HOST", "127.0.0.1")
+PG_PORT = get_int("PG_PORT", 5434)
+PG_USER = os.getenv("PG_USER", "postgres")
+PG_PASSWORD = os.getenv("PG_PASSWORD", "")
+PG_DATABASE = os.getenv("PG_DATABASE", "face_db")
+PG_POOL_SIZE = get_int("PG_POOL_SIZE", 20)
+
+EMBEDDING_SYNC_POLL_INTERVAL = get_float("EMBEDDING_SYNC_POLL_INTERVAL", 30.0)
+EMBEDDING_SYNC_DEBOUNCE = get_float("EMBEDDING_SYNC_DEBOUNCE", 2.0)
+REMOTE_ENROLLMENT_STRANGER_SUPPRESS_SECONDS = get_float(
+    "REMOTE_ENROLLMENT_STRANGER_SUPPRESS_SECONDS", 8.0
+)
+
+REDIS_HOST = os.getenv("REDIS_HOST", "127.0.0.1")
+REDIS_PORT = get_int("REDIS_PORT", 6379)
+REDIS_PASSWORD = os.getenv("REDIS_PASSWORD", "")
+REDIS_DB = get_int("REDIS_DB", 0)
+REDIS_POOL_SIZE = get_int("REDIS_POOL_SIZE", 30)
+REDIS_POOL_MAX_OVERFLOW = get_int("REDIS_POOL_MAX_OVERFLOW", 10)
+
+MQ_TOPIC_PREFIX = os.getenv("MQ_TOPIC_PREFIX", "attendance")

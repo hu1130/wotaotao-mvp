@@ -1,0 +1,89 @@
+# Secrets / local environment
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Deployment archives and packaged builds
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.7z
+*.rar
+
+# Python runtime/build artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Node runtime artifacts
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Project runtime cache/log/output data
+cache/
+logs/
+*.log
+server_deploy/cache/
+server_deploy/avatar/cache/
+client_deploy/cache/
+client_deploy/logs/
+server_deploy/logs/
+
+# Runtime/private business data
+server_deploy/employees/
+client_deploy/employees/
+server_deploy/unknown_visitors/
+client_deploy/unknown_visitors/
+server_deploy/knowledge_base/
+client_deploy/knowledge_base/
+server_deploy/core/gesture/data/
+client_deploy/core/gesture/data/
+
+# Local database/runtime state
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.pid
+tmp/
+temp/
+*.tmp
+*.bak
+
+# Keys/certificates
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# skills
+.ai/
+
+# Materialized deployment bundles
+server_deploy_bundle_*/

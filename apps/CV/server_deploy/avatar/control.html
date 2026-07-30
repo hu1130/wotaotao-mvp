@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light">
+    <title>企业数字人控制台</title>
+    <link rel="stylesheet" href="control.css">
+</head>
+
+<body class="control-body">
+    <div class="control-shell">
+        <aside class="tenant-rail" aria-label="企业与功能导航">
+            <div class="brand-block">
+                <span class="brand-mark">CV</span>
+                <div>
+                    <strong>企业控制台</strong>
+                    <span>Company Operations</span>
+                </div>
+            </div>
+
+            <section class="tenant-scope" aria-labelledby="tenant-scope-title">
+                <div class="scope-lock"><span aria-hidden="true">●</span> 数据范围已锁定</div>
+                <h1 id="tenant-scope-title">正在确认企业</h1>
+                <code id="tenant-scope-id">--</code>
+                <dl>
+                    <div><dt>当前管理员</dt><dd id="tenant-admin-name">--</dd></div>
+                    <div><dt>已激活设备</dt><dd id="tenant-device-count">--</dd></div>
+                </dl>
+            </section>
+
+            <nav id="control-tabs" class="control-tabs" aria-label="控制台标签页">
+                <button type="button" class="active" data-tab="overview"><span>01</span>运行控制</button>
+                <button type="button" data-tab="faces"><span>02</span>人员与设备</button>
+                <button type="button" data-tab="content"><span>03</span>企业知识</button>
+                <button type="button" data-tab="logs"><span>04</span>操作记录</button>
+            </nav>
+
+            <div class="rail-footer">
+                <span id="session-scope-note">所有操作仅作用于当前企业</span>
+                <button id="control-logout-button" type="button">安全退出</button>
+            </div>
+        </aside>
+
+        <div class="workspace">
+            <header class="ctrl-header">
+                <div>
+                    <p class="eyebrow">TENANT OPERATIONS / <span id="header-tenant-id">--</span></p>
+                    <h2 id="workspace-title">运行控制</h2>
+                </div>
+                <div class="ctrl-header-info">
+                    <a id="super-admin-link" class="frontdesk-link" href="/super-admin.html" data-platform-only>客户端管理</a>
+                    <span id="connection-status" class="status-dot offline">数字人未连接</span>
+                    <span id="current-model-name">--</span>
+                </div>
+            </header>
+
+            <main class="ctrl-main">
+                <div id="tab-overview" class="tab-panel active" data-tab-panel="overview">
+                    <section class="metric-strip" aria-label="企业资源概览">
+                        <article><span>企业员工</span><strong id="metric-employee-count">--</strong><small>独立人员库</small></article>
+                        <article><span>设备节点</span><strong id="metric-device-count">--</strong><small>仅显示本企业设备</small></article>
+                        <article><span>知识文档</span><strong id="metric-document-count">--</strong><small>租户专属目录</small></article>
+                    </section>
+
+                    <section class="ctrl-section section-wide">
+                        <div class="section-heading">
+                            <div><span class="section-index">A</span><h3>前台与数字人实例</h3></div>
+                            <div class="section-actions">
+                                <button id="avatar-persona-open" class="text-button" type="button">数字人人设</button>
+                                <div id="avatar-persona-status" aria-live="polite">读取人设中</div>
+                            </div>
+                        </div>
+                        <div class="frontdesk-model-panel">
+                            <div id="model-switcher-panel">
+                                <div id="model-switcher" aria-label="切换数字人模型"></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="ctrl-section" data-platform-only>
+                        <div class="section-heading">
+                            <div><span class="section-index">B</span><h3>平台交互链路</h3></div>
+                            <p>默认租户的全局运行参数。</p>
+                        </div>
+                        <div id="interaction-mode-switcher" aria-label="切换交互链路"></div>
+                    </section>
+
+                    <section class="ctrl-section" data-platform-only>
+                        <div class="section-heading">
+                            <div><span class="section-index">C</span><h3>手势识别</h3></div>
+                            <p>当前服务节点的实时识别状态。</p>
+                        </div>
+                        <div id="gesture-panel">
+                            <div id="gesture-status">待命</div>
+                            <div id="gesture-detail">--</div>
+                        </div>
+                    </section>
+                </div>
+
+                <div id="tab-faces" class="tab-panel" data-tab-panel="faces" hidden>
+                    <section class="ctrl-section section-wide">
+                        <div class="section-heading">
+                            <div><span class="section-index">A</span><h3>员工人脸注册</h3></div>
+                            <p>先选择本企业设备，再将采集任务下发到对应客户端。</p>
+                        </div>
+                        <div id="face-capture-panel">
+                            <label class="field-block"><span>执行设备</span><select id="face-capture-device"><option value="">读取设备中</option></select></label>
+                            <label class="field-block"><span>员工姓名</span><input id="face-capture-name" type="text" placeholder="例如：张三" autocomplete="off"></label>
+                            <button id="face-capture-button" class="primary-button" type="button">下发采集任务</button>
+                            <div id="face-capture-status" aria-live="polite">待命</div>
+                        </div>
+                    </section>
+
+                    <section class="ctrl-section">
+                        <div class="section-heading">
+                            <div><span class="section-index">B</span><h3>人员数据</h3></div>
+                            <p>人员列表和人脸向量都按企业隔离。</p>
+                        </div>
+                        <div id="employee-face-panel">
+                            <div class="employee-toolbar">
+                                <select id="employee-face-select" aria-label="选择员工"><option value="">读取员工列表中</option></select>
+                                <button id="employee-refresh-button" type="button">刷新列表</button>
+                                <button id="employee-delete-button" class="danger-button" type="button">删除人脸数据</button>
+                            </div>
+                            <div id="employee-face-status">未读取员工列表</div>
+                        </div>
+                    </section>
+
+                    <section class="ctrl-section">
+                        <div class="section-heading">
+                            <div><span class="section-index">C</span><h3>企业设备</h3></div>
+                            <p>停用后设备凭证会在短时间内失效。</p>
+                        </div>
+                        <div id="tenant-device-list" class="device-list"><div class="empty-state">读取设备中</div></div>
+                    </section>
+                </div>
+
+                <div id="tab-content" class="tab-panel" data-tab-panel="content" hidden>
+                    <section class="ctrl-section section-wide">
+                        <div class="section-heading">
+                            <div><span class="section-index">A</span><h3>企业文档</h3></div>
+                            <p>上传后存入当前租户专属目录；重建索引后即可检索。</p>
+                        </div>
+                        <div class="document-upload-row">
+                            <label class="file-picker"><input id="knowledge-document-input" type="file" multiple accept=".txt,.md,.markdown,.json,.csv,.tsv,.pdf,.docx"><span>选择企业文档</span></label>
+                            <button id="knowledge-document-upload" class="primary-button" type="button">上传文档</button>
+                            <span id="knowledge-document-status">尚未选择文件</span>
+                        </div>
+                        <button id="knowledge-document-toggle" class="document-toggle" type="button" aria-expanded="false" aria-controls="knowledge-document-list" hidden>
+                            <span class="document-toggle-icon" aria-hidden="true">▾</span>
+                            <span id="knowledge-document-toggle-text">展开文档</span>
+                        </button>
+                        <div id="knowledge-document-list" class="document-list knowledge-document-grid"><div class="empty-state">读取文档中</div></div>
+                    </section>
+
+                    <section class="ctrl-section section-wide">
+                        <div class="section-heading">
+                            <div><span class="section-index">B</span><h3>知识索引与验证</h3></div>
+                            <p>统计、索引、检索和问答均绑定当前企业。</p>
+                        </div>
+                        <div id="knowledge-panel">
+                            <div id="knowledge-summary">未读取统计</div>
+                            <div class="ops-panel">
+                                <button id="knowledge-stats-button" type="button">查看统计</button>
+                                <button id="knowledge-index-button" class="primary-button" type="button">更新索引</button>
+                                <label class="inline-check"><input id="knowledge-reset-index" type="checkbox"><span>强制全量重建</span></label>
+                                <label class="inline-field"><span>TopK</span><input id="knowledge-top-k" type="number" min="1" max="20" step="1" value="6"></label>
+                                <label class="inline-field"><span>阈值</span><input id="knowledge-min-score" type="number" min="0" max="1" step="0.01" value="0.12"></label>
+                                <div id="knowledge-status">待命</div>
+                            </div>
+                            <div class="knowledge-query-row">
+                                <input id="knowledge-query" type="text" placeholder="输入企业制度、产品资料或关键词" autocomplete="off">
+                                <button id="knowledge-search-button" type="button">检索</button>
+                                <button id="knowledge-ask-button" type="button">问答</button>
+                            </div>
+                            <pre id="knowledge-result"></pre>
+                        </div>
+                    </section>
+
+                    <section class="ctrl-section section-wide" data-platform-only>
+                        <div class="section-heading">
+                            <div><span class="section-index">C</span><h3>平台今日语录</h3></div>
+                            <p>仅默认租户可管理的全局生成任务。</p>
+                        </div>
+                        <div id="daily-tts-panel" class="ops-panel">
+                            <button id="daily-tts-generate-button" type="button">重新生成今日语录</button>
+                            <div id="daily-tts-status">待命</div>
+                        </div>
+                    </section>
+                </div>
+
+                <div id="tab-logs" class="tab-panel" data-tab-panel="logs" hidden>
+                    <section class="ctrl-section section-wide">
+                        <div class="section-heading">
+                            <div><span class="section-index">A</span><h3>本次操作记录</h3></div>
+                            <p>用于排查当前浏览器会话中的控制指令。</p>
+                        </div>
+                        <div id="log-panel"><div id="log-content"></div></div>
+                    </section>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div id="avatar-persona-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="avatar-persona-modal-title" hidden>
+        <div class="modal-dialog persona-dialog">
+            <div class="modal-header">
+                <div>
+                    <span class="section-index">设</span>
+                    <h3 id="avatar-persona-modal-title">数字人人设</h3>
+                </div>
+                <button id="avatar-persona-close" class="icon-button" type="button" aria-label="关闭">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="persona-grid">
+                    <label class="field-block"><span>数字人名字</span><input id="avatar-persona-name" type="text" maxlength="40" placeholder="默认：叮当" autocomplete="off"></label>
+                    <label class="field-block"><span>唤醒别名</span><input id="avatar-persona-aliases" type="text" maxlength="180" placeholder="例如：小叮当、前台助手" autocomplete="off"></label>
+                    <label class="field-block"><span>性格设定</span><textarea id="avatar-persona-personality" maxlength="300" placeholder="例如：亲切、专业、有耐心，偶尔俏皮"></textarea></label>
+                    <label class="field-block"><span>说话语气</span><textarea id="avatar-persona-tone" maxlength="300" placeholder="例如：简短自然，像真人前台，语速温柔"></textarea></label>
+                    <label class="field-block persona-wide"><span>补充要求</span><textarea id="avatar-persona-extra" maxlength="600" placeholder="例如：称呼来访者时更正式；回答不要太长"></textarea></label>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button id="avatar-persona-reset" type="button">恢复默认</button>
+                <button id="avatar-persona-cancel" type="button">取消</button>
+                <button id="avatar-persona-save" class="primary-button" type="button">保存人设</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="control.js?v=20260727-remove-vortex-surface"></script>
+</body>
+
+</html>

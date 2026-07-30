@@ -1,0 +1,22 @@
+{
+    "name": "cv-avatar",
+    "version": "1.0.0",
+    "description": "Live2D Epsilon avatar for CV system",
+    "private": true,
+    "scripts": {
+        "build:showcase": "esbuild src/speech-showcase/main.jsx --bundle --format=iife --outfile=speech-showcase.js --loader:.jsx=jsx --jsx=automatic --minify --legal-comments=none && node scripts/trim-built-showcase.js",
+        "test": "node --test tests/*.test.js"
+    },
+    "dependencies": {
+        "express": "^4.21.0",
+        "pixi-live2d-display": "^0.4.0",
+        "pixi.js": "6.5.10",
+        "react": "^19.2.7",
+        "react-dom": "^19.2.7",
+        "three": "^0.185.1",
+        "ws": "^8.18.0"
+    },
+    "devDependencies": {
+        "esbuild": "^0.28.1"
+    }
+}

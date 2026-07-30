@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light">
+    <title>超级管理员 · 客户端管理</title>
+    <link rel="stylesheet" href="super-admin.css">
+</head>
+
+<body class="super-body">
+    <div class="super-shell">
+        <aside class="super-rail" aria-label="超级管理员导航">
+            <div class="brand-block">
+                <span class="brand-mark">CV</span>
+                <div>
+                    <strong>超级管理员</strong>
+                    <span>Client Operations</span>
+                </div>
+            </div>
+            <section class="session-card">
+                <span class="scope-pill">平台范围</span>
+                <h1 id="platform-admin-name">正在确认身份</h1>
+                <code id="platform-tenant-id">--</code>
+            </section>
+            <nav class="side-actions" aria-label="页面操作">
+                <a href="/control.html">企业控制台</a>
+                <button id="refresh-button" type="button">刷新数据</button>
+                <button id="logout-button" type="button">安全退出</button>
+            </nav>
+        </aside>
+
+        <main class="super-main">
+            <header class="super-header">
+                <div>
+                    <p class="eyebrow">PLATFORM ADMIN</p>
+                    <h2>客户端与设备控制面</h2>
+                </div>
+                <div id="page-status" class="page-status" aria-live="polite">初始化</div>
+            </header>
+
+            <section class="metrics" aria-label="客户端概览">
+                <article><span>客户端</span><strong id="metric-client-count">--</strong></article>
+                <article><span>激活设备</span><strong id="metric-device-count">--</strong></article>
+                <article><span>可用激活码</span><strong id="metric-activation-count">--</strong></article>
+            </section>
+
+            <section class="work-grid">
+                <article class="panel">
+                    <div class="panel-heading">
+                        <div>
+                            <span class="section-index">A</span>
+                            <h3>新建客户端</h3>
+                        </div>
+                    </div>
+                    <form id="create-client-form" class="form-grid">
+                        <label><span>租户 ID</span><input id="new-tenant-id" type="text" maxlength="64" required></label>
+                        <label><span>客户名称</span><input id="new-tenant-name" type="text" maxlength="120"></label>
+                        <label><span>管理员用户名</span><input id="new-admin-username" type="text" maxlength="64" value="admin" required></label>
+                        <label><span>管理员显示名</span><input id="new-admin-display-name" type="text" maxlength="120" value="企业管理员"></label>
+                        <label><span>设备标签</span><input id="new-device-label" type="text" maxlength="120"></label>
+                        <label><span>激活码有效期</span><input id="new-ttl-hours" type="number" min="1" max="720" value="24" required></label>
+                        <label class="checkbox-line"><input id="new-reset-existing" type="checkbox"><span>已存在时重置密码</span></label>
+                        <button id="create-client-button" class="primary-button" type="submit">创建客户端</button>
+                    </form>
+                </article>
+
+                <article class="panel secret-panel" id="secret-panel" hidden>
+                    <div class="panel-heading">
+                        <div>
+                            <span class="section-index">B</span>
+                            <h3>本次交付信息</h3>
+                        </div>
+                    </div>
+                    <dl id="secret-output" class="secret-list"></dl>
+                </article>
+            </section>
+
+            <section class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <span class="section-index">C</span>
+                        <h3>客户端列表</h3>
+                    </div>
+                    <input id="client-filter" class="table-filter" type="search" placeholder="筛选租户 ID / 名称">
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>租户</th>
+                                <th>管理员</th>
+                                <th>设备</th>
+                                <th>激活码</th>
+                                <th>最后在线</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="client-table-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <div id="client-detail-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="detail-title" hidden>
+        <div class="modal-dialog detail-dialog">
+            <div class="modal-header">
+                <div>
+                    <span class="section-index">详</span>
+                    <h3 id="detail-title">客户端详情</h3>
+                </div>
+                <button id="client-detail-close" class="icon-button" type="button" aria-label="关闭">×</button>
+            </div>
+            <div class="modal-body detail-grid" id="client-detail">
+                <article class="detail-card">
+                    <div class="mini-heading first">管理员</div>
+                    <div id="admin-list" class="stack-list"></div>
+                    <div class="mini-heading">激活码</div>
+                    <div id="activation-list" class="stack-list"></div>
+                </article>
+                <article class="detail-card">
+                    <div class="mini-heading first">注册机器</div>
+                    <div id="device-list" class="stack-list"></div>
+                </article>
+            </div>
+        </div>
+    </div>
+
+    <script src="super-admin.js"></script>
+</body>
+
+</html>
