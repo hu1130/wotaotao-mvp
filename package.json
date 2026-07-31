@@ -7,7 +7,7 @@
     "dev": "pnpm --parallel --filter @wotao/review-api --filter @wotao/review-web dev",
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",
-    "test": "pnpm --filter @wotao/review-api test",
+    "test": "pnpm --filter @wotao/contracts test && pnpm --filter @wotao/review-api test",
     "db:setup": "pnpm --filter @wotao/review-api db:setup"
   },
   "devDependencies": {
