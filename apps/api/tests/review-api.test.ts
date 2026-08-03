@@ -1,4 +1,11 @@
 import { PrismaClient } from "@prisma/client";
+import {
+  hasBusinessIdPrefix,
+  isErrorResponse,
+  isIsoUtcDateTime,
+  isPage,
+  isSuccessResponse,
+} from "@wotao/contracts";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { createApp } from "../src/app.js";
 import { AppError } from "../src/domain/app-error.js";
@@ -36,6 +43,8 @@ describe("review queue and detail", () => {
 
     expect(response.statusCode).toBe(200);
     const payload = response.json();
+    expect(isSuccessResponse(payload)).toBe(true);
+    expect(isPage(payload.data)).toBe(true);
     expect(payload.requestId).toBeTypeOf("string");
     expect(payload.data).toMatchObject({
       page: 1,
@@ -44,6 +53,10 @@ describe("review queue and detail", () => {
     });
     expect(payload.data.items).toHaveLength(2);
     expect(payload.data.items[0].contentId).toBe("cnt_ceramic_001");
+    expect(
+      hasBusinessIdPrefix("contentId", payload.data.items[0].contentId),
+    ).toBe(true);
+    expect(isIsoUtcDateTime(payload.data.items[0].submittedAt)).toBe(true);
   });
 
   it("filters the queue by merchant and submission time", async () => {
@@ -74,6 +87,7 @@ describe("review queue and detail", () => {
     });
 
     expect(response.statusCode).toBe(403);
+    expect(isErrorResponse(response.json())).toBe(true);
     expect(response.json().errorCode).toBe("FORBIDDEN");
   });
 
@@ -120,6 +134,10 @@ describe("review decisions", () => {
       previousStatus: "PENDING_REVIEW",
       nextStatus: "APPROVED",
     });
+    expect(
+      hasBusinessIdPrefix("reviewId", response.json().data.review.reviewId),
+    ).toBe(true);
+    expect(isIsoUtcDateTime(response.json().data.review.reviewedAt)).toBe(true);
 
     const storedReviews = await prisma.review.findMany({
       where: { contentId: "cnt_lamp_002" },

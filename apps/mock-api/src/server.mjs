@@ -1,21 +1,27 @@
-import { createServer } from "node:http";
 import { randomUUID } from "node:crypto";
+import { createServer } from "node:http";
 import { pathToFileURL } from "node:url";
 import {
-  CONTENT_TRANSITIONS,
-  INQUIRY_TRANSITIONS,
-  Role,
-} from "../../../packages/contracts/src/runtime.mjs";
+  enumValues,
+  idPrefix,
+  matchOperation,
+  transitionMap,
+} from "./contract.mjs";
 import { createSeedState } from "./data.mjs";
 
-const ROLES = new Set(Object.values(Role));
+const ROLES = new Set(enumValues("Role"));
+const ERROR_CODES = new Set(enumValues("ErrorCode"));
+const CHANNELS = new Set(enumValues("Channel"));
+const CONTENT_TRANSITIONS = transitionMap("ContentStatus");
+const INQUIRY_TRANSITIONS = transitionMap("InquiryStatus");
+
 const JSON_HEADERS = {
   "content-type": "application/json; charset=utf-8",
   "cache-control": "no-store",
 };
 
 class ApiError extends Error {
-  constructor(status, errorCode, message, details = {}) {
+  constructor(status, errorCode, message, details) {
     super(message);
     this.status = status;
     this.errorCode = errorCode;
@@ -34,24 +40,27 @@ function success(res, requestId, data, status = 200) {
 
 function fail(res, requestId, error) {
   const status = error instanceof ApiError ? error.status : 500;
-  const errorCode = error instanceof ApiError ? error.errorCode : "INTERNAL_ERROR";
-  const message = error instanceof ApiError ? error.message : "服务内部错误";
-  const details = error instanceof ApiError ? error.details : {};
-  send(res, status, { errorCode, message, requestId, details });
+  const requestedCode =
+    error instanceof ApiError ? error.errorCode : "INTERNAL_ERROR";
+  const errorCode = ERROR_CODES.has(requestedCode)
+    ? requestedCode
+    : "INTERNAL_ERROR";
+  const message =
+    error instanceof ApiError ? error.message : "Internal server error";
+  const payload = { errorCode, message, requestId };
+  if (error instanceof ApiError && error.details !== undefined) {
+    payload.details = error.details;
+  }
+  send(res, status, payload);
 }
 
 async function readJson(req) {
-  const declaredLength = Number(req.headers["content-length"] ?? 0);
-  if (declaredLength > 1024 * 1024) {
-    throw new ApiError(413, "PAYLOAD_TOO_LARGE", "请求体超过 1MB");
-  }
-
   const chunks = [];
   let size = 0;
   for await (const chunk of req) {
     size += chunk.length;
     if (size > 1024 * 1024) {
-      throw new ApiError(413, "PAYLOAD_TOO_LARGE", "请求体超过 1MB");
+      throw new ApiError(413, "VALIDATION_ERROR", "Request body exceeds 1MB");
     }
     chunks.push(chunk);
   }
@@ -59,65 +68,75 @@ async function readJson(req) {
   try {
     return JSON.parse(Buffer.concat(chunks).toString("utf8"));
   } catch {
-    throw new ApiError(400, "INVALID_JSON", "请求体不是有效 JSON");
+    throw new ApiError(400, "VALIDATION_ERROR", "Request body is not valid JSON");
   }
 }
 
-function context(req) {
+function actorContext(req) {
   const role = req.headers["x-role"];
-  const merchantId = req.headers["x-merchant-id"];
-  const actorId =
-    req.headers["x-user-id"] ??
-    req.headers["x-actor-id"] ??
-    role?.toLowerCase() ??
-    "anonymous";
-  const rawActorName = req.headers["x-user-name"];
-  let actorName = String(actorId);
-  if (typeof rawActorName === "string") {
+  const userId = req.headers["x-user-id"];
+  const merchantId = req.headers["x-merchant-id"] ?? null;
+  const encodedName = req.headers["x-user-name"];
+  let userName = typeof userId === "string" ? userId : "anonymous";
+  if (typeof encodedName === "string") {
     try {
-      actorName = decodeURIComponent(rawActorName);
+      userName = decodeURIComponent(encodedName);
     } catch {
-      actorName = rawActorName;
+      userName = encodedName;
     }
   }
-  return { role, merchantId, actorId, actorName };
+  return { role, userId, userName, merchantId };
 }
 
-function requireRole(ctx, allowed) {
-  if (!ROLES.has(ctx.role)) {
-    throw new ApiError(401, "ROLE_REQUIRED", "缺少或无效的 x-role");
+function authorize(operation, actor) {
+  if (operation.auth === "PUBLIC") return;
+  if (
+    typeof actor.role !== "string" ||
+    !ROLES.has(actor.role) ||
+    typeof actor.userId !== "string" ||
+    actor.userId.length === 0
+  ) {
+    throw new ApiError(
+      401,
+      "UNAUTHENTICATED",
+      "A valid x-role and x-user-id are required",
+    );
   }
-  if (!allowed.includes(ctx.role)) {
-    throw new ApiError(403, "FORBIDDEN", "无权执行此操作");
+  if (!operation.roles.includes(actor.role)) {
+    throw new ApiError(403, "FORBIDDEN", "The actor cannot call this operation");
   }
 }
 
-function requireMerchant(ctx) {
-  if (!ctx.merchantId) {
-    throw new ApiError(400, "MERCHANT_CONTEXT_REQUIRED", "缺少 x-merchant-id");
+function requireMerchant(actor) {
+  if (typeof actor.merchantId !== "string" || actor.merchantId.length === 0) {
+    throw new ApiError(403, "FORBIDDEN", "A merchant context is required");
   }
+  return actor.merchantId;
 }
 
-function requireOwned(resource, ctx) {
-  requireMerchant(ctx);
-  if (resource.merchantId !== ctx.merchantId) {
-    throw new ApiError(403, "MERCHANT_DATA_FORBIDDEN", "不能访问其他商家的数据");
+function requireOwned(resource, actor) {
+  const merchantId = requireMerchant(actor);
+  if (resource.merchantId !== merchantId) {
+    throw new ApiError(403, "FORBIDDEN", "Cross-merchant access is forbidden");
   }
 }
 
 function requireFields(body, fields) {
   const missing = fields.filter(
-    (field) => body[field] === undefined || body[field] === null || body[field] === "",
+    (field) =>
+      body[field] === undefined || body[field] === null || body[field] === "",
   );
   if (missing.length > 0) {
-    throw new ApiError(400, "VALIDATION_ERROR", "请求参数不完整", { missing });
+    throw new ApiError(400, "VALIDATION_ERROR", "Required fields are missing", {
+      missing,
+    });
   }
 }
 
-function getOr404(map, id, resourceName) {
+function getResource(map, id, errorCode, name) {
   const value = map.get(id);
   if (!value) {
-    throw new ApiError(404, "RESOURCE_NOT_FOUND", `${resourceName}不存在`, { id });
+    throw new ApiError(404, errorCode, `${name} not found`, { id });
   }
   return value;
 }
@@ -126,15 +145,21 @@ function now() {
   return new Date().toISOString();
 }
 
-function makeId(prefix) {
-  return `${prefix}_${randomUUID().replaceAll("-", "")}`;
+function makeId(schemaName) {
+  return `${idPrefix(schemaName)}${randomUUID().replaceAll("-", "")}`;
 }
 
 function pagination(url) {
   const page = Number(url.searchParams.get("page") ?? 1);
   const pageSize = Number(url.searchParams.get("pageSize") ?? 20);
-  if (!Number.isInteger(page) || page < 1 || !Number.isInteger(pageSize) || pageSize < 1 || pageSize > 100) {
-    throw new ApiError(400, "INVALID_PAGINATION", "page 或 pageSize 无效");
+  if (
+    !Number.isInteger(page) ||
+    page < 1 ||
+    !Number.isInteger(pageSize) ||
+    pageSize < 1 ||
+    pageSize > 100
+  ) {
+    throw new ApiError(400, "VALIDATION_ERROR", "Invalid pagination");
   }
   return { page, pageSize };
 }
@@ -149,43 +174,74 @@ function pageItems(items, page, pageSize) {
   };
 }
 
-function audit(state, ctx, action, resourceType, resourceId, before, after) {
-  state.auditLog.push({
-    auditId: makeId("audit"),
-    actorId: String(ctx.actorId),
-    role: ctx.role,
-    action,
-    resourceType,
-    resourceId,
-    before,
-    after,
-    createdAt: now(),
-  });
-}
-
-function reviewSummary(state, content) {
-  const product = state.products.get(content.productId);
-  return {
-    contentId: content.contentId,
-    merchantId: content.merchantId,
-    merchantName:
-      content.merchantId === "merchant_demo" ? "我淘淘演示商家" : "认证商家",
-    productId: content.productId,
-    productTitle: product?.name ?? "未知商品",
-    title: content.caption,
-    status: content.status,
-    contentVersion: content.contentVersion ?? 1,
-    submittedAt: content.submittedAt ?? content.updatedAt,
-  };
-}
-
-function ensureTransition(transitions, current, next) {
+function ensureTransition(transitions, current, next, errorCode) {
   if (!(transitions[current] ?? []).includes(next)) {
-    throw new ApiError(409, "INVALID_STATE_TRANSITION", "当前状态不允许执行此操作", {
+    throw new ApiError(409, errorCode, "Invalid state transition", {
       currentStatus: current,
       requestedStatus: next,
     });
   }
+}
+
+function assertVersion(content, value) {
+  if (!Number.isInteger(value) || value < 1) {
+    throw new ApiError(400, "VALIDATION_ERROR", "contentVersion must be positive");
+  }
+  if (value !== content.contentVersion) {
+    throw new ApiError(409, "CONTENT_VERSION_CONFLICT", "Content version changed", {
+      currentVersion: content.contentVersion,
+      requestedVersion: value,
+    });
+  }
+}
+
+function reviewSummary(state, content) {
+  const product = state.products.get(content.productId);
+  const merchant = state.merchants.get(content.merchantId);
+  return {
+    contentId: content.contentId,
+    merchantId: content.merchantId,
+    merchantName: merchant?.name ?? "Unknown merchant",
+    productId: content.productId,
+    productTitle: product?.name ?? "Unknown product",
+    title: content.title ?? "Untitled content",
+    status: content.status,
+    contentVersion: content.contentVersion,
+    submittedAt: content.submittedAt ?? content.updatedAt,
+  };
+}
+
+function reviewDetail(state, content) {
+  const product = state.products.get(content.productId);
+  return {
+    ...reviewSummary(state, content),
+    copy: content.copy ?? "",
+    videoUrl: content.videoUrl ?? "",
+    sellingPoints: product?.sellingPoints ?? [],
+    targetAudience: content.targetAudience,
+    reviewHistory: state.reviews.filter(
+      (review) => review.contentId === content.contentId,
+    ),
+  };
+}
+
+function generationResult(content) {
+  return {
+    contentId: content.contentId,
+    generationRequestId: content.generationRequestId,
+    status: content.generationStatus,
+    errorCode: content.generationErrorCode,
+    errorMessage: null,
+    updatedAt: content.updatedAt,
+  };
+}
+
+function publicationScenario(req) {
+  const value = req.headers["x-mock-publication-result"] ?? "PROCESSING";
+  if (!["PROCESSING", "SUCCESS", "FAILURE"].includes(value)) {
+    throw new ApiError(400, "VALIDATION_ERROR", "Invalid mock publication result");
+  }
+  return value;
 }
 
 async function handle(req, res, state) {
@@ -195,429 +251,736 @@ async function handle(req, res, state) {
   try {
     const method = req.method ?? "GET";
     const url = new URL(req.url ?? "/", "http://mock.local");
-    const ctx = context(req);
-    let match;
-
-    if (method === "POST" && url.pathname === "/products") {
-      requireRole(ctx, [Role.MERCHANT]);
-      requireMerchant(ctx);
-      const body = await readJson(req);
-      requireFields(body, ["name", "description", "imageUrls"]);
-      if (!Array.isArray(body.imageUrls) || body.imageUrls.length === 0) {
-        throw new ApiError(400, "VALIDATION_ERROR", "imageUrls 至少包含一项");
-      }
-      const timestamp = now();
-      const product = {
-        productId: makeId("product"),
-        merchantId: ctx.merchantId,
-        name: String(body.name),
-        description: String(body.description),
-        imageUrls: body.imageUrls.map(String),
-        isPublic: false,
-        createdAt: timestamp,
-        updatedAt: timestamp,
-      };
-      state.products.set(product.productId, product);
-      return success(res, requestId, product, 201);
+    const operation = matchOperation(method, url.pathname);
+    if (!operation) {
+      throw new ApiError(404, "VALIDATION_ERROR", "Route not found", {
+        method,
+        path: url.pathname,
+      });
     }
 
-    if (method === "GET" && (match = url.pathname.match(/^\/products\/([^/]+)$/))) {
-      requireRole(ctx, [Role.MERCHANT, Role.OPERATOR, Role.BUYER]);
-      const product = getOr404(state.products, decodeURIComponent(match[1]), "商品");
-      if (ctx.role === Role.MERCHANT) requireOwned(product, ctx);
-      if (ctx.role === Role.BUYER && !product.isPublic) {
-        throw new ApiError(404, "RESOURCE_NOT_FOUND", "商品不存在");
-      }
-      return success(res, requestId, product);
-    }
+    const actor = actorContext(req);
+    authorize(operation, actor);
 
-    if (method === "POST" && url.pathname === "/contents/generate") {
-      requireRole(ctx, [Role.MERCHANT]);
-      requireMerchant(ctx);
-      const body = await readJson(req);
-      requireFields(body, ["productId"]);
-      const product = getOr404(state.products, body.productId, "商品");
-      requireOwned(product, ctx);
-      const timestamp = now();
-      const content = {
-        contentId: makeId("content"),
-        merchantId: product.merchantId,
-        productId: product.productId,
-        caption: `${product.name}，让好产品被更多人看见。`,
-        videoUrl: "https://example.test/content/generated-demo.mp4",
-        status: "GENERATED",
-        contentVersion: 1,
-        createdAt: timestamp,
-        updatedAt: timestamp,
-      };
-      state.contents.set(content.contentId, content);
-      return success(res, requestId, content, 201);
-    }
+    switch (operation.operationId) {
+      case "foundation.health":
+        return success(res, requestId, { status: "ok" });
 
-    if (method === "PUT" && (match = url.pathname.match(/^\/contents\/([^/]+)$/))) {
-      requireRole(ctx, [Role.MERCHANT]);
-      const content = getOr404(state.contents, decodeURIComponent(match[1]), "内容");
-      requireOwned(content, ctx);
-      if (!["GENERATED", "REJECTED"].includes(content.status)) {
-        throw new ApiError(409, "CONTENT_NOT_EDITABLE", "当前内容状态不可编辑", {
-          currentStatus: content.status,
-        });
-      }
-      const body = await readJson(req);
-      if (body.caption === undefined && body.videoUrl === undefined) {
-        throw new ApiError(400, "VALIDATION_ERROR", "caption 和 videoUrl 至少提供一项");
-      }
-      if (body.caption !== undefined) content.caption = String(body.caption);
-      if (body.videoUrl !== undefined) content.videoUrl = String(body.videoUrl);
-      content.contentVersion = (content.contentVersion ?? 1) + 1;
-      content.updatedAt = now();
-      content.updatedBy = String(ctx.actorId);
-      return success(res, requestId, content);
-    }
-
-    if (
-      method === "POST" &&
-      (match = url.pathname.match(/^\/contents\/([^/]+)\/submit-review$/))
-    ) {
-      requireRole(ctx, [Role.MERCHANT]);
-      const content = getOr404(state.contents, decodeURIComponent(match[1]), "内容");
-      requireOwned(content, ctx);
-      ensureTransition(CONTENT_TRANSITIONS, content.status, "PENDING_REVIEW");
-      const before = content.status;
-      content.status = "PENDING_REVIEW";
-      content.updatedAt = now();
-      content.submittedAt = content.updatedAt;
-      content.updatedBy = String(ctx.actorId);
-      audit(state, ctx, "SUBMIT_REVIEW", "CONTENT", content.contentId, before, content.status);
-      return success(res, requestId, content);
-    }
-
-    if (method === "GET" && url.pathname === "/reviews/pending") {
-      requireRole(ctx, [Role.OPERATOR]);
-      const { page, pageSize } = pagination(url);
-      const items = [...state.contents.values()].filter(
-        (content) => content.status === "PENDING_REVIEW",
-      ).map((content) => reviewSummary(state, content));
-      return success(res, requestId, pageItems(items, page, pageSize));
-    }
-
-    if (
-      method === "POST" &&
-      (match = url.pathname.match(/^\/reviews\/([^/]+)\/(approve|reject)$/))
-    ) {
-      requireRole(ctx, [Role.OPERATOR]);
-      const content = getOr404(state.contents, decodeURIComponent(match[1]), "内容");
-      const action = match[2];
-      const nextStatus = action === "approve" ? "APPROVED" : "REJECTED";
-      ensureTransition(CONTENT_TRANSITIONS, content.status, nextStatus);
-      const body = await readJson(req);
-      if (!Number.isInteger(body.contentVersion) || body.contentVersion < 1) {
-        throw new ApiError(400, "VALIDATION_ERROR", "contentVersion 必须是正整数", {
-          field: "contentVersion",
-        });
-      }
-      if (body.contentVersion !== (content.contentVersion ?? 1)) {
-        throw new ApiError(409, "CONTENT_VERSION_CONFLICT", "内容版本已变化", {
-          currentVersion: content.contentVersion ?? 1,
-          requestedVersion: body.contentVersion,
-        });
-      }
-      if (action === "reject") {
-        requireFields(body, ["comment"]);
-        const reasonCodes = [
-          "MISLEADING_CLAIM",
-          "INCOMPLETE_INFORMATION",
-          "MEDIA_QUALITY",
-          "PLATFORM_POLICY",
-          "OTHER",
-        ];
-        if (body.reasonCode && !reasonCodes.includes(body.reasonCode)) {
-          throw new ApiError(400, "VALIDATION_ERROR", "reasonCode 不受支持", {
-            field: "reasonCode",
-          });
+      case "product.create": {
+        const merchantId = requireMerchant(actor);
+        const body = await readJson(req);
+        requireFields(body, ["name", "sellingPoints", "priceMode"]);
+        if (!Array.isArray(body.sellingPoints)) {
+          throw new ApiError(400, "PRODUCT_VALIDATION_FAILED", "sellingPoints must be an array");
         }
-        content.rejectionReason = String(body.comment);
-      } else {
-        delete content.rejectionReason;
+        if (!["FIXED", "INQUIRY"].includes(body.priceMode)) {
+          throw new ApiError(400, "PRODUCT_VALIDATION_FAILED", "priceMode is invalid");
+        }
+        if (body.priceMode === "FIXED" && typeof body.price !== "number") {
+          throw new ApiError(400, "PRODUCT_VALIDATION_FAILED", "FIXED price requires price");
+        }
+        const timestamp = now();
+        const product = {
+          productId: makeId("ProductId"),
+          merchantId,
+          name: String(body.name),
+          summary: String(body.summary ?? ""),
+          sellingPoints: body.sellingPoints.map(String),
+          images: Array.isArray(body.images) ? body.images : [],
+          parameters: Array.isArray(body.parameters) ? body.parameters : [],
+          priceMode: body.priceMode,
+          price: body.priceMode === "FIXED" ? body.price : null,
+          status: "DRAFT",
+          createdAt: timestamp,
+          updatedAt: timestamp,
+        };
+        state.products.set(product.productId, product);
+        return success(res, requestId, product, 201);
       }
-      const before = content.status;
-      content.status = nextStatus;
-      content.updatedAt = now();
-      content.updatedBy = String(ctx.actorId);
-      const review = {
-        reviewId: makeId("review"),
-        contentId: content.contentId,
-        decision: nextStatus,
-        reasonCode: action === "reject" ? body.reasonCode ?? null : null,
-        comment: body.comment ? String(body.comment) : null,
-        reviewerId: String(ctx.actorId),
-        reviewerName: String(ctx.actorName),
-        reviewedAt: content.updatedAt,
-        contentVersion: content.contentVersion ?? 1,
-        previousStatus: before,
-        nextStatus,
-      };
-      state.reviews.push(review);
-      audit(state, ctx, action.toUpperCase(), "CONTENT", content.contentId, before, nextStatus);
-      return success(res, requestId, {
-        content: reviewSummary(state, content),
-        review,
-      });
-    }
 
-    if (method === "GET" && url.pathname === "/authorized-accounts") {
-      requireRole(ctx, [Role.OPERATOR]);
-      const channel = url.searchParams.get("channel");
-      const accounts = [...state.accounts.values()].filter(
-        (account) => !channel || account.channel === channel,
-      );
-      return success(res, requestId, accounts);
-    }
-
-    if (method === "POST" && url.pathname === "/publications") {
-      requireRole(ctx, [Role.OPERATOR]);
-      const idempotencyKey = req.headers["idempotency-key"];
-      if (typeof idempotencyKey !== "string" || idempotencyKey.length < 8) {
-        throw new ApiError(400, "IDEMPOTENCY_KEY_REQUIRED", "缺少有效的 idempotency-key");
+      case "product.list": {
+        const merchantId = requireMerchant(actor);
+        const { page, pageSize } = pagination(url);
+        const status = url.searchParams.get("status");
+        const items = [...state.products.values()]
+          .filter((item) => item.merchantId === merchantId)
+          .filter((item) => !status || item.status === status)
+          .map((item) => ({
+            productId: item.productId,
+            merchantId: item.merchantId,
+            name: item.name,
+            primaryImageUrl: item.images[0]?.url ?? null,
+            sellingPoints: item.sellingPoints,
+            priceMode: item.priceMode,
+            price: item.price,
+            status: item.status,
+            updatedAt: item.updatedAt,
+          }));
+        return success(res, requestId, pageItems(items, page, pageSize));
       }
-      const body = await readJson(req);
-      requireFields(body, ["contentId", "accountId", "channel"]);
-      const fingerprint = JSON.stringify({
-        contentId: body.contentId,
-        accountId: body.accountId,
-        channel: body.channel,
-        scenario: body.scenario ?? "PROCESSING",
-      });
-      const prior = state.idempotency.get(idempotencyKey);
-      if (prior) {
-        if (prior.fingerprint !== fingerprint) {
-          throw new ApiError(409, "IDEMPOTENCY_KEY_CONFLICT", "幂等键已用于不同请求");
+
+      case "product.get": {
+        const product = getResource(
+          state.products,
+          operation.params.productId,
+          "PRODUCT_NOT_FOUND",
+          "Product",
+        );
+        if (actor.role === "MERCHANT") requireOwned(product, actor);
+        return success(res, requestId, product);
+      }
+
+      case "product.update": {
+        const product = getResource(
+          state.products,
+          operation.params.productId,
+          "PRODUCT_NOT_FOUND",
+          "Product",
+        );
+        requireOwned(product, actor);
+        const body = await readJson(req);
+        for (const field of [
+          "name",
+          "summary",
+          "sellingPoints",
+          "images",
+          "parameters",
+          "priceMode",
+          "price",
+        ]) {
+          if (body[field] !== undefined) product[field] = body[field];
+        }
+        product.updatedAt = now();
+        return success(res, requestId, product);
+      }
+
+      case "product.activate":
+      case "product.deactivate": {
+        const product = getResource(
+          state.products,
+          operation.params.productId,
+          "PRODUCT_NOT_FOUND",
+          "Product",
+        );
+        requireOwned(product, actor);
+        product.status =
+          operation.operationId === "product.activate" ? "ACTIVE" : "INACTIVE";
+        product.updatedAt = now();
+        return success(res, requestId, product);
+      }
+
+      case "product.uploadImage":
+        return success(
+          res,
+          requestId,
+          {
+            url: "https://example.test/uploads/product-image.jpg",
+            contentType: "image/jpeg",
+            size: 1024,
+          },
+          201,
+        );
+
+      case "content.generate": {
+        const body = await readJson(req);
+        requireFields(body, [
+          "productId",
+          "targetAudience",
+          "sellingPoints",
+          "style",
+          "duration",
+        ]);
+        const product = getResource(
+          state.products,
+          body.productId,
+          "PRODUCT_NOT_FOUND",
+          "Product",
+        );
+        requireOwned(product, actor);
+        if (product.status !== "ACTIVE") {
+          throw new ApiError(409, "PRODUCT_INACTIVE", "Product is not active");
+        }
+        const timestamp = now();
+        const content = {
+          contentId: makeId("ContentId"),
+          merchantId: product.merchantId,
+          productId: product.productId,
+          title: `${product.name} demo`,
+          copy: product.summary,
+          videoUrl: "https://example.test/content/generated.mp4",
+          targetAudience: String(body.targetAudience),
+          style: String(body.style),
+          duration: Number(body.duration),
+          status: "GENERATED",
+          generationRequestId: makeId("GenerationRequestId"),
+          generationStatus: "SUCCEEDED",
+          generationErrorCode: null,
+          contentVersion: 1,
+          submittedAt: null,
+          createdAt: timestamp,
+          updatedAt: timestamp,
+        };
+        state.contents.set(content.contentId, content);
+        return success(res, requestId, generationResult(content), 201);
+      }
+
+      case "content.get": {
+        const content = getResource(
+          state.contents,
+          operation.params.contentId,
+          "CONTENT_NOT_FOUND",
+          "Content",
+        );
+        if (actor.role === "MERCHANT") requireOwned(content, actor);
+        return success(res, requestId, content);
+      }
+
+      case "content.generationStatus": {
+        const content = getResource(
+          state.contents,
+          operation.params.contentId,
+          "CONTENT_NOT_FOUND",
+          "Content",
+        );
+        requireOwned(content, actor);
+        return success(res, requestId, generationResult(content));
+      }
+
+      case "content.update": {
+        const content = getResource(
+          state.contents,
+          operation.params.contentId,
+          "CONTENT_NOT_FOUND",
+          "Content",
+        );
+        requireOwned(content, actor);
+        if (!["GENERATED", "REJECTED"].includes(content.status)) {
+          throw new ApiError(409, "CONTENT_NOT_EDITABLE", "Content is not editable");
+        }
+        const body = await readJson(req);
+        assertVersion(content, body.contentVersion);
+        for (const field of [
+          "title",
+          "copy",
+          "videoUrl",
+          "targetAudience",
+          "style",
+          "duration",
+        ]) {
+          if (body[field] !== undefined) content[field] = body[field];
+        }
+        content.contentVersion += 1;
+        content.updatedAt = now();
+        return success(res, requestId, content);
+      }
+
+      case "content.regenerate": {
+        const content = getResource(
+          state.contents,
+          operation.params.contentId,
+          "CONTENT_NOT_FOUND",
+          "Content",
+        );
+        requireOwned(content, actor);
+        const body = await readJson(req);
+        assertVersion(content, body.contentVersion);
+        if (!["GENERATED", "REJECTED"].includes(content.status)) {
+          throw new ApiError(409, "CONTENT_NOT_EDITABLE", "Content is not editable");
+        }
+        content.generationRequestId = makeId("GenerationRequestId");
+        content.generationStatus = "SUCCEEDED";
+        content.generationErrorCode = null;
+        content.contentVersion += 1;
+        content.updatedAt = now();
+        return success(res, requestId, generationResult(content));
+      }
+
+      case "content.submitReview": {
+        const content = getResource(
+          state.contents,
+          operation.params.contentId,
+          "CONTENT_NOT_FOUND",
+          "Content",
+        );
+        requireOwned(content, actor);
+        const body = await readJson(req);
+        assertVersion(content, body.contentVersion);
+        ensureTransition(
+          CONTENT_TRANSITIONS,
+          content.status,
+          "PENDING_REVIEW",
+          "CONTENT_NOT_EDITABLE",
+        );
+        content.status = "PENDING_REVIEW";
+        content.submittedAt = now();
+        content.updatedAt = content.submittedAt;
+        return success(res, requestId, content);
+      }
+
+      case "review.pending": {
+        const { page, pageSize } = pagination(url);
+        const merchantId = url.searchParams.get("merchantId");
+        const from = url.searchParams.get("submittedFrom");
+        const to = url.searchParams.get("submittedTo");
+        const items = [...state.contents.values()]
+          .filter((item) => item.status === "PENDING_REVIEW")
+          .filter((item) => !merchantId || item.merchantId === merchantId)
+          .filter((item) => !from || item.submittedAt >= from)
+          .filter((item) => !to || item.submittedAt <= to)
+          .map((item) => reviewSummary(state, item));
+        return success(res, requestId, pageItems(items, page, pageSize));
+      }
+
+      case "review.get": {
+        const content = getResource(
+          state.contents,
+          operation.params.contentId,
+          "CONTENT_NOT_FOUND",
+          "Content",
+        );
+        return success(res, requestId, reviewDetail(state, content));
+      }
+
+      case "review.approve":
+      case "review.reject": {
+        const content = getResource(
+          state.contents,
+          operation.params.contentId,
+          "CONTENT_NOT_FOUND",
+          "Content",
+        );
+        if (content.status !== "PENDING_REVIEW") {
+          throw new ApiError(409, "REVIEW_STATUS_CHANGED", "Content is no longer pending");
+        }
+        const body = await readJson(req);
+        assertVersion(content, body.contentVersion);
+        const rejected = operation.operationId === "review.reject";
+        if (rejected && (!body.comment || String(body.comment).trim().length === 0)) {
+          throw new ApiError(
+            400,
+            "REJECTION_REASON_REQUIRED",
+            "A rejection comment is required",
+          );
+        }
+        const previousStatus = content.status;
+        const nextStatus = rejected ? "REJECTED" : "APPROVED";
+        content.status = nextStatus;
+        content.updatedAt = now();
+        const review = {
+          reviewId: makeId("ReviewId"),
+          contentId: content.contentId,
+          decision: nextStatus,
+          reasonCode: rejected ? body.reasonCode ?? null : null,
+          comment: body.comment ? String(body.comment) : null,
+          reviewerId: actor.userId,
+          reviewerName: actor.userName,
+          reviewedAt: content.updatedAt,
+          contentVersion: content.contentVersion,
+          previousStatus,
+          nextStatus,
+        };
+        state.reviews.push(review);
+        return success(res, requestId, {
+          content: reviewSummary(state, content),
+          review,
+        });
+      }
+
+      case "review.history": {
+        const content = getResource(
+          state.contents,
+          operation.params.contentId,
+          "CONTENT_NOT_FOUND",
+          "Content",
+        );
+        if (actor.role === "MERCHANT") requireOwned(content, actor);
+        const reviews = state.reviews
+          .filter((item) => item.contentId === content.contentId)
+          .map((item) =>
+            actor.role === "MERCHANT" && item.decision === "APPROVED"
+              ? { ...item, comment: null }
+              : item,
+          );
+        return success(res, requestId, reviews);
+      }
+
+      case "publishing.accounts": {
+        const channel = url.searchParams.get("channel");
+        if (!channel || !CHANNELS.has(channel)) {
+          throw new ApiError(400, "VALIDATION_ERROR", "channel is required");
         }
         return success(
           res,
           requestId,
-          getOr404(state.publications, prior.publicationId, "发布记录"),
+          [...state.accounts.values()].filter((item) => item.channel === channel),
         );
       }
 
-      const content = getOr404(state.contents, body.contentId, "内容");
-      if (content.status !== "APPROVED") {
-        throw new ApiError(409, "CONTENT_NOT_APPROVED", "内容尚未审核通过", {
-          currentStatus: content.status,
+      case "publishing.create": {
+        const body = await readJson(req);
+        requireFields(body, ["contentId", "accountId", "channel", "idempotencyKey"]);
+        const fingerprint = JSON.stringify({
+          contentId: body.contentId,
+          accountId: body.accountId,
+          channel: body.channel,
         });
-      }
-      const account = getOr404(state.accounts, body.accountId, "授权账号");
-      if (account.channel !== body.channel) {
-        throw new ApiError(400, "ACCOUNT_CHANNEL_MISMATCH", "账号与渠道不匹配");
-      }
-      const scenario = body.scenario ?? "PROCESSING";
-      if (!["SUCCESS", "PROCESSING", "FAILURE"].includes(scenario)) {
-        throw new ApiError(400, "INVALID_MOCK_SCENARIO", "未知模拟发布场景");
-      }
-      const timestamp = now();
-      const publication = {
-        publicationId: makeId("publication"),
-        merchantId: content.merchantId,
-        productId: content.productId,
-        contentId: content.contentId,
-        accountId: account.accountId,
-        channel: account.channel,
-        status:
-          scenario === "SUCCESS" ? "SUCCEEDED" : scenario === "FAILURE" ? "FAILED" : "PUBLISHING",
-        createdAt: timestamp,
-        updatedAt: timestamp,
-      };
-      if (scenario === "SUCCESS") {
-        publication.externalWorkId = makeId("work");
-        publication.externalWorkUrl = `https://example.test/${account.channel.toLowerCase()}/work/${publication.externalWorkId}`;
-        const product = state.products.get(content.productId);
-        if (product) product.isPublic = true;
-      }
-      if (scenario === "FAILURE") publication.failureReason = "模拟发布失败";
-      state.publications.set(publication.publicationId, publication);
-      state.idempotency.set(idempotencyKey, {
-        publicationId: publication.publicationId,
-        fingerprint,
-      });
-      audit(state, ctx, "CREATE_PUBLICATION", "PUBLICATION", publication.publicationId, null, publication.status);
-      return success(res, requestId, publication, 201);
-    }
-
-    if (method === "POST" && url.pathname === "/publications/callback") {
-      if (req.headers["x-callback-signature"] !== "mock-valid-signature") {
-        throw new ApiError(401, "INVALID_CALLBACK_SIGNATURE", "回调签名无效");
-      }
-      const body = await readJson(req);
-      requireFields(body, ["callbackEventId", "publicationId", "status"]);
-      const duplicateEvent = state.callbackEvents.get(body.callbackEventId);
-      if (duplicateEvent) {
-        return success(
-          res,
-          requestId,
-          getOr404(state.publications, duplicateEvent.publicationId, "发布记录"),
+        const prior = state.idempotency.get(body.idempotencyKey);
+        if (prior) {
+          if (prior.fingerprint !== fingerprint) {
+            throw new ApiError(409, "IDEMPOTENCY_CONFLICT", "Idempotency key conflict");
+          }
+          return success(
+            res,
+            requestId,
+            getResource(
+              state.publications,
+              prior.publicationId,
+              "PUBLICATION_NOT_FOUND",
+              "Publication",
+            ),
+          );
+        }
+        const content = getResource(
+          state.contents,
+          body.contentId,
+          "CONTENT_NOT_FOUND",
+          "Content",
         );
+        if (content.status !== "APPROVED") {
+          throw new ApiError(409, "CONTENT_NOT_APPROVED", "Content is not approved");
+        }
+        const account = state.accounts.get(body.accountId);
+        if (!account || !account.available || account.channel !== body.channel) {
+          throw new ApiError(400, "ACCOUNT_NOT_AVAILABLE", "Account is unavailable");
+        }
+        const scenario = publicationScenario(req);
+        const timestamp = now();
+        const publicationId = makeId("PublicationId");
+        const publication = {
+          publicationId,
+          merchantId: content.merchantId,
+          contentId: content.contentId,
+          productId: content.productId,
+          channel: account.channel,
+          accountId: account.accountId,
+          idempotencyKey: String(body.idempotencyKey),
+          status:
+            scenario === "SUCCESS"
+              ? "SUCCEEDED"
+              : scenario === "FAILURE"
+                ? "FAILED"
+                : "PUBLISHING",
+          externalTaskId: `task_${publicationId}`,
+          externalWorkId:
+            scenario === "SUCCESS" ? `work_${publicationId}` : null,
+          externalUrl:
+            scenario === "SUCCESS"
+              ? `https://example.test/${account.channel.toLowerCase()}/${publicationId}`
+              : null,
+          errorCode: scenario === "FAILURE" ? "RATE_LIMITED" : null,
+          errorMessage: scenario === "FAILURE" ? "Mock channel failure" : null,
+          requestedBy: actor.userId,
+          publishedAt: scenario === "SUCCESS" ? timestamp : null,
+          createdAt: timestamp,
+          updatedAt: timestamp,
+        };
+        state.publications.set(publicationId, publication);
+        state.idempotency.set(body.idempotencyKey, { publicationId, fingerprint });
+        return success(res, requestId, publication, 201);
       }
-      const publication = getOr404(state.publications, body.publicationId, "发布记录");
-      if (publication.status !== "PUBLISHING") {
-        throw new ApiError(409, "PUBLICATION_NOT_PROCESSING", "发布记录不在处理中", {
-          currentStatus: publication.status,
-        });
-      }
-      if (!["SUCCEEDED", "FAILED"].includes(body.status)) {
-        throw new ApiError(400, "INVALID_CALLBACK_STATUS", "回调状态无效");
-      }
-      if (body.status === "SUCCEEDED") {
-        requireFields(body, ["externalWorkId", "externalWorkUrl"]);
-        publication.externalWorkId = String(body.externalWorkId);
-        publication.externalWorkUrl = String(body.externalWorkUrl);
-        delete publication.failureReason;
-        const product = state.products.get(publication.productId);
-        if (product) product.isPublic = true;
-      } else {
-        requireFields(body, ["failureReason"]);
-        publication.failureReason = String(body.failureReason);
-      }
-      const before = publication.status;
-      publication.status = body.status;
-      publication.updatedAt = now();
-      state.callbackEvents.set(body.callbackEventId, {
-        callbackEventId: String(body.callbackEventId),
-        publicationId: publication.publicationId,
-        status: publication.status,
-        receivedAt: now(),
-      });
-      audit(
-        state,
-        { role: "PUBLISHING_SERVICE", actorId: "callback" },
-        "PUBLICATION_CALLBACK",
-        "PUBLICATION",
-        publication.publicationId,
-        before,
-        publication.status,
-      );
-      return success(res, requestId, publication);
-    }
 
-    if (
-      method === "POST" &&
-      (match = url.pathname.match(/^\/publications\/([^/]+)\/retry$/))
-    ) {
-      requireRole(ctx, [Role.OPERATOR]);
-      const publication = getOr404(
-        state.publications,
-        decodeURIComponent(match[1]),
-        "发布记录",
-      );
-      if (publication.status !== "FAILED") {
-        throw new ApiError(409, "PUBLICATION_NOT_RETRYABLE", "只有失败发布可以重试", {
-          currentStatus: publication.status,
-        });
+      case "publishing.get": {
+        const publication = getResource(
+          state.publications,
+          operation.params.publicationId,
+          "PUBLICATION_NOT_FOUND",
+          "Publication",
+        );
+        if (actor.role === "MERCHANT") requireOwned(publication, actor);
+        return success(res, requestId, publication);
       }
-      const before = publication.status;
-      publication.status = "QUEUED";
-      publication.updatedAt = now();
-      delete publication.failureReason;
-      audit(state, ctx, "RETRY_PUBLICATION", "PUBLICATION", publication.publicationId, before, "QUEUED");
-      return success(res, requestId, publication);
-    }
 
-    if (method === "GET" && url.pathname === "/feed") {
-      const { page, pageSize } = pagination(url);
-      const items = [...state.publications.values()]
-        .filter((publication) => publication.status === "SUCCEEDED")
-        .map((publication) => {
-          const product = state.products.get(publication.productId);
-          const content = state.contents.get(publication.contentId);
-          if (!product?.isPublic || !content || !publication.externalWorkUrl) return null;
-          return {
-            publicationId: publication.publicationId,
-            productId: product.productId,
-            contentId: content.contentId,
+      case "publishing.list": {
+        const { page, pageSize } = pagination(url);
+        const status = url.searchParams.get("status");
+        const channel = url.searchParams.get("channel");
+        let items = [...state.publications.values()];
+        if (actor.role === "MERCHANT") {
+          const merchantId = requireMerchant(actor);
+          items = items.filter((item) => item.merchantId === merchantId);
+        }
+        items = items
+          .filter((item) => !status || item.status === status)
+          .filter((item) => !channel || item.channel === channel);
+        return success(res, requestId, pageItems(items, page, pageSize));
+      }
+
+      case "publishing.retry": {
+        const publication = getResource(
+          state.publications,
+          operation.params.publicationId,
+          "PUBLICATION_NOT_FOUND",
+          "Publication",
+        );
+        const body = await readJson(req);
+        requireFields(body, ["idempotencyKey"]);
+        if (publication.status !== "FAILED") {
+          throw new ApiError(409, "VALIDATION_ERROR", "Publication is not retryable");
+        }
+        publication.status = "QUEUED";
+        publication.idempotencyKey = String(body.idempotencyKey);
+        publication.errorCode = null;
+        publication.errorMessage = null;
+        publication.updatedAt = now();
+        return success(res, requestId, publication);
+      }
+
+      case "publishing.callback": {
+        if (req.headers["x-callback-signature"] !== "mock-valid-signature") {
+          throw new ApiError(401, "CALLBACK_INVALID", "Callback signature is invalid");
+        }
+        const body = await readJson(req);
+        requireFields(body, ["eventId", "externalTaskId", "status"]);
+        if (state.callbackEvents.has(body.eventId)) {
+          return success(res, requestId, { accepted: true, duplicate: true });
+        }
+        const publication = [...state.publications.values()].find(
+          (item) => item.externalTaskId === body.externalTaskId,
+        );
+        if (!publication) {
+          throw new ApiError(404, "PUBLICATION_NOT_FOUND", "Publication not found");
+        }
+        if (!["SUCCEEDED", "FAILED"].includes(body.status)) {
+          throw new ApiError(400, "CALLBACK_INVALID", "Callback status is invalid");
+        }
+        publication.status = body.status;
+        publication.externalWorkId = body.externalWorkId ?? null;
+        publication.externalUrl = body.externalUrl ?? null;
+        publication.errorCode = body.errorCode ?? null;
+        publication.errorMessage = body.errorMessage ?? null;
+        publication.publishedAt = body.status === "SUCCEEDED" ? body.occurredAt ?? now() : null;
+        publication.updatedAt = now();
+        state.callbackEvents.set(body.eventId, publication.publicationId);
+        return success(res, requestId, { accepted: true, duplicate: false });
+      }
+
+      case "storefront.feed": {
+        const { page, pageSize } = pagination(url);
+        const items = [...state.publications.values()]
+          .filter((item) => item.status === "SUCCEEDED")
+          .map((publication) => {
+            const product = state.products.get(publication.productId);
+            const content = state.contents.get(publication.contentId);
+            const merchant = state.merchants.get(publication.merchantId);
+            if (!product || product.status !== "ACTIVE" || !content) return null;
+            return {
+              publicationId: publication.publicationId,
+              contentId: publication.contentId,
+              productId: publication.productId,
+              merchantId: publication.merchantId,
+              channel: publication.channel,
+              externalWorkId: publication.externalWorkId,
+              externalUrl: publication.externalUrl,
+              videoUrl: content.videoUrl,
+              title: content.title,
+              productName: product.name,
+              merchantName: merchant?.name ?? "Unknown merchant",
+              sellingPoints: product.sellingPoints,
+              publishedAt: publication.publishedAt,
+            };
+          })
+          .filter(Boolean);
+        return success(res, requestId, pageItems(items, page, pageSize));
+      }
+
+      case "storefront.product": {
+        const product = getResource(
+          state.products,
+          operation.params.productId,
+          "PRODUCT_NOT_FOUND",
+          "Product",
+        );
+        const publicationId = url.searchParams.get("publicationId");
+        const publication = publicationId
+          ? getResource(
+              state.publications,
+              publicationId,
+              "PUBLICATION_NOT_FOUND",
+              "Publication",
+            )
+          : null;
+        if (publication && publication.productId !== product.productId) {
+          throw new ApiError(400, "SOURCE_MISMATCH", "Publication source mismatch");
+        }
+        const merchant = state.merchants.get(product.merchantId);
+        return success(res, requestId, {
+          productId: product.productId,
+          merchantId: product.merchantId,
+          merchantName: merchant?.name ?? "Unknown merchant",
+          name: product.name,
+          summary: product.summary,
+          sellingPoints: product.sellingPoints,
+          images: product.images,
+          parameters: product.parameters,
+          priceMode: product.priceMode,
+          price: product.price,
+          available: product.status === "ACTIVE",
+          attribution: {
             merchantId: product.merchantId,
-            channel: publication.channel,
-            caption: content.caption,
-            videoUrl: content.videoUrl,
-            externalWorkUrl: publication.externalWorkUrl,
-            productName: product.name,
-          };
-        })
-        .filter(Boolean);
-      return success(res, requestId, pageItems(items, page, pageSize));
-    }
-
-    if (
-      method === "GET" &&
-      (match = url.pathname.match(/^\/storefront\/products\/([^/]+)$/))
-    ) {
-      const product = getOr404(state.products, decodeURIComponent(match[1]), "商品");
-      if (!product.isPublic) throw new ApiError(404, "RESOURCE_NOT_FOUND", "商品不存在");
-      return success(res, requestId, {
-        product,
-        merchantName:
-          product.merchantId === "merchant_demo" ? "我淘淘演示商家" : "认证商家",
-      });
-    }
-
-    if (method === "POST" && url.pathname === "/inquiries") {
-      requireRole(ctx, [Role.BUYER]);
-      const body = await readJson(req);
-      requireFields(body, ["publicationId", "buyerName", "contact", "message"]);
-      const publication = getOr404(state.publications, body.publicationId, "发布记录");
-      if (publication.status !== "SUCCEEDED") {
-        throw new ApiError(400, "PUBLICATION_NOT_PUBLIC", "来源作品尚未公开");
+            productId: product.productId,
+            contentId: publication?.contentId ?? null,
+            publicationId: publication?.publicationId ?? null,
+            channel: publication?.channel ?? null,
+            externalWorkId: publication?.externalWorkId ?? null,
+            referrer: null,
+          },
+        });
       }
-      const timestamp = now();
-      const inquiry = {
-        inquiryId: makeId("inquiry"),
-        merchantId: publication.merchantId,
-        productId: publication.productId,
-        contentId: publication.contentId,
-        publicationId: publication.publicationId,
-        channel: publication.channel,
-        accountId: publication.accountId,
-        buyerName: String(body.buyerName),
-        contact: String(body.contact),
-        message: String(body.message),
-        status: "NEW",
-        createdAt: timestamp,
-        updatedAt: timestamp,
-      };
-      state.inquiries.set(inquiry.inquiryId, inquiry);
-      return success(res, requestId, inquiry, 201);
-    }
 
-    if (method === "GET" && url.pathname === "/merchant/inquiries") {
-      requireRole(ctx, [Role.MERCHANT, Role.OPERATOR]);
-      requireMerchant(ctx);
-      const { page, pageSize } = pagination(url);
-      const items = [...state.inquiries.values()].filter(
-        (inquiry) => inquiry.merchantId === ctx.merchantId,
-      );
-      return success(res, requestId, pageItems(items, page, pageSize));
-    }
+      case "storefront.merchant": {
+        const merchant = state.merchants.get(operation.params.merchantId);
+        if (!merchant) {
+          throw new ApiError(404, "VALIDATION_ERROR", "Merchant not found");
+        }
+        return success(res, requestId, merchant);
+      }
 
-    if (
-      method === "PATCH" &&
-      (match = url.pathname.match(/^\/inquiries\/([^/]+)\/status$/))
-    ) {
-      requireRole(ctx, [Role.MERCHANT]);
-      const inquiry = getOr404(state.inquiries, decodeURIComponent(match[1]), "询盘");
-      requireOwned(inquiry, ctx);
-      const body = await readJson(req);
-      requireFields(body, ["status"]);
-      ensureTransition(INQUIRY_TRANSITIONS, inquiry.status, body.status);
-      const before = inquiry.status;
-      inquiry.status = body.status;
-      inquiry.updatedAt = now();
-      inquiry.updatedBy = String(ctx.actorId);
-      audit(state, ctx, "UPDATE_INQUIRY_STATUS", "INQUIRY", inquiry.inquiryId, before, inquiry.status);
-      return success(res, requestId, inquiry);
-    }
+      case "storefront.publication": {
+        const publication = getResource(
+          state.publications,
+          operation.params.publicationId,
+          "PUBLICATION_NOT_FOUND",
+          "Publication",
+        );
+        if (publication.status !== "SUCCEEDED") {
+          throw new ApiError(404, "PUBLICATION_NOT_FOUND", "Publication not found");
+        }
+        return success(res, requestId, {
+          publicationId: publication.publicationId,
+          merchantId: publication.merchantId,
+          productId: publication.productId,
+          contentId: publication.contentId,
+          channel: publication.channel,
+          externalWorkId: publication.externalWorkId,
+          externalUrl: publication.externalUrl,
+          publishedAt: publication.publishedAt,
+        });
+      }
 
-    throw new ApiError(404, "ROUTE_NOT_FOUND", "接口不存在", {
-      method,
-      path: url.pathname,
-    });
+      case "inquiry.create": {
+        const body = await readJson(req);
+        requireFields(body, ["productId", "buyerName", "contact", "message"]);
+        const product = getResource(
+          state.products,
+          body.productId,
+          "PRODUCT_NOT_FOUND",
+          "Product",
+        );
+        let publication = null;
+        if (body.publicationId) {
+          publication = getResource(
+            state.publications,
+            body.publicationId,
+            "PUBLICATION_NOT_FOUND",
+            "Publication",
+          );
+          if (publication.productId !== product.productId) {
+            throw new ApiError(400, "SOURCE_MISMATCH", "Publication source mismatch");
+          }
+        }
+        const timestamp = now();
+        const inquiry = {
+          inquiryId: makeId("InquiryId"),
+          merchantId: product.merchantId,
+          productId: product.productId,
+          buyerName: String(body.buyerName),
+          contact: String(body.contact),
+          quantity: body.quantity ? String(body.quantity) : null,
+          message: String(body.message),
+          status: "NEW",
+          attribution: {
+            merchantId: product.merchantId,
+            productId: product.productId,
+            contentId: publication?.contentId ?? null,
+            publicationId: publication?.publicationId ?? null,
+            channel: publication?.channel ?? null,
+            accountId: publication?.accountId ?? null,
+            externalWorkId: publication?.externalWorkId ?? null,
+            referrer: body.referrer ? String(body.referrer) : null,
+          },
+          createdAt: timestamp,
+          updatedAt: timestamp,
+        };
+        state.inquiries.set(inquiry.inquiryId, inquiry);
+        state.inquiryHistory.set(inquiry.inquiryId, []);
+        return success(
+          res,
+          requestId,
+          { inquiryId: inquiry.inquiryId, status: "NEW", createdAt: timestamp },
+          201,
+        );
+      }
+
+      case "inquiry.list": {
+        const merchantId = requireMerchant(actor);
+        const { page, pageSize } = pagination(url);
+        const status = url.searchParams.get("status");
+        const items = [...state.inquiries.values()]
+          .filter((item) => item.merchantId === merchantId)
+          .filter((item) => !status || item.status === status);
+        return success(res, requestId, pageItems(items, page, pageSize));
+      }
+
+      case "inquiry.get": {
+        const inquiry = getResource(
+          state.inquiries,
+          operation.params.inquiryId,
+          "INQUIRY_NOT_FOUND",
+          "Inquiry",
+        );
+        requireOwned(inquiry, actor);
+        return success(res, requestId, {
+          ...inquiry,
+          statusHistory: state.inquiryHistory.get(inquiry.inquiryId) ?? [],
+        });
+      }
+
+      case "inquiry.updateStatus": {
+        const inquiry = getResource(
+          state.inquiries,
+          operation.params.inquiryId,
+          "INQUIRY_NOT_FOUND",
+          "Inquiry",
+        );
+        if (actor.role === "MERCHANT") requireOwned(inquiry, actor);
+        const body = await readJson(req);
+        requireFields(body, ["status"]);
+        ensureTransition(
+          INQUIRY_TRANSITIONS,
+          inquiry.status,
+          body.status,
+          "INQUIRY_STATUS_INVALID",
+        );
+        const previousStatus = inquiry.status;
+        inquiry.status = body.status;
+        inquiry.updatedAt = now();
+        const history = state.inquiryHistory.get(inquiry.inquiryId) ?? [];
+        history.push({
+          fromStatus: previousStatus,
+          toStatus: inquiry.status,
+          changedBy: actor.userId,
+          changedAt: inquiry.updatedAt,
+          comment: body.comment ? String(body.comment) : null,
+        });
+        state.inquiryHistory.set(inquiry.inquiryId, history);
+        return success(res, requestId, { ...inquiry, statusHistory: history });
+      }
+
+      default:
+        throw new ApiError(500, "INTERNAL_ERROR", "Mock operation is not implemented", {
+          operationId: operation.operationId,
+        });
+    }
   } catch (error) {
     fail(res, requestId, error);
   }
@@ -638,6 +1001,6 @@ if (isMainModule()) {
   const host = process.env.HOST ?? "127.0.0.1";
   const { server } = createMockServer();
   server.listen(port, host, () => {
-    console.log(`我淘淘 MVP mock API: http://${host}:${port}`);
+    console.log(`Wotao MVP mock API: http://${host}:${port}`);
   });
 }

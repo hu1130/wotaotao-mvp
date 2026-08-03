@@ -7,10 +7,13 @@
     "dev": "pnpm --parallel --filter @wotao/review-api --filter @wotao/review-web dev",
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",
-    "test": "pnpm --filter @wotao/review-api test",
+    "test": "pnpm openapi:check && pnpm --filter @wotao/contracts test && pnpm --filter @wotao/mock-api test && pnpm --filter @wotao/review-api test",
+    "openapi:generate": "tsx scripts/generate-openapi.ts",
+    "openapi:check": "tsx scripts/generate-openapi.ts --check",
     "db:setup": "pnpm --filter @wotao/review-api db:setup"
   },
   "devDependencies": {
+    "tsx": "4.20.6",
     "typescript": "5.9.3"
   }
 }

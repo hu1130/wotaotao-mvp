@@ -5,6 +5,7 @@ import type {
   ReviewContentSummary,
   ReviewDecision,
   ReviewRecord,
+  RejectionReasonCode,
 } from "@wotao/contracts";
 
 function parseSellingPoints(value: string): string[] {
@@ -37,7 +38,7 @@ export function mapReview(review: Review): ReviewRecord {
     reviewId: review.reviewId,
     contentId: review.contentId,
     decision: review.decision as ReviewDecision,
-    reasonCode: review.reasonCode,
+    reasonCode: review.reasonCode as RejectionReasonCode | null,
     comment: review.comment,
     reviewerId: review.reviewerId,
     reviewerName: review.reviewerName,

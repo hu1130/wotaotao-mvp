@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "node src/server.mjs",
+    "build": "node --check src/contract.mjs && node --check src/data.mjs && node --check src/server.mjs",
+    "typecheck": "node --check src/contract.mjs && node --check src/data.mjs && node --check src/server.mjs",
     "test": "node --test test/*.test.mjs"
   },
   "engines": {

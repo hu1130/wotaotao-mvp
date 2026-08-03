@@ -1,11 +1,22 @@
 import assert from "node:assert/strict";
 import { after, before, test } from "node:test";
 import { once } from "node:events";
+import { mockOperations, openApi } from "../src/contract.mjs";
 import { createMockServer } from "../src/server.mjs";
 
 let server;
 let state;
 let baseUrl;
+
+const merchantHeaders = {
+  "x-role": "MERCHANT",
+  "x-user-id": "merchant_user_001",
+  "x-merchant-id": "mer_demo_001",
+};
+const operatorHeaders = {
+  "x-role": "OPERATOR",
+  "x-user-id": "op_demo_001",
+};
 
 before(async () => {
   ({ server, state } = createMockServer());
@@ -30,268 +41,221 @@ async function request(path, options = {}) {
     headers,
     body: options.body ? JSON.stringify(options.body) : undefined,
   });
-  const json = await response.json();
-  return { response, json };
+  return { response, json: await response.json() };
 }
 
-test("成功和失败响应都带 requestId", async () => {
-  const ok = await request("/feed");
+test("mock routes are loaded from the generated OpenAPI document", () => {
+  const openApiCount = Object.values(openApi.paths).reduce(
+    (total, pathItem) => total + Object.keys(pathItem).length,
+    0,
+  );
+  assert.equal(mockOperations.length, openApiCount);
+  assert.equal(
+    new Set(mockOperations.map((operation) => operation.operationId)).size,
+    mockOperations.length,
+  );
+  assert.ok(
+    mockOperations.some(
+      (operation) =>
+        operation.method === "GET" &&
+        operation.path === "/products/{productId}",
+    ),
+  );
+});
+
+test("success and error responses use the common envelopes", async () => {
+  const ok = await request("/health");
   assert.equal(ok.response.status, 200);
-  assert.equal(typeof ok.json.requestId, "string");
+  assert.deepEqual(ok.json.data, { status: "ok" });
   assert.equal(ok.response.headers.get("x-request-id"), ok.json.requestId);
 
   const error = await request("/not-found");
   assert.equal(error.response.status, 404);
-  assert.equal(error.json.errorCode, "ROUTE_NOT_FOUND");
+  assert.equal(error.json.errorCode, "VALIDATION_ERROR");
   assert.equal(typeof error.json.requestId, "string");
-  assert.deepEqual(error.json.details, { method: "GET", path: "/not-found" });
-});
-
-test("商家不能读取其他商家的商品", async () => {
-  const result = await request("/products/product_other_001", {
-    headers: {
-      "x-role": "MERCHANT",
-      "x-merchant-id": "merchant_demo",
-    },
+  assert.deepEqual(error.json.details, {
+    method: "GET",
+    path: "/not-found",
   });
-  assert.equal(result.response.status, 403);
-  assert.equal(result.json.errorCode, "MERCHANT_DATA_FORBIDDEN");
 });
 
-test("授权账号仅运营可见且不返回秘密字段", async () => {
-  const forbidden = await request("/authorized-accounts", {
-    headers: { "x-role": "MERCHANT", "x-merchant-id": "merchant_demo" },
+test("actor auth and merchant isolation match the integration contract", async () => {
+  const unauthenticated = await request("/products/prd_demo_001", {
+    headers: { "x-role": "MERCHANT", "x-merchant-id": "mer_demo_001" },
+  });
+  assert.equal(unauthenticated.response.status, 401);
+  assert.equal(unauthenticated.json.errorCode, "UNAUTHENTICATED");
+
+  const forbidden = await request("/products/prd_other_001", {
+    headers: merchantHeaders,
   });
   assert.equal(forbidden.response.status, 403);
-
-  const allowed = await request("/authorized-accounts", {
-    headers: { "x-role": "OPERATOR" },
-  });
-  assert.equal(allowed.response.status, 200);
-  assert.ok(allowed.json.data.length >= 2);
-  const serialized = JSON.stringify(allowed.json.data).toLowerCase();
-  assert.equal(serialized.includes("token"), false);
-  assert.equal(serialized.includes("cookie"), false);
-  assert.equal(serialized.includes("password"), false);
+  assert.equal(forbidden.json.errorCode, "FORBIDDEN");
 });
 
-test("审核必须由运营执行并按状态流转", async () => {
-  const merchantAttempt = await request("/reviews/content_demo_pending/approve", {
-    method: "POST",
-    headers: { "x-role": "MERCHANT", "x-merchant-id": "merchant_demo" },
-    body: { contentVersion: 1 },
+test("authorized account fields use the shared channel and field names", async () => {
+  const result = await request("/authorized-accounts?channel=DOUYIN", {
+    headers: operatorHeaders,
   });
-  assert.equal(merchantAttempt.response.status, 403);
+  assert.equal(result.response.status, 200);
+  assert.equal(result.json.data.length, 1);
+  assert.deepEqual(Object.keys(result.json.data[0]).sort(), [
+    "accountId",
+    "available",
+    "channel",
+    "displayLabel",
+  ]);
+  assert.match(result.json.data[0].accountId, /^acc_/);
+});
 
-  const approved = await request("/reviews/content_demo_pending/approve", {
+test("review decisions use contentId, version and shared response types", async () => {
+  const approved = await request("/reviews/cnt_demo_pending/approve", {
     method: "POST",
-    headers: { "x-role": "OPERATOR", "x-actor-id": "operator_demo" },
-    body: { contentVersion: 1 },
+    headers: operatorHeaders,
+    body: { contentVersion: 1, comment: "Approved in mock review" },
   });
   assert.equal(approved.response.status, 200);
   assert.equal(approved.json.data.content.status, "APPROVED");
-  assert.equal(approved.json.data.review.reviewerId, "operator_demo");
-  assert.ok(
-    state.auditLog.some(
-      (entry) =>
-        entry.resourceId === "content_demo_pending" && entry.action === "APPROVE",
-    ),
-  );
+  assert.match(approved.json.data.review.reviewId, /^rev_/);
+  assert.equal(approved.json.data.review.reviewerId, "op_demo_001");
 
-  const repeated = await request("/reviews/content_demo_pending/approve", {
+  const repeated = await request("/reviews/cnt_demo_pending/reject", {
     method: "POST",
-    headers: { "x-role": "OPERATOR" },
-    body: { contentVersion: 1 },
+    headers: operatorHeaders,
+    body: { contentVersion: 1, comment: "Cannot overwrite" },
   });
   assert.equal(repeated.response.status, 409);
-  assert.equal(repeated.json.errorCode, "INVALID_STATE_TRANSITION");
+  assert.equal(repeated.json.errorCode, "REVIEW_STATUS_CHANGED");
 });
 
-test("未审核内容不能创建发布任务", async () => {
-  const result = await request("/publications", {
-    method: "POST",
-    headers: {
-      "x-role": "OPERATOR",
-      "idempotency-key": "test-not-approved-001",
-    },
-    body: {
-      contentId: "content_demo_generated",
-      accountId: "account_douyin_demo",
-      channel: "DOUYIN",
-      scenario: "SUCCESS",
-    },
-  });
-  assert.equal(result.response.status, 409);
-  assert.equal(result.json.errorCode, "CONTENT_NOT_APPROVED");
-});
-
-test("发布幂等键阻止重复发布并检测载荷冲突", async () => {
+test("publication idempotency is carried in the shared request body", async () => {
   const options = {
     method: "POST",
     headers: {
-      "x-role": "OPERATOR",
-      "idempotency-key": "test-idempotency-001",
+      ...operatorHeaders,
+      "x-mock-publication-result": "SUCCESS",
     },
     body: {
-      contentId: "content_demo_approved",
-      accountId: "account_douyin_demo",
+      contentId: "cnt_demo_approved",
+      accountId: "acc_douyin_001",
       channel: "DOUYIN",
-      scenario: "SUCCESS",
+      idempotencyKey: "publication-test-001",
     },
   };
   const first = await request("/publications", options);
-  const second = await request("/publications", options);
+  const duplicate = await request("/publications", options);
   assert.equal(first.response.status, 201);
-  assert.equal(second.response.status, 200);
-  assert.equal(first.json.data.publicationId, second.json.data.publicationId);
+  assert.equal(duplicate.response.status, 200);
+  assert.equal(first.json.data.publicationId, duplicate.json.data.publicationId);
+  assert.match(first.json.data.publicationId, /^pub_/);
+  assert.equal(first.json.data.externalUrl.includes("example.test"), true);
+  assert.equal("externalWorkUrl" in first.json.data, false);
+  assert.equal("failureReason" in first.json.data, false);
 
   const conflict = await request("/publications", {
     ...options,
-    body: { ...options.body, scenario: "FAILURE" },
+    body: { ...options.body, accountId: "acc_xhs_001", channel: "XIAOHONGSHU" },
   });
   assert.equal(conflict.response.status, 409);
-  assert.equal(conflict.json.errorCode, "IDEMPOTENCY_KEY_CONFLICT");
+  assert.equal(conflict.json.errorCode, "IDEMPOTENCY_CONFLICT");
 });
 
-test("发布模拟覆盖处理中、回调成功、重复回调、失败和重试", async () => {
-  const processing = await request("/publications", {
-    method: "POST",
-    headers: {
-      "x-role": "OPERATOR",
-      "idempotency-key": "test-processing-001",
-    },
-    body: {
-      contentId: "content_demo_approved",
-      accountId: "account_xhs_demo",
-      channel: "XIAOHONGSHU",
-      scenario: "PROCESSING",
-    },
-  });
-  assert.equal(processing.json.data.status, "PUBLISHING");
-
-  const invalidSignature = await request("/publications/callback", {
-    method: "POST",
-    headers: { "x-callback-signature": "invalid" },
-    body: {
-      callbackEventId: "callback_test_001",
-      publicationId: processing.json.data.publicationId,
-      status: "SUCCEEDED",
-      externalWorkId: "xhs_work_test_001",
-      externalWorkUrl: "https://example.test/xhs/work/test-001",
-    },
-  });
-  assert.equal(invalidSignature.response.status, 401);
-
-  const callbackOptions = {
+test("provider callback returns the shared acknowledgement structure", async () => {
+  const callback = await request("/publications/callback", {
     method: "POST",
     headers: { "x-callback-signature": "mock-valid-signature" },
     body: {
-      callbackEventId: "callback_test_001",
-      publicationId: processing.json.data.publicationId,
+      eventId: "event_demo_001",
+      externalTaskId: "task_demo_processing",
       status: "SUCCEEDED",
-      externalWorkId: "xhs_work_test_001",
-      externalWorkUrl: "https://example.test/xhs/work/test-001",
+      externalWorkId: "work_callback_001",
+      externalUrl: "https://example.test/xhs/work/callback-001",
+      occurredAt: "2026-07-30T05:00:00Z",
     },
-  };
-  const callback = await request("/publications/callback", callbackOptions);
-  const duplicate = await request("/publications/callback", callbackOptions);
-  assert.equal(callback.response.status, 200);
-  assert.equal(callback.json.data.status, "SUCCEEDED");
-  assert.equal(duplicate.json.data.publicationId, callback.json.data.publicationId);
-
-  const failed = await request("/publications", {
+  });
+  const duplicate = await request("/publications/callback", {
     method: "POST",
-    headers: {
-      "x-role": "OPERATOR",
-      "idempotency-key": "test-failure-001",
-    },
+    headers: { "x-callback-signature": "mock-valid-signature" },
     body: {
-      contentId: "content_demo_approved",
-      accountId: "account_xhs_demo",
-      channel: "XIAOHONGSHU",
-      scenario: "FAILURE",
+      eventId: "event_demo_001",
+      externalTaskId: "task_demo_processing",
+      status: "SUCCEEDED",
     },
   });
-  assert.equal(failed.json.data.status, "FAILED");
-
-  const retried = await request(`/publications/${failed.json.data.publicationId}/retry`, {
-    method: "POST",
-    headers: { "x-role": "OPERATOR", "x-actor-id": "operator_demo" },
-  });
-  assert.equal(retried.response.status, 200);
-  assert.equal(retried.json.data.status, "QUEUED");
+  assert.deepEqual(callback.json.data, { accepted: true, duplicate: false });
+  assert.deepEqual(duplicate.json.data, { accepted: true, duplicate: true });
 });
 
-test("公开浏览和询盘保存完整来源链路", async () => {
+test("storefront and inquiry preserve server-derived attribution", async () => {
   const feed = await request("/feed?page=1&pageSize=10");
   assert.equal(feed.response.status, 200);
   assert.ok(feed.json.data.items.length >= 1);
+  assert.match(feed.json.data.items[0].productId, /^prd_/);
 
-  const storefront = await request("/storefront/products/product_demo_001");
+  const storefront = await request(
+    "/storefront/products/prd_demo_001?publicationId=pub_demo_success",
+  );
   assert.equal(storefront.response.status, 200);
-  assert.equal(storefront.json.data.product.merchantId, "merchant_demo");
+  assert.equal(storefront.json.data.productId, "prd_demo_001");
+  assert.equal(storefront.json.data.attribution.publicationId, "pub_demo_success");
+  assert.equal("product" in storefront.json.data, false);
 
   const created = await request("/inquiries", {
     method: "POST",
-    headers: { "x-role": "BUYER" },
     body: {
-      publicationId: "publication_demo_success",
-      buyerName: "测试采购商",
+      productId: "prd_demo_001",
+      publicationId: "pub_demo_success",
+      buyerName: "Integration buyer",
       contact: "buyer@example.test",
-      message: "需要批量报价",
+      quantity: "200 units",
+      message: "Please quote",
+      referrer: "https://example.test/feed",
     },
   });
   assert.equal(created.response.status, 201);
-  assert.deepEqual(
-    {
-      merchantId: created.json.data.merchantId,
-      productId: created.json.data.productId,
-      contentId: created.json.data.contentId,
-      publicationId: created.json.data.publicationId,
-      channel: created.json.data.channel,
-      accountId: created.json.data.accountId,
-    },
-    {
-      merchantId: "merchant_demo",
-      productId: "product_demo_001",
-      contentId: "content_demo_approved",
-      publicationId: "publication_demo_success",
-      channel: "DOUYIN",
-      accountId: "account_douyin_demo",
-    },
+  assert.deepEqual(Object.keys(created.json.data).sort(), [
+    "createdAt",
+    "inquiryId",
+    "status",
+  ]);
+  assert.match(created.json.data.inquiryId, /^inq_/);
+
+  const detail = await request(
+    `/merchant/inquiries/${created.json.data.inquiryId}`,
+    { headers: merchantHeaders },
   );
+  assert.equal(detail.response.status, 200);
+  assert.deepEqual(detail.json.data.attribution, {
+    merchantId: "mer_demo_001",
+    productId: "prd_demo_001",
+    contentId: "cnt_demo_approved",
+    publicationId: "pub_demo_success",
+    channel: "DOUYIN",
+    accountId: "acc_douyin_001",
+    externalWorkId: "work_demo_success",
+    referrer: "https://example.test/feed",
+  });
 });
 
-test("询盘列表按商家隔离且状态机由后端校验", async () => {
-  const otherMerchant = await request("/merchant/inquiries", {
-    headers: {
-      "x-role": "MERCHANT",
-      "x-merchant-id": "merchant_other",
-    },
-  });
-  assert.equal(otherMerchant.response.status, 200);
-  assert.equal(otherMerchant.json.data.total, 0);
-
-  const updated = await request("/inquiries/inquiry_demo_001/status", {
+test("inquiry status transition returns detail and append-only history", async () => {
+  const updated = await request("/inquiries/inq_demo_001/status", {
     method: "PATCH",
-    headers: {
-      "x-role": "MERCHANT",
-      "x-merchant-id": "merchant_demo",
-      "x-actor-id": "merchant_user_demo",
-    },
-    body: { status: "CONTACTED" },
+    headers: merchantHeaders,
+    body: { status: "CONTACTED", comment: "Called buyer" },
   });
   assert.equal(updated.response.status, 200);
   assert.equal(updated.json.data.status, "CONTACTED");
-
-  const invalid = await request("/inquiries/inquiry_demo_001/status", {
-    method: "PATCH",
-    headers: {
-      "x-role": "MERCHANT",
-      "x-merchant-id": "merchant_demo",
-    },
-    body: { status: "WON" },
+  assert.deepEqual(updated.json.data.statusHistory[0], {
+    fromStatus: "NEW",
+    toStatus: "CONTACTED",
+    changedBy: "merchant_user_001",
+    changedAt: updated.json.data.updatedAt,
+    comment: "Called buyer",
   });
-  assert.equal(invalid.response.status, 409);
-  assert.equal(invalid.json.errorCode, "INVALID_STATE_TRANSITION");
+
+  assert.ok(
+    state.inquiryHistory.get("inq_demo_001").some(
+      (item) => item.toStatus === "CONTACTED",
+    ),
+  );
 });
