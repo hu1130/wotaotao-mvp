@@ -3,11 +3,8 @@ packages:
   - packages/*
 
 allowBuilds:
+  "@scarf/scarf": false
   "@prisma/client": true
   "@prisma/engines": true
   esbuild: true
   prisma: true
-
-# Scarf is an optional dependency telemetry hook; it is deliberately never run.
-ignoredBuiltDependencies:
-  - "@scarf/scarf"
