@@ -1,0 +1,52 @@
+{
+  "operationId": "sys03.settlement.getEvidence",
+  "method": "GET",
+  "path": "/internal/v1/commerce/orders/{orderId}/settlement-evidence",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001"
+    },
+    "params": {
+      "orderId": "ord_001"
+    },
+    "query": {
+      "eligibilityVersion": 1,
+      "evidenceVersion": 2
+    }
+  },
+  "status": 200,
+  "response": {
+    "data": {
+      "orderId": "ord_001",
+      "subOrderId": "sor_001",
+      "eligibilityVersion": 1,
+      "evidenceVersion": 2,
+      "salesModel": "MERCHANT",
+      "sellerEnterpriseId": "ent_001",
+      "storeId": "sto_001",
+      "supplierId": null,
+      "payeeType": "MERCHANT",
+      "payeeId": "ent_001",
+      "evidenceItems": [
+        {
+          "costEvidenceId": "cev_001",
+          "evidenceType": "MERCHANT_PAYABLE",
+          "payeeType": "MERCHANT",
+          "payeeId": "ent_001",
+          "declaredAmountFen": 7000,
+          "currency": "CNY",
+          "sourceRef": "src_001",
+          "evidenceRefs": [
+            "evd_100"
+          ],
+          "evidenceVersion": 2,
+          "status": "DECLARED"
+        }
+      ],
+      "completenessStatus": "COMPLETE",
+      "evidenceSnapshotHash": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

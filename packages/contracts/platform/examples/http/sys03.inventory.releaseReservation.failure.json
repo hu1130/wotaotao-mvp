@@ -1,0 +1,28 @@
+{
+  "operationId": "sys03.inventory.releaseReservation",
+  "method": "POST",
+  "path": "/internal/v1/commerce/commands/release-inventory-reservation",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "idempotency-key": "INVENTORY_RELEASE:{reservationId}:{reasonFamily}"
+    },
+    "body": {
+      "commandId": "cmd_release_001",
+      "reservationId": "irs_001",
+      "orderId": "ord_001",
+      "reason": "USER_CANCEL",
+      "orderVersion": 2,
+      "traceId": "trace_contract_example_001"
+    }
+  },
+  "status": 403,
+  "response": {
+    "code": "FORBIDDEN",
+    "message": "The authenticated actor is not allowed to perform the action.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

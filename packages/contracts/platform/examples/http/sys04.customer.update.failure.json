@@ -1,0 +1,34 @@
+{
+  "operationId": "sys04.customer.update",
+  "method": "PATCH",
+  "path": "/api/v1/marketing/customers/{customerId}",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "CUSTOMER_UPDATE:{customerId}:{expectedVersion}:{clientRequestId}"
+    },
+    "params": {
+      "customerId": "cus_001"
+    },
+    "body": {
+      "expectedVersion": 3,
+      "mainStage": "QUALIFIED",
+      "ownerUserId": "usr_sales_001",
+      "tags": [
+        "高意向"
+      ],
+      "reason": "完成需求确认",
+      "clientRequestId": "req_customer_update_001"
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

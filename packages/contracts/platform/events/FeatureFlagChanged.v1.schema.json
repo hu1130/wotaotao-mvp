@@ -1,0 +1,251 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.wotaotao.com/events/platform.feature-flag.changed.v1/envelope.schema.json",
+  "title": "FeatureFlagChanged envelope v1",
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable evt_ identifier",
+      "pattern": "^evt_[A-Za-z0-9_-]+$"
+    },
+    "eventType": {
+      "type": "string",
+      "const": "FeatureFlagChanged"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Business occurrence time"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Outbox publication time"
+    },
+    "producer": {
+      "type": "string",
+      "const": "SYS-01"
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "DEV",
+        "TEST",
+        "STAGING",
+        "PROD"
+      ]
+    },
+    "audience": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SYS-02",
+          "SYS-03",
+          "SYS-04",
+          "SYS-05",
+          "SYS-06",
+          "SYS-07",
+          "SYS-08"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "enterpriseId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "aggregateType": {
+      "type": "string",
+      "const": "FeatureFlag"
+    },
+    "aggregateId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable aggregate identifier"
+    },
+    "aggregateVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonic aggregate version"
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causationId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable evt_ identifier",
+          "pattern": "^evt_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "correlationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable business idempotency key; unchanged on retry"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "flagCode": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scopeType": {
+          "type": "string",
+          "enum": [
+            "GLOBAL",
+            "ENTERPRISE",
+            "USER"
+          ]
+        },
+        "scopeId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "value": {
+          "type": "boolean"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "changeType": {
+          "type": "string",
+          "enum": [
+            "UPDATED",
+            "ROLLED_BACK"
+          ]
+        },
+        "reasonCode": {
+          "type": "string",
+          "minLength": 1
+        },
+        "effectiveAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "flagCode",
+        "scopeType",
+        "scopeId",
+        "value",
+        "version",
+        "changeType",
+        "reasonCode",
+        "effectiveAt"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://contracts.wotaotao.com/events/platform.feature-flag.changed.v1/payload.schema.json",
+      "title": "FeatureFlagChanged payload v1"
+    }
+  },
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "occurredAt",
+    "publishedAt",
+    "producer",
+    "environment",
+    "audience",
+    "enterpriseId",
+    "aggregateType",
+    "aggregateId",
+    "aggregateVersion",
+    "traceId",
+    "causationId",
+    "correlationId",
+    "idempotencyKey",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "description": "flagCode + scopeType + scopeId + version",
+  "examples": [
+    {
+      "eventId": "evt_featureflagchanged_001",
+      "eventType": "FeatureFlagChanged",
+      "schemaVersion": 1,
+      "occurredAt": "2026-08-10T02:00:00Z",
+      "publishedAt": "2026-08-10T02:00:01Z",
+      "producer": "SYS-01",
+      "environment": "DEV",
+      "audience": [
+        "SYS-02",
+        "SYS-03",
+        "SYS-04",
+        "SYS-05",
+        "SYS-06",
+        "SYS-07",
+        "SYS-08"
+      ],
+      "enterpriseId": null,
+      "aggregateType": "FeatureFlag",
+      "aggregateId": "DOUYIN_AUTO_PUBLISH",
+      "aggregateVersion": 2,
+      "traceId": "trace_contract_fixture_001",
+      "causationId": null,
+      "correlationId": "corr_contract_fixture_001",
+      "idempotencyKey": "FEATURE_FLAG:DOUYIN_AUTO_PUBLISH:ENTERPRISE:ent_contract_001:2",
+      "payload": {
+        "flagCode": "DOUYIN_AUTO_PUBLISH",
+        "scopeType": "ENTERPRISE",
+        "scopeId": "ent_contract_001",
+        "value": true,
+        "version": 2,
+        "changeType": "UPDATED",
+        "reasonCode": "PILOT_OPEN",
+        "effectiveAt": "2026-08-10T02:00:00Z"
+      }
+    }
+  ],
+  "x-topic": "platform.feature-flag.changed.v1",
+  "x-producer": "SYS-01",
+  "x-consumers": [
+    "SYS-02",
+    "SYS-03",
+    "SYS-04",
+    "SYS-05",
+    "SYS-06",
+    "SYS-07",
+    "SYS-08"
+  ],
+  "x-idempotency-key-format": "FEATURE_FLAG:{flagCode}:{scopeType}:{scopeId}:{version}"
+}

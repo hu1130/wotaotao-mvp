@@ -1,0 +1,31 @@
+{
+  "operationId": "sys03.store.create",
+  "method": "POST",
+  "path": "/api/v1/commerce/stores",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "STORE_CREATE:{enterpriseId}:{clientRequestId}"
+    },
+    "body": {
+      "clientRequestId": "req_store_001",
+      "name": "示例店铺",
+      "businessScope": [
+        "TEA"
+      ],
+      "serviceRegionCodes": [
+        "CN"
+      ]
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

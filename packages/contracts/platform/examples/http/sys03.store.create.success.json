@@ -1,0 +1,33 @@
+{
+  "operationId": "sys03.store.create",
+  "method": "POST",
+  "path": "/api/v1/commerce/stores",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "STORE_CREATE:{enterpriseId}:{clientRequestId}"
+    },
+    "body": {
+      "clientRequestId": "req_store_001",
+      "name": "示例店铺",
+      "businessScope": [
+        "TEA"
+      ],
+      "serviceRegionCodes": [
+        "CN"
+      ]
+    }
+  },
+  "status": 201,
+  "response": {
+    "data": {
+      "storeId": "sto_001",
+      "enterpriseId": "ent_001",
+      "status": "DRAFT",
+      "version": 1
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

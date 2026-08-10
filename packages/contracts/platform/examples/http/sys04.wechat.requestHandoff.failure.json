@@ -1,0 +1,29 @@
+{
+  "operationId": "sys04.wechat.requestHandoff",
+  "method": "POST",
+  "path": "/api/v1/marketing/wechat/conversations/{conversationId}/handoff",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "WECHAT_HANDOFF:{conversationId}:{activeConversationVersion}"
+    },
+    "params": {
+      "conversationId": "wxc_001"
+    },
+    "body": {
+      "reasonCode": "CUSTOMER_REQUESTED",
+      "contextSafeRef": "csr_010",
+      "assigneeUserId": "usr_sales_001"
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

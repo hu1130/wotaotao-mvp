@@ -1,0 +1,38 @@
+{
+  "operationId": "sys02.order.registerShipment",
+  "method": "POST",
+  "path": "/internal/v1/mall/commands/register-order-shipment",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "x-user-delegation": "<signed-user-delegation-assertion>",
+      "idempotency-key": "SHIPMENT_REGISTER:{fulfillmentId}:{fulfillmentVersion}"
+    },
+    "body": {
+      "commandId": "cmd_ship_001",
+      "fulfillmentId": "ful_001",
+      "orderId": "ord_001",
+      "subOrderId": "sor_001",
+      "enterpriseId": "ent_001",
+      "storeId": "sto_001",
+      "carrierCode": "SF",
+      "trackingNoRef": "trk_001",
+      "trackingNoMasked": "SF****1234",
+      "shippedAt": "2026-08-10T02:00:00Z",
+      "fulfillmentVersion": 1,
+      "expectedOrderVersion": 2,
+      "actorRef": "usr_merchant_001",
+      "approvalRef": null,
+      "traceId": "trace_contract_example_001"
+    }
+  },
+  "status": 403,
+  "response": {
+    "code": "FORBIDDEN",
+    "message": "The authenticated actor is not allowed to perform the action.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

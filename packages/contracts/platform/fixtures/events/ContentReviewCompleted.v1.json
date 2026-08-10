@@ -1,0 +1,33 @@
+{
+  "eventId": "evt_contentreviewcompleted_001",
+  "eventType": "ContentReviewCompleted",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "REVIEW_CENTER",
+  "environment": "DEV",
+  "audience": [
+    "SYS-05",
+    "SYS-06"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "ContentReview",
+  "aggregateId": "crev_contract_001",
+  "aggregateVersion": 1,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "CONTENT_REVIEW:crev_contract_001:1",
+  "payload": {
+    "reviewId": "crev_contract_001",
+    "contentId": "cnt_contract_001",
+    "channelVersionId": "cver_contract_001",
+    "enterpriseId": "ent_contract_001",
+    "contentVersion": 2,
+    "decision": "APPROVED",
+    "decisionVersion": 1,
+    "reasonCodes": [],
+    "evidenceHash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "completedAt": "2026-08-10T02:05:00Z"
+  }
+}

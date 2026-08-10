@@ -1,0 +1,27 @@
+{
+  "operationId": "sys07.opc.getMe",
+  "method": "GET",
+  "path": "/api/v1/opc/me",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>"
+    }
+  },
+  "status": 200,
+  "response": {
+    "data": {
+      "providerId": "prv_001",
+      "status": "ACTIVE",
+      "agreement": {
+        "acceptedVersion": 2,
+        "currentVersion": 2,
+        "acceptanceRequired": false
+      },
+      "payoutProfileMasked": "微信商户号 ****1234",
+      "profileVersion": 3
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

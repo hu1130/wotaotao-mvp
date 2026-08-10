@@ -1,0 +1,1965 @@
+{
+  "contractVersion": "1.0.0",
+  "http": [
+    {
+      "operationId": "sys01.auth.sendPhoneCode",
+      "method": "POST",
+      "path": "/api/v1/auth/phone/code",
+      "provider": "SYS-01",
+      "producer": "SYS-01.http-api",
+      "consumers": [
+        "workbench-web",
+        "mall-web",
+        "opc-mobile",
+        "admin-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "PUBLIC"
+    },
+    {
+      "operationId": "sys01.auth.createPhoneSession",
+      "method": "POST",
+      "path": "/api/v1/auth/phone/session",
+      "provider": "SYS-01",
+      "producer": "SYS-01.http-api",
+      "consumers": [
+        "workbench-web",
+        "mall-web",
+        "opc-mobile",
+        "admin-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "PUBLIC"
+    },
+    {
+      "operationId": "sys01.identity.getMyContext",
+      "method": "GET",
+      "path": "/api/v1/me/context",
+      "provider": "SYS-01",
+      "producer": "SYS-01.http-api",
+      "consumers": [
+        "workbench-web",
+        "mall-web",
+        "opc-mobile",
+        "admin-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys01.enterprise.create",
+      "method": "POST",
+      "path": "/api/v1/enterprises",
+      "provider": "SYS-01",
+      "producer": "SYS-01.http-api",
+      "consumers": [
+        "workbench-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys01.enterprise.getProfile",
+      "method": "GET",
+      "path": "/api/v1/enterprises/{enterpriseId}/profile",
+      "provider": "SYS-01",
+      "producer": "SYS-01.http-api",
+      "consumers": [
+        "workbench-web",
+        "admin-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys01.enterprise.updateProfile",
+      "method": "PUT",
+      "path": "/api/v1/enterprises/{enterpriseId}/profile",
+      "provider": "SYS-01",
+      "producer": "SYS-01.http-api",
+      "consumers": [
+        "workbench-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys01.enterprise.submitReview",
+      "method": "POST",
+      "path": "/api/v1/enterprises/{enterpriseId}/review-submissions",
+      "provider": "SYS-01",
+      "producer": "SYS-01.http-api",
+      "consumers": [
+        "workbench-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys01.enterprise.decideReview",
+      "method": "POST",
+      "path": "/api/v1/admin/enterprise-review-submissions/{reviewSubmissionId}/decision",
+      "provider": "SYS-01",
+      "producer": "SYS-01.http-api",
+      "consumers": [
+        "admin-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION_STRONG"
+    },
+    {
+      "operationId": "sys01.authorization.decide",
+      "method": "POST",
+      "path": "/internal/v1/authorization/decisions",
+      "provider": "SYS-01",
+      "producer": "SYS-01.http-api",
+      "consumers": [
+        "SYS-02",
+        "SYS-03",
+        "SYS-04",
+        "SYS-05",
+        "SYS-07",
+        "SYS-08"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS"
+    },
+    {
+      "operationId": "sys01.authorization.createDelegation",
+      "method": "POST",
+      "path": "/api/v1/authorization/delegations",
+      "provider": "SYS-01",
+      "producer": "SYS-01.http-api",
+      "consumers": [
+        "domain-bff"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION_STRONG"
+    },
+    {
+      "operationId": "sys01.approvals.putProjection",
+      "method": "PUT",
+      "path": "/internal/v1/approval-task-projections/{approvalRef}",
+      "provider": "SYS-01",
+      "producer": "SYS-01.http-api",
+      "consumers": [
+        "SYS-02",
+        "SYS-03",
+        "SYS-04",
+        "SYS-05",
+        "SYS-07",
+        "SYS-08"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS"
+    },
+    {
+      "operationId": "sys01.agents.createRun",
+      "method": "POST",
+      "path": "/api/v1/agent-runs",
+      "provider": "SYS-01",
+      "producer": "SYS-01.http-api",
+      "consumers": [
+        "workbench-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys01.agents.reportToolResult",
+      "method": "POST",
+      "path": "/internal/v1/agent-runs/{agentRunId}/tool-results",
+      "provider": "SYS-01",
+      "producer": "SYS-01.http-api",
+      "consumers": [
+        "SYS-04",
+        "SYS-05"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS"
+    },
+    {
+      "operationId": "sys08.membership.getCurrent",
+      "method": "GET",
+      "path": "/api/v1/membership/current",
+      "provider": "SYS-08",
+      "producer": "SYS-08.http-api",
+      "consumers": [
+        "workbench-web",
+        "content-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys08.membership.createOrder",
+      "method": "POST",
+      "path": "/api/v1/membership/orders",
+      "provider": "SYS-08",
+      "producer": "SYS-08.http-api",
+      "consumers": [
+        "workbench-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION_STRONG"
+    },
+    {
+      "operationId": "sys08.wallet.getSummary",
+      "method": "GET",
+      "path": "/api/v1/wallet/summary",
+      "provider": "SYS-08",
+      "producer": "SYS-08.http-api",
+      "consumers": [
+        "workbench-web",
+        "opc-mobile"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys08.points.createQuote",
+      "method": "POST",
+      "path": "/api/v1/points/quotes",
+      "provider": "SYS-08",
+      "producer": "SYS-08.http-api",
+      "consumers": [
+        "workbench-web",
+        "agent-control-plane"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys08.points.reserve",
+      "method": "POST",
+      "path": "/api/v1/points/reservations",
+      "provider": "SYS-08",
+      "producer": "SYS-08.http-api",
+      "consumers": [
+        "workbench-web",
+        "agent-control-plane"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys08.points.commitReservation",
+      "method": "POST",
+      "path": "/internal/v1/points/reservations/{reservationId}/commit",
+      "provider": "SYS-08",
+      "producer": "SYS-08.http-api",
+      "consumers": [
+        "SYS-01",
+        "SYS-04",
+        "SYS-05"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS"
+    },
+    {
+      "operationId": "sys08.points.releaseReservation",
+      "method": "POST",
+      "path": "/internal/v1/points/reservations/{reservationId}/release",
+      "provider": "SYS-08",
+      "producer": "SYS-08.http-api",
+      "consumers": [
+        "SYS-01",
+        "SYS-04",
+        "SYS-05"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS"
+    },
+    {
+      "operationId": "sys08.publicationService.createOrder",
+      "method": "POST",
+      "path": "/api/v1/publication-service-orders",
+      "provider": "SYS-08",
+      "producer": "SYS-08.http-api",
+      "consumers": [
+        "content-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION_STRONG"
+    },
+    {
+      "operationId": "sys08.publicationService.getOrder",
+      "method": "GET",
+      "path": "/api/v1/publication-service-orders/{serviceOrderId}",
+      "provider": "SYS-08",
+      "producer": "SYS-08.http-api",
+      "consumers": [
+        "content-web",
+        "SYS-05"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys08.publicationCharge.reserve",
+      "method": "POST",
+      "path": "/internal/v1/ledger/publication-charge-reservations",
+      "provider": "SYS-08",
+      "producer": "SYS-08.http-api",
+      "consumers": [
+        "SYS-05"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS"
+    },
+    {
+      "operationId": "sys08.distribution.resolveContext",
+      "method": "POST",
+      "path": "/internal/v1/ledger/distribution-context:resolve",
+      "provider": "SYS-08",
+      "producer": "SYS-08.http-api",
+      "consumers": [
+        "SYS-02"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS"
+    },
+    {
+      "operationId": "sys08.opc.createWithdrawal",
+      "method": "POST",
+      "path": "/internal/v1/opc/withdrawals",
+      "provider": "SYS-08",
+      "producer": "SYS-08.http-api",
+      "consumers": [
+        "SYS-07"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS_USER_DELEGATION"
+    },
+    {
+      "operationId": "sys08.enterprise.createWithdrawal",
+      "method": "POST",
+      "path": "/api/v1/withdrawals",
+      "provider": "SYS-08",
+      "producer": "SYS-08.http-api",
+      "consumers": [
+        "workbench-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION_STRONG"
+    },
+    {
+      "operationId": "sys08.payment.receiveResult",
+      "method": "POST",
+      "path": "/callbacks/v1/payments/{channel}",
+      "provider": "SYS-08",
+      "producer": "PAYMENT_PROVIDER",
+      "consumers": [
+        "SYS-08.payment-adapter"
+      ],
+      "visibility": "CALLBACK",
+      "authMode": "SIGNED_PROVIDER_CALLBACK"
+    },
+    {
+      "operationId": "sys08.refund.receiveResult",
+      "method": "POST",
+      "path": "/callbacks/v1/refunds/{channel}",
+      "provider": "SYS-08",
+      "producer": "PAYMENT_PROVIDER",
+      "consumers": [
+        "SYS-08.payment-adapter"
+      ],
+      "visibility": "CALLBACK",
+      "authMode": "SIGNED_PROVIDER_CALLBACK"
+    },
+    {
+      "operationId": "sys08.payout.receiveResult",
+      "method": "POST",
+      "path": "/callbacks/v1/payouts/{channel}",
+      "provider": "SYS-08",
+      "producer": "PAYOUT_PROVIDER",
+      "consumers": [
+        "SYS-08.payout-adapter"
+      ],
+      "visibility": "CALLBACK",
+      "authMode": "SIGNED_PROVIDER_CALLBACK"
+    },
+    {
+      "operationId": "sys08.admin.finalReviewWithdrawal",
+      "method": "POST",
+      "path": "/api/v1/admin/withdrawals/{withdrawalId}/final-review",
+      "provider": "SYS-08",
+      "producer": "SYS-08.http-api",
+      "consumers": [
+        "admin-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION_STRONG"
+    },
+    {
+      "operationId": "sys06.analytics.getOverview",
+      "method": "GET",
+      "path": "/api/v1/analytics/overview",
+      "provider": "SYS-06",
+      "producer": "SYS-06.http-api",
+      "consumers": [
+        "analytics-web",
+        "workbench-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys06.analytics.getMetric",
+      "method": "GET",
+      "path": "/api/v1/analytics/metrics/{metricId}",
+      "provider": "SYS-06",
+      "producer": "SYS-06.http-api",
+      "consumers": [
+        "analytics-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys06.analytics.getMetricDetails",
+      "method": "GET",
+      "path": "/api/v1/analytics/metrics/{metricId}/details",
+      "provider": "SYS-06",
+      "producer": "SYS-06.http-api",
+      "consumers": [
+        "analytics-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys06.analytics.createExport",
+      "method": "POST",
+      "path": "/api/v1/analytics/exports",
+      "provider": "SYS-06",
+      "producer": "SYS-06.http-api",
+      "consumers": [
+        "analytics-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION_STRONG"
+    },
+    {
+      "operationId": "sys06.analytics.getSyncHealth",
+      "method": "GET",
+      "path": "/api/v1/analytics/sync-health",
+      "provider": "SYS-06",
+      "producer": "SYS-06.http-api",
+      "consumers": [
+        "analytics-web",
+        "admin-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys06.analytics.retrySyncJob",
+      "method": "POST",
+      "path": "/api/v1/analytics/sync-jobs/{syncJobId}/retry",
+      "provider": "SYS-06",
+      "producer": "SYS-06.http-api",
+      "consumers": [
+        "admin-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION_STRONG"
+    },
+    {
+      "operationId": "sys07.opc.getMe",
+      "method": "GET",
+      "path": "/api/v1/opc/me",
+      "provider": "SYS-07",
+      "producer": "SYS-07.http-api",
+      "consumers": [
+        "opc-mobile"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys07.opc.updateProfile",
+      "method": "PUT",
+      "path": "/api/v1/opc/me/profile",
+      "provider": "SYS-07",
+      "producer": "SYS-07.http-api",
+      "consumers": [
+        "opc-mobile"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION_STRONG"
+    },
+    {
+      "operationId": "sys07.account.create",
+      "method": "POST",
+      "path": "/api/v1/opc/accounts",
+      "provider": "SYS-07",
+      "producer": "SYS-07.http-api",
+      "consumers": [
+        "opc-mobile"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION_STRONG"
+    },
+    {
+      "operationId": "sys07.account.pause",
+      "method": "POST",
+      "path": "/api/v1/opc/accounts/{opcAccountId}/pause",
+      "provider": "SYS-07",
+      "producer": "SYS-07.http-api",
+      "consumers": [
+        "opc-mobile"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION_STRONG"
+    },
+    {
+      "operationId": "sys07.withdrawal.createIntent",
+      "method": "POST",
+      "path": "/api/v1/opc/withdrawal-intents",
+      "provider": "SYS-07",
+      "producer": "SYS-07.http-api",
+      "consumers": [
+        "opc-mobile"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION_STRONG"
+    },
+    {
+      "operationId": "sys07.admin.decideAccountReview",
+      "method": "POST",
+      "path": "/api/v1/admin/opc/reviews/{reviewId}/decision",
+      "provider": "SYS-07",
+      "producer": "SYS-07.http-api",
+      "consumers": [
+        "admin-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION_STRONG"
+    },
+    {
+      "operationId": "sys07.assignment.createSessionGrant",
+      "method": "POST",
+      "path": "/internal/v1/opc/assignments/{accountAssignmentId}/session-grants",
+      "provider": "SYS-07",
+      "producer": "SYS-07.http-api",
+      "consumers": [
+        "SYS-05"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS"
+    },
+    {
+      "operationId": "sys07.assignment.getStatus",
+      "method": "GET",
+      "path": "/internal/v1/opc/assignments/{accountAssignmentId}/status",
+      "provider": "SYS-07",
+      "producer": "SYS-07.http-api",
+      "consumers": [
+        "SYS-05"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS"
+    },
+    {
+      "operationId": "sys04.marketing.getContext",
+      "method": "GET",
+      "path": "/api/v1/marketing/context",
+      "provider": "SYS-04",
+      "producer": "SYS-04.http-api",
+      "consumers": [
+        "marketing-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys04.lead.create",
+      "method": "POST",
+      "path": "/api/v1/marketing/leads",
+      "provider": "SYS-04",
+      "producer": "SYS-04.http-api",
+      "consumers": [
+        "marketing-web",
+        "approved-import-worker"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys04.customer.update",
+      "method": "PATCH",
+      "path": "/api/v1/marketing/customers/{customerId}",
+      "provider": "SYS-04",
+      "producer": "SYS-04.http-api",
+      "consumers": [
+        "marketing-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys04.customer.createFollowup",
+      "method": "POST",
+      "path": "/api/v1/marketing/customers/{customerId}/followups",
+      "provider": "SYS-04",
+      "producer": "SYS-04.http-api",
+      "consumers": [
+        "marketing-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys04.touchPolicy.evaluate",
+      "method": "POST",
+      "path": "/api/v1/marketing/touch-policy/evaluate",
+      "provider": "SYS-04",
+      "producer": "SYS-04.http-api",
+      "consumers": [
+        "marketing-web",
+        "calling-worker",
+        "wechat-worker"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys04.attribution.resolve",
+      "method": "POST",
+      "path": "/internal/v1/marketing/attribution/resolve",
+      "provider": "SYS-04",
+      "producer": "SYS-04.http-api",
+      "consumers": [
+        "SYS-02"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS"
+    },
+    {
+      "operationId": "sys04.analytics.listOutcomes",
+      "method": "GET",
+      "path": "/internal/v1/marketing/analytics-outcomes",
+      "provider": "SYS-04",
+      "producer": "SYS-04.http-api",
+      "consumers": [
+        "SYS-06"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS"
+    },
+    {
+      "operationId": "sys04.analytics.getOutcomeSnapshot",
+      "method": "GET",
+      "path": "/internal/v1/marketing/analytics-outcome-snapshots/{snapshotRef}",
+      "provider": "SYS-04",
+      "producer": "SYS-04.http-api",
+      "consumers": [
+        "SYS-06"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS"
+    },
+    {
+      "operationId": "sys04.calling.createAdapterTask",
+      "method": "POST",
+      "path": "/internal/v1/adapters/ai-calling/tasks",
+      "provider": "SYS-04",
+      "producer": "SYS-04.http-api",
+      "consumers": [
+        "SYS-04.calling-worker"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS"
+    },
+    {
+      "operationId": "sys04.calling.receiveResult",
+      "method": "POST",
+      "path": "/callbacks/v1/ai-calling/results",
+      "provider": "SYS-04",
+      "producer": "AI_CALLING_PROVIDER",
+      "consumers": [
+        "SYS-04"
+      ],
+      "visibility": "CALLBACK",
+      "authMode": "SIGNED_PROVIDER_CALLBACK"
+    },
+    {
+      "operationId": "sys04.wechat.receiveMessage",
+      "method": "POST",
+      "path": "/callbacks/v1/wechat/messages",
+      "provider": "SYS-04",
+      "producer": "WECHAT_PROVIDER",
+      "consumers": [
+        "SYS-04"
+      ],
+      "visibility": "CALLBACK",
+      "authMode": "SIGNED_PROVIDER_CALLBACK"
+    },
+    {
+      "operationId": "sys04.wechat.requestHandoff",
+      "method": "POST",
+      "path": "/api/v1/marketing/wechat/conversations/{conversationId}/handoff",
+      "provider": "SYS-04",
+      "producer": "SYS-04.http-api",
+      "consumers": [
+        "marketing-web",
+        "wechat-worker"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys05.asset.createUploadSession",
+      "method": "POST",
+      "path": "/api/v1/content/assets/uploads",
+      "provider": "SYS-05",
+      "producer": "SYS-05.http-api",
+      "consumers": [
+        "content-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys05.content.create",
+      "method": "POST",
+      "path": "/api/v1/content/items",
+      "provider": "SYS-05",
+      "producer": "SYS-05.http-api",
+      "consumers": [
+        "content-web",
+        "agent-control-plane"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys05.content.update",
+      "method": "PATCH",
+      "path": "/api/v1/content/items/{contentId}",
+      "provider": "SYS-05",
+      "producer": "SYS-05.http-api",
+      "consumers": [
+        "content-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys05.content.createChannelVersion",
+      "method": "POST",
+      "path": "/api/v1/content/items/{contentId}/channel-versions",
+      "provider": "SYS-05",
+      "producer": "SYS-05.http-api",
+      "consumers": [
+        "content-web",
+        "agent-control-plane"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys05.review.submitOrDecide",
+      "method": "POST",
+      "path": "/api/v1/content/channel-versions/{channelVersionId}/reviews",
+      "provider": "SYS-05",
+      "producer": "SYS-05.http-api",
+      "consumers": [
+        "content-web",
+        "review-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys05.publication.confirm",
+      "method": "POST",
+      "path": "/api/v1/content/publication-confirmations",
+      "provider": "SYS-05",
+      "producer": "SYS-05.http-api",
+      "consumers": [
+        "content-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION_STRONG"
+    },
+    {
+      "operationId": "sys05.publication.cancelPlan",
+      "method": "POST",
+      "path": "/api/v1/content/publication-plans/{publicationPlanId}/cancel",
+      "provider": "SYS-05",
+      "producer": "SYS-05.http-api",
+      "consumers": [
+        "content-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION_STRONG"
+    },
+    {
+      "operationId": "sys05.publication.retry",
+      "method": "POST",
+      "path": "/api/v1/content/channel-publications/{channelPublicationId}/retry",
+      "provider": "SYS-05",
+      "producer": "SYS-05.http-api",
+      "consumers": [
+        "content-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION_STRONG"
+    },
+    {
+      "operationId": "sys05.publication.createVisibilityCheck",
+      "method": "POST",
+      "path": "/api/v1/content/channel-publications/{channelPublicationId}/visibility-checks",
+      "provider": "SYS-05",
+      "producer": "SYS-05.http-api",
+      "consumers": [
+        "content-web",
+        "verification-worker"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION_STRONG"
+    },
+    {
+      "operationId": "sys05.assignment.getReleaseEligibility",
+      "method": "GET",
+      "path": "/internal/v1/content/channel-publications/{channelPublicationId}/executions/{executionId}/assignment-release-eligibility",
+      "provider": "SYS-05",
+      "producer": "SYS-05.http-api",
+      "consumers": [
+        "SYS-07"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS"
+    },
+    {
+      "operationId": "sys03.access.createRequest",
+      "method": "POST",
+      "path": "/api/v1/commerce/access-requests",
+      "provider": "SYS-03",
+      "producer": "SYS-03.http-api",
+      "consumers": [
+        "merchant-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys03.store.create",
+      "method": "POST",
+      "path": "/api/v1/commerce/stores",
+      "provider": "SYS-03",
+      "producer": "SYS-03.http-api",
+      "consumers": [
+        "merchant-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys03.product.create",
+      "method": "POST",
+      "path": "/api/v1/commerce/products",
+      "provider": "SYS-03",
+      "producer": "SYS-03.http-api",
+      "consumers": [
+        "merchant-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys03.inventory.command",
+      "method": "POST",
+      "path": "/api/v1/commerce/inventories/{inventoryId}/commands",
+      "provider": "SYS-03",
+      "producer": "SYS-03.http-api",
+      "consumers": [
+        "merchant-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys03.inventory.reserve",
+      "method": "POST",
+      "path": "/internal/v1/commerce/inventory-reservations",
+      "provider": "SYS-03",
+      "producer": "SYS-03.http-api",
+      "consumers": [
+        "SYS-02"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS"
+    },
+    {
+      "operationId": "sys03.inventory.commitReservation",
+      "method": "POST",
+      "path": "/internal/v1/commerce/inventory-reservations/{reservationId}/commit",
+      "provider": "SYS-03",
+      "producer": "SYS-03.http-api",
+      "consumers": [
+        "SYS-02"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS"
+    },
+    {
+      "operationId": "sys03.inventory.releaseReservation",
+      "method": "POST",
+      "path": "/internal/v1/commerce/commands/release-inventory-reservation",
+      "provider": "SYS-03",
+      "producer": "SYS-03.http-api",
+      "consumers": [
+        "SYS-02"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS"
+    },
+    {
+      "operationId": "sys03.product.decideAudit",
+      "method": "POST",
+      "path": "/api/v1/admin/commerce/product-audits/{auditId}/decision",
+      "provider": "SYS-03",
+      "producer": "SYS-03.http-api",
+      "consumers": [
+        "admin-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION_STRONG"
+    },
+    {
+      "operationId": "sys03.product.publish",
+      "method": "POST",
+      "path": "/api/v1/commerce/products/{productId}/publication-commands",
+      "provider": "SYS-03",
+      "producer": "SYS-03.http-api",
+      "consumers": [
+        "merchant-web",
+        "admin-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION_STRONG"
+    },
+    {
+      "operationId": "sys03.product.getPublishedSnapshot",
+      "method": "GET",
+      "path": "/internal/v1/commerce/published-product-snapshots/{snapshotRef}",
+      "provider": "SYS-03",
+      "producer": "SYS-03.http-api",
+      "consumers": [
+        "SYS-02"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS"
+    },
+    {
+      "operationId": "sys03.fulfillment.create",
+      "method": "POST",
+      "path": "/api/v1/commerce/orders/{orderId}/fulfillments",
+      "provider": "SYS-03",
+      "producer": "SYS-03.http-api",
+      "consumers": [
+        "merchant-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys03.settlement.getEvidence",
+      "method": "GET",
+      "path": "/internal/v1/commerce/orders/{orderId}/settlement-evidence",
+      "provider": "SYS-03",
+      "producer": "SYS-03.http-api",
+      "consumers": [
+        "SYS-08"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS"
+    },
+    {
+      "operationId": "sys02.consumer.getProfile",
+      "method": "GET",
+      "path": "/api/v1/mall/me/profile",
+      "provider": "SYS-02",
+      "producer": "SYS-02.http-api",
+      "consumers": [
+        "mall-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys02.consumer.mergeAnonymousSubject",
+      "method": "POST",
+      "path": "/internal/v1/mall/anonymous-subjects/{anonymousId}/merge",
+      "provider": "SYS-02",
+      "producer": "SYS-02.http-api",
+      "consumers": [
+        "SYS-01"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS"
+    },
+    {
+      "operationId": "sys02.trial.getEligibility",
+      "method": "GET",
+      "path": "/api/v1/mall/trial-eligibility",
+      "provider": "SYS-02",
+      "producer": "SYS-02.http-api",
+      "consumers": [
+        "mall-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys02.mall.getHome",
+      "method": "GET",
+      "path": "/api/v1/mall/home",
+      "provider": "SYS-02",
+      "producer": "SYS-02.http-api",
+      "consumers": [
+        "mall-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "PUBLIC"
+    },
+    {
+      "operationId": "sys02.mall.getProduct",
+      "method": "GET",
+      "path": "/api/v1/mall/products/{productId}",
+      "provider": "SYS-02",
+      "producer": "SYS-02.http-api",
+      "consumers": [
+        "mall-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "PUBLIC"
+    },
+    {
+      "operationId": "sys02.publication.putChannelPublication",
+      "method": "PUT",
+      "path": "/internal/v1/mall/channel-publications/{channelPublicationId}",
+      "provider": "SYS-02",
+      "producer": "SYS-02.http-api",
+      "consumers": [
+        "SYS-05"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS"
+    },
+    {
+      "operationId": "sys02.publication.getChannelPublication",
+      "method": "GET",
+      "path": "/internal/v1/mall/channel-publications/{channelPublicationId}",
+      "provider": "SYS-02",
+      "producer": "SYS-02.http-api",
+      "consumers": [
+        "SYS-05"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS"
+    },
+    {
+      "operationId": "sys02.attribution.createCandidate",
+      "method": "POST",
+      "path": "/api/v1/mall/attribution-candidates",
+      "provider": "SYS-02",
+      "producer": "SYS-02.http-api",
+      "consumers": [
+        "mall-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "PUBLIC"
+    },
+    {
+      "operationId": "sys02.cart.addItem",
+      "method": "POST",
+      "path": "/api/v1/mall/carts/items",
+      "provider": "SYS-02",
+      "producer": "SYS-02.http-api",
+      "consumers": [
+        "mall-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "PUBLIC"
+    },
+    {
+      "operationId": "sys02.checkout.preview",
+      "method": "POST",
+      "path": "/api/v1/mall/checkout/preview",
+      "provider": "SYS-02",
+      "producer": "SYS-02.http-api",
+      "consumers": [
+        "mall-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys02.order.create",
+      "method": "POST",
+      "path": "/api/v1/mall/orders",
+      "provider": "SYS-02",
+      "producer": "SYS-02.http-api",
+      "consumers": [
+        "mall-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys02.order.get",
+      "method": "GET",
+      "path": "/api/v1/mall/orders/{orderId}",
+      "provider": "SYS-02",
+      "producer": "SYS-02.http-api",
+      "consumers": [
+        "mall-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys02.payment.create",
+      "method": "POST",
+      "path": "/api/v1/mall/orders/{orderId}/payments",
+      "provider": "SYS-02",
+      "producer": "SYS-02.http-api",
+      "consumers": [
+        "mall-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys02.order.registerShipment",
+      "method": "POST",
+      "path": "/internal/v1/mall/commands/register-order-shipment",
+      "provider": "SYS-02",
+      "producer": "SYS-02.http-api",
+      "consumers": [
+        "SYS-03"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS_USER_DELEGATION"
+    },
+    {
+      "operationId": "sys02.analytics.getOrderOutcomeSnapshot",
+      "method": "GET",
+      "path": "/internal/v1/mall/order-outcome-snapshots/{snapshotRef}",
+      "provider": "SYS-02",
+      "producer": "SYS-02.http-api",
+      "consumers": [
+        "SYS-04",
+        "SYS-06"
+      ],
+      "visibility": "INTERNAL",
+      "authMode": "SERVICE_MTLS"
+    },
+    {
+      "operationId": "sys02.aftersale.create",
+      "method": "POST",
+      "path": "/api/v1/mall/after-sales",
+      "provider": "SYS-02",
+      "producer": "SYS-02.http-api",
+      "consumers": [
+        "mall-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    },
+    {
+      "operationId": "sys02.review.create",
+      "method": "POST",
+      "path": "/api/v1/mall/reviews",
+      "provider": "SYS-02",
+      "producer": "SYS-02.http-api",
+      "consumers": [
+        "mall-web"
+      ],
+      "visibility": "PUBLIC",
+      "authMode": "USER_SESSION"
+    }
+  ],
+  "events": [
+    {
+      "eventType": "UserRegistered",
+      "topic": "platform.identity.user.registered.v1",
+      "physicalTopicTemplate": "wotao.{environment}.platform.identity.user.registered.v1",
+      "provider": "SYS-01",
+      "consumers": [
+        "SYS-01"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "EnterpriseInitialized",
+      "topic": "platform.enterprise.initialized.v1",
+      "physicalTopicTemplate": "wotao.{environment}.platform.enterprise.initialized.v1",
+      "provider": "SYS-01",
+      "consumers": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-05",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "EnterpriseProfileUpdated",
+      "topic": "platform.enterprise.profile_updated.v1",
+      "physicalTopicTemplate": "wotao.{environment}.platform.enterprise.profile_updated.v1",
+      "provider": "SYS-01",
+      "consumers": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-05",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "EnterpriseReviewChanged",
+      "topic": "platform.enterprise.review-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.platform.enterprise.review-changed.v1",
+      "provider": "SYS-01",
+      "consumers": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-05"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "EnterpriseWhitelistChanged",
+      "topic": "platform.enterprise.whitelist-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.platform.enterprise.whitelist-changed.v1",
+      "provider": "SYS-01",
+      "consumers": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-05",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "EnterpriseMemberChanged",
+      "topic": "platform.enterprise.member_changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.platform.enterprise.member_changed.v1",
+      "provider": "SYS-01",
+      "consumers": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-05",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "FeatureFlagChanged",
+      "topic": "platform.feature-flag.changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.platform.feature-flag.changed.v1",
+      "provider": "SYS-01",
+      "consumers": [
+        "SYS-02",
+        "SYS-03",
+        "SYS-04",
+        "SYS-05",
+        "SYS-06",
+        "SYS-07",
+        "SYS-08"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "AgentToolExecutionReported",
+      "topic": "platform.agent.tool-execution-reported.v1",
+      "physicalTopicTemplate": "wotao.{environment}.platform.agent.tool-execution-reported.v1",
+      "provider": "REGISTERED_DOMAIN_ADAPTER",
+      "consumers": [
+        "SYS-01"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "AgentRunStatusChanged",
+      "topic": "platform.agent.run-status-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.platform.agent.run-status-changed.v1",
+      "provider": "SYS-01",
+      "consumers": [
+        "SYS-04",
+        "SYS-05",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "ConsumerTrialAccessChanged",
+      "topic": "commerce.consumer.trial-access-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.consumer.trial-access-changed.v1",
+      "provider": "SYS-02",
+      "consumers": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "ProductPublished",
+      "topic": "commerce.product.published.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.product.published.v1",
+      "provider": "SYS-03",
+      "consumers": [
+        "SYS-02",
+        "SYS-04",
+        "SYS-05",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "InventoryChanged",
+      "topic": "commerce.inventory.changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.inventory.changed.v1",
+      "provider": "SYS-03",
+      "consumers": [
+        "SYS-02",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "InventoryReservationCreated",
+      "topic": "commerce.inventory-reservation.created.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.inventory-reservation.created.v1",
+      "provider": "SYS-03",
+      "consumers": [
+        "SYS-02"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "InventoryReservationCommitted",
+      "topic": "commerce.inventory-reservation.committed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.inventory-reservation.committed.v1",
+      "provider": "SYS-03",
+      "consumers": [
+        "SYS-02"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "InventoryReservationReleased",
+      "topic": "commerce.inventory-reservation.released.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.inventory-reservation.released.v1",
+      "provider": "SYS-03",
+      "consumers": [
+        "SYS-02"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "ContentProductClicked",
+      "topic": "commerce.content.product-clicked.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.content.product-clicked.v1",
+      "provider": "SYS-02",
+      "consumers": [
+        "SYS-04",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "OrderAttributionFrozen",
+      "topic": "commerce.order.attribution-frozen.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.order.attribution-frozen.v1",
+      "provider": "SYS-02",
+      "consumers": [
+        "SYS-04",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "OrderAttributionAdjusted",
+      "topic": "commerce.order.attribution-adjusted.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.order.attribution-adjusted.v1",
+      "provider": "SYS-02",
+      "consumers": [
+        "SYS-04",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "OrderPaid",
+      "topic": "commerce.order.paid.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.order.paid.v1",
+      "provider": "SYS-02",
+      "consumers": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "OrderCancelled",
+      "topic": "commerce.order.cancelled.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.order.cancelled.v1",
+      "provider": "SYS-02",
+      "consumers": [
+        "SYS-03",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "OrderShipmentRegistered",
+      "topic": "commerce.order.shipment-registered.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.order.shipment-registered.v1",
+      "provider": "SYS-02",
+      "consumers": [
+        "SYS-03",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "OrderReceived",
+      "topic": "commerce.order.received.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.order.received.v1",
+      "provider": "SYS-02",
+      "consumers": [
+        "SYS-03",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "OrderSettlementEligible",
+      "topic": "commerce.order.settlement-eligible.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.order.settlement-eligible.v1",
+      "provider": "SYS-02",
+      "consumers": [
+        "SYS-03",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "AftersaleStatusChanged",
+      "topic": "commerce.aftersale.status-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.aftersale.status-changed.v1",
+      "provider": "SYS-02",
+      "consumers": [
+        "SYS-03",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "RefundRequested",
+      "topic": "commerce.refund.requested.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.refund.requested.v1",
+      "provider": "SYS-02",
+      "consumers": [
+        "SYS-03",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "RefundStatusChanged",
+      "topic": "commerce.refund.status-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.refund.status-changed.v1",
+      "provider": "SYS-02",
+      "consumers": [
+        "SYS-03",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "OrderRefunded",
+      "topic": "commerce.order.refunded.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.order.refunded.v1",
+      "provider": "SYS-02",
+      "consumers": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "ReviewReplyChanged",
+      "topic": "commerce.review.reply-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.review.reply-changed.v1",
+      "provider": "SYS-02",
+      "consumers": [
+        "SYS-03",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "ReviewGovernanceChanged",
+      "topic": "commerce.review.governance-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.review.governance-changed.v1",
+      "provider": "SYS-02",
+      "consumers": [
+        "SYS-03",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "LeadCreated",
+      "topic": "crm.lead.created.v1",
+      "physicalTopicTemplate": "wotao.{environment}.crm.lead.created.v1",
+      "provider": "SYS-04",
+      "consumers": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "LeadStatusChanged",
+      "topic": "crm.lead.status_changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.crm.lead.status_changed.v1",
+      "provider": "SYS-04",
+      "consumers": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "CustomerUpdated",
+      "topic": "crm.customer.updated.v1",
+      "physicalTopicTemplate": "wotao.{environment}.crm.customer.updated.v1",
+      "provider": "SYS-04",
+      "consumers": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "CustomerAssigned",
+      "topic": "crm.customer.assigned.v1",
+      "physicalTopicTemplate": "wotao.{environment}.crm.customer.assigned.v1",
+      "provider": "SYS-04",
+      "consumers": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "OpportunityStageChanged",
+      "topic": "crm.opportunity.stage-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.crm.opportunity.stage-changed.v1",
+      "provider": "SYS-04",
+      "consumers": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "CallCompleted",
+      "topic": "crm.call.completed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.crm.call.completed.v1",
+      "provider": "SYS-04",
+      "consumers": [
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "WeChatHandoffRequested",
+      "topic": "crm.wechat.handoff-requested.v1",
+      "physicalTopicTemplate": "wotao.{environment}.crm.wechat.handoff-requested.v1",
+      "provider": "SYS-04",
+      "consumers": [
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "GlobalMarketingRefusalChanged",
+      "topic": "crm.marketing.global-refusal-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.crm.marketing.global-refusal-changed.v1",
+      "provider": "SYS-04",
+      "consumers": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "ContactSuppressionChanged",
+      "topic": "crm.marketing.contact-suppression-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.crm.marketing.contact-suppression-changed.v1",
+      "provider": "SYS-04",
+      "consumers": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "ContentVersionSubmitted",
+      "topic": "content.version.submitted.v1",
+      "physicalTopicTemplate": "wotao.{environment}.content.version.submitted.v1",
+      "provider": "SYS-05",
+      "consumers": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "ContentReviewCompleted",
+      "topic": "content.review.completed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.content.review.completed.v1",
+      "provider": "REVIEW_CENTER",
+      "consumers": [
+        "SYS-05",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "PublicationConfirmed",
+      "topic": "publication.confirmed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.publication.confirmed.v1",
+      "provider": "SYS-05",
+      "consumers": [
+        "SYS-01",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "PublicationServiceOrderChanged",
+      "topic": "ledger.publication-service-order.changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.publication-service-order.changed.v1",
+      "provider": "SYS-08",
+      "consumers": [
+        "SYS-01",
+        "SYS-05"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "ChannelPublicationReserved",
+      "topic": "ledger.publication.charge-reserved.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.publication.charge-reserved.v1",
+      "provider": "SYS-08",
+      "consumers": [
+        "SYS-05",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "ChannelPublicationFirstVisible",
+      "topic": "publication.channel.first_visible.v1",
+      "physicalTopicTemplate": "wotao.{environment}.publication.channel.first_visible.v1",
+      "provider": "SYS-05",
+      "consumers": [
+        "SYS-06",
+        "SYS-07",
+        "SYS-08"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "ChannelPublicationEffective",
+      "topic": "publication.channel.effective.v1",
+      "physicalTopicTemplate": "wotao.{environment}.publication.channel.effective.v1",
+      "provider": "SYS-05",
+      "consumers": [
+        "SYS-06",
+        "SYS-07",
+        "SYS-08"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "ChannelPublicationFailed",
+      "topic": "publication.channel.failed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.publication.channel.failed.v1",
+      "provider": "SYS-05",
+      "consumers": [
+        "SYS-06",
+        "SYS-07",
+        "SYS-08"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "ChannelPublicationRefundEligible",
+      "topic": "publication.channel.refund-eligible.v1",
+      "physicalTopicTemplate": "wotao.{environment}.publication.channel.refund-eligible.v1",
+      "provider": "SYS-05",
+      "consumers": [
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "ChannelPublicationChargeReleased",
+      "topic": "ledger.publication.charge-released.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.publication.charge-released.v1",
+      "provider": "SYS-08",
+      "consumers": [
+        "SYS-05",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "AccountAssignmentRequested",
+      "topic": "publication.account-assignment.requested.v1",
+      "physicalTopicTemplate": "wotao.{environment}.publication.account-assignment.requested.v1",
+      "provider": "SYS-05",
+      "consumers": [
+        "SYS-07"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "AccountAssignmentCompleted",
+      "topic": "opc.account-assignment.completed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.opc.account-assignment.completed.v1",
+      "provider": "SYS-07",
+      "consumers": [
+        "SYS-05"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "AccountAssignmentUnavailable",
+      "topic": "opc.account-assignment.unavailable.v1",
+      "physicalTopicTemplate": "wotao.{environment}.opc.account-assignment.unavailable.v1",
+      "provider": "SYS-07",
+      "consumers": [
+        "SYS-05"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "AccountAssignmentReleaseRequested",
+      "topic": "publication.account-assignment.release-requested.v1",
+      "physicalTopicTemplate": "wotao.{environment}.publication.account-assignment.release-requested.v1",
+      "provider": "SYS-05",
+      "consumers": [
+        "SYS-07"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "AccountAssignmentReleased",
+      "topic": "opc.account-assignment.released.v1",
+      "physicalTopicTemplate": "wotao.{environment}.opc.account-assignment.released.v1",
+      "provider": "SYS-07",
+      "consumers": [
+        "SYS-05"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "OpcAccountStatusChanged",
+      "topic": "opc.account.status-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.opc.account.status-changed.v1",
+      "provider": "SYS-07",
+      "consumers": [
+        "SYS-05",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "RequestOpcEarningSettlement",
+      "topic": "ledger.command.request-opc-earning-settlement.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.command.request-opc-earning-settlement.v1",
+      "provider": "SYS-07",
+      "consumers": [
+        "SYS-08"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "OpcEarningSettled",
+      "topic": "ledger.opc-earning.settled.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.opc-earning.settled.v1",
+      "provider": "SYS-08",
+      "consumers": [
+        "SYS-07"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "OpcEarningReversed",
+      "topic": "ledger.opc-earning.reversed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.opc-earning.reversed.v1",
+      "provider": "SYS-08",
+      "consumers": [
+        "SYS-07"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "MembershipChanged",
+      "topic": "ledger.membership.changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.membership.changed.v1",
+      "provider": "SYS-08",
+      "consumers": [
+        "SYS-01",
+        "SYS-05",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "BenefitQuotaChanged",
+      "topic": "ledger.benefit-quota.changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.benefit-quota.changed.v1",
+      "provider": "SYS-08",
+      "consumers": [
+        "SYS-01",
+        "SYS-05",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "ProfitBaseFrozen",
+      "topic": "ledger.profit-base.frozen.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.profit-base.frozen.v1",
+      "provider": "SYS-08",
+      "consumers": [
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "ProfitBaseAllocated",
+      "topic": "ledger.profit-base.allocated.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.profit-base.allocated.v1",
+      "provider": "SYS-08",
+      "consumers": [
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "ProfitBaseReversed",
+      "topic": "ledger.profit-base.reversed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.profit-base.reversed.v1",
+      "provider": "SYS-08",
+      "consumers": [
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "MerchantSettlementChanged",
+      "topic": "ledger.merchant-settlement.changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.merchant-settlement.changed.v1",
+      "provider": "SYS-08",
+      "consumers": [
+        "SYS-03",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "PointsLedgerEntryPosted",
+      "topic": "ledger.points-entry.posted.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.points-entry.posted.v1",
+      "provider": "SYS-08",
+      "consumers": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "PointsBalanceChanged",
+      "topic": "ledger.points-balance.changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.points-balance.changed.v1",
+      "provider": "SYS-08",
+      "consumers": [
+        "SYS-01"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "WithdrawalStatusChanged",
+      "topic": "ledger.withdrawal.status-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.withdrawal.status-changed.v1",
+      "provider": "SYS-08",
+      "consumers": [
+        "SYS-01",
+        "SYS-06",
+        "SYS-07"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "CashLedgerEntryPosted",
+      "topic": "ledger.cash-entry.posted.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.cash-entry.posted.v1",
+      "provider": "SYS-08",
+      "consumers": [
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "EnterpriseBalanceChanged",
+      "topic": "ledger.enterprise-balance.changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.enterprise-balance.changed.v1",
+      "provider": "SYS-08",
+      "consumers": [
+        "SYS-01"
+      ],
+      "schemaVersion": 1
+    },
+    {
+      "eventType": "LedgerAnomalyDetected",
+      "topic": "ledger.anomaly.detected.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.anomaly.detected.v1",
+      "provider": "SYS-08",
+      "consumers": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "schemaVersion": 1
+    }
+  ]
+}

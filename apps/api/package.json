@@ -12,7 +12,7 @@
     "db:migrate": "cross-env DATABASE_URL=file:./dev.db prisma migrate deploy",
     "db:seed": "cross-env DATABASE_URL=file:./dev.db tsx prisma/seed.ts",
     "db:setup": "pnpm db:generate && pnpm db:migrate && pnpm db:seed",
-    "test:db": "cross-env DATABASE_URL=file:./test.db prisma migrate reset --force --skip-generate --skip-seed",
+    "test:db": "cross-env DATABASE_URL=file:./test.db node scripts/ensure-test-database.mjs && cross-env DATABASE_URL=file:./test.db prisma migrate reset --force --skip-generate --skip-seed",
     "test": "pnpm test:db && cross-env DATABASE_URL=file:./test.db vitest run"
   },
   "dependencies": {

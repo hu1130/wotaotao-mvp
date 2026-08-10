@@ -1,0 +1,27 @@
+{
+  "operationId": "sys01.auth.createPhoneSession",
+  "method": "POST",
+  "path": "/api/v1/auth/phone/session",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "idempotency-key": "PHONE_SESSION:{phoneHash}:{clientType}:{clientRequestId}"
+    },
+    "body": {
+      "phone": "+8613800000000",
+      "code": "123456",
+      "clientType": "MALL",
+      "returnUrl": "/mall/orders",
+      "clientRequestId": "req_login_001"
+    }
+  },
+  "status": 400,
+  "response": {
+    "code": "VALIDATION_ERROR",
+    "message": "Request shape or field validation failed.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

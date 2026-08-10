@@ -1,0 +1,40 @@
+{
+  "eventId": "evt_agentrunstatuschanged_001",
+  "eventType": "AgentRunStatusChanged",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-01",
+  "environment": "DEV",
+  "audience": [
+    "SYS-04",
+    "SYS-05",
+    "SYS-06"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "AgentRun",
+  "aggregateId": "arun_contract_001",
+  "aggregateVersion": 2,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "AGENT_RUN_STATUS:arun_contract_001:2",
+  "payload": {
+    "agentRunId": "arun_contract_001",
+    "enterpriseId": "ent_contract_001",
+    "agentCode": "CONTENT_PUBLISHING_AGENT",
+    "oldStatus": "RUNNING",
+    "newStatus": "SUCCEEDED",
+    "agentRunVersion": 2,
+    "completedToolCount": 1,
+    "failedToolCount": 0,
+    "businessRefs": [
+      {
+        "type": "ChannelPublication",
+        "id": "cpub_contract_001",
+        "version": 1
+      }
+    ],
+    "changedAt": "2026-08-10T02:00:00Z"
+  }
+}

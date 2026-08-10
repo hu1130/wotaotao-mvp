@@ -1,0 +1,31 @@
+{
+  "operationId": "sys03.inventory.command",
+  "method": "POST",
+  "path": "/api/v1/commerce/inventories/{inventoryId}/commands",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "INVENTORY_COMMAND:{inventoryId}:{businessKey}"
+    },
+    "params": {
+      "inventoryId": "inv_001"
+    },
+    "body": {
+      "commandType": "SET",
+      "quantity": 100,
+      "businessKey": "MANUAL_STOCKTAKE:20260810",
+      "expectedVersion": 3,
+      "reason": "盘点调整"
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

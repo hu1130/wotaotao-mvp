@@ -1,0 +1,25 @@
+# Bootstrap owner for the current personal repository.
+# Before work is delegated, add each developer's real GitHub handle (or move the
+# repository into an organization and replace these with real teams). A role name
+# such as DEV-B is not a valid CODEOWNER. Keep @hu1130 until a replacement PR has
+# proved that GitHub can request reviews from the new owners.
+
+* @hu1130
+
+# Contract and integration governance: DEV-B + DEV-A + QA
+/packages/contracts/ @hu1130
+/packages/platform-sdk/ @hu1130
+/apps/platform-contract-mock/ @hu1130
+/scripts/ @hu1130
+/docs/CONTRACT_GOVERNANCE.md @hu1130
+/docs/INTEGRATION_BRANCH_AND_RELEASE.md @hu1130
+/docs/INTEGRATION_TASKS.md @hu1130
+
+# Runtime ownership bootstrap
+/apps/api/ @hu1130
+/apps/web/ @hu1130
+/apps/mock-api/ @hu1130
+
+# Delivery, CI and local infrastructure: DEV-B + DEV-F + QA
+/.github/ @hu1130
+/infra/ @hu1130

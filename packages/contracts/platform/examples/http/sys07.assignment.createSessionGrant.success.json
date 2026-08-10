@@ -1,0 +1,38 @@
+{
+  "operationId": "sys07.assignment.createSessionGrant",
+  "method": "POST",
+  "path": "/internal/v1/opc/assignments/{accountAssignmentId}/session-grants",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "idempotency-key": "SESSION_GRANT:{accountAssignmentId}:{executionId}:{nonce}"
+    },
+    "params": {
+      "accountAssignmentId": "aas_001"
+    },
+    "body": {
+      "channelPublicationId": "chp_dy_001",
+      "executionId": "exe_001",
+      "assignmentSnapshotVersion": 2,
+      "requestedScopes": [
+        "PUBLISH",
+        "READ_STATUS"
+      ],
+      "nonce": "nonce_session_001"
+    }
+  },
+  "status": 201,
+  "response": {
+    "data": {
+      "sessionGrantId": "sgr_001",
+      "opaqueGrant": "<one-time-opaque-session-grant-value>",
+      "expiresAt": "2026-08-10T02:05:00Z",
+      "scope": [
+        "PUBLISH",
+        "READ_STATUS"
+      ]
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

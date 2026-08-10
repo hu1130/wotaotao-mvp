@@ -1,0 +1,42 @@
+{
+  "operationId": "sys01.agents.reportToolResult",
+  "method": "POST",
+  "path": "/internal/v1/agent-runs/{agentRunId}/tool-results",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "idempotency-key": "AGENT_TOOL_RESULT:{agentRunId}:{toolRunId}:{resultVersion}"
+    },
+    "params": {
+      "agentRunId": "agr_001"
+    },
+    "body": {
+      "toolRunId": "atr_001",
+      "toolCallId": "atc_001",
+      "toolCode": "content.publish",
+      "domainSystem": "SYS-05",
+      "enterpriseId": "ent_001",
+      "businessRefs": [
+        "publication:chp_001"
+      ],
+      "inputVersion": 1,
+      "status": "SUCCEEDED",
+      "billingPoint": "PUBLICATION_CONFIRMED",
+      "retryable": false,
+      "resultVersion": 1,
+      "toolAuthorizationRef": "tau_001",
+      "resultSummary": "发布确认已建立",
+      "failureCode": null,
+      "reportedAt": "2026-08-10T02:00:00Z"
+    }
+  },
+  "status": 403,
+  "response": {
+    "code": "FORBIDDEN",
+    "message": "The authenticated actor is not allowed to perform the action.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

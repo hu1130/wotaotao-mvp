@@ -1,0 +1,37 @@
+{
+  "eventId": "evt_opcearningreversed_001",
+  "eventType": "OpcEarningReversed",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-08",
+  "environment": "DEV",
+  "audience": [
+    "SYS-07"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "OpcEarning",
+  "aggregateId": "oearn_contract_001",
+  "aggregateVersion": 2,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "OPC_EARNING_REVERSE:le_contract_opc_001",
+  "payload": {
+    "earningId": "oearn_contract_001",
+    "originalLedgerEntryId": "le_contract_opc_001",
+    "reversalLedgerEntryId": "le_contract_opc_reversal_001",
+    "validPublicationId": "vpub_contract_001",
+    "enterpriseId": "ent_contract_001",
+    "channelPublicationId": "cpub_contract_001",
+    "accountAssignmentId": "aasg_contract_001",
+    "providerId": "prov_contract_001",
+    "opcAccountId": "opca_contract_001",
+    "channelAccountId": "chacc_contract_001",
+    "amountFen": 200,
+    "reasonCode": "APPROVED_ADJUSTMENT",
+    "approvalRef": "approval_contract_005",
+    "sourceVersion": 2,
+    "reversedAt": "2026-08-12T02:00:00Z"
+  }
+}

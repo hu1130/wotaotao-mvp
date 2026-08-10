@@ -1,0 +1,29 @@
+{
+  "operationId": "sys07.account.pause",
+  "method": "POST",
+  "path": "/api/v1/opc/accounts/{opcAccountId}/pause",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "x-csrf-token": "csrf_example_token_001",
+      "idempotency-key": "OPC_ACCOUNT_PAUSE:{opcAccountId}:{expectedVersion}"
+    },
+    "params": {
+      "opcAccountId": "oca_001"
+    },
+    "body": {
+      "expectedVersion": 3,
+      "reason": "暂时停止接单"
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "operationId": "sys08.opc.createWithdrawal",
+  "method": "POST",
+  "path": "/internal/v1/opc/withdrawals",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "x-user-delegation": "<signed-user-delegation-assertion>",
+      "idempotency-key": "OPC_WITHDRAWAL:{providerId}:{clientRequestId}"
+    },
+    "body": {
+      "amountFen": 10000,
+      "payoutProfileRef": "ppr_001",
+      "clientRequestId": "req_withdraw_001"
+    }
+  },
+  "status": 201,
+  "response": {
+    "data": {
+      "withdrawalId": "wdr_001",
+      "providerId": "prv_001",
+      "amountFen": 10000,
+      "status": "SUBMITTED",
+      "version": 1
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "eventId": "evt_requestopcearningsettlement_001",
+  "eventType": "RequestOpcEarningSettlement",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-07",
+  "environment": "DEV",
+  "audience": [
+    "SYS-08"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "ValidPublication",
+  "aggregateId": "vpub_contract_001",
+  "aggregateVersion": 1,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "OPC_EARNING:vpub_contract_001",
+  "payload": {
+    "validPublicationId": "vpub_contract_001",
+    "enterpriseId": "ent_contract_001",
+    "channelPublicationId": "cpub_contract_001",
+    "accountAssignmentId": "aasg_contract_001",
+    "providerId": "prov_contract_001",
+    "opcAccountId": "opca_contract_001",
+    "channelAccountId": "chacc_contract_001",
+    "accountOwnershipType": "OPC_RENTED",
+    "amountFen": 200,
+    "ruleVersion": 1,
+    "requestedAt": "2026-08-11T02:00:00Z"
+  }
+}

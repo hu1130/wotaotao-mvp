@@ -1,0 +1,26 @@
+{
+  "operationId": "sys02.checkout.preview",
+  "method": "POST",
+  "path": "/api/v1/mall/checkout/preview",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "CHECKOUT_PREVIEW:{consumerProfileId}:{cartVersion}:{addressRef}"
+    },
+    "body": {
+      "cartId": "crt_001",
+      "cartVersion": 1,
+      "addressRef": "adr_001"
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

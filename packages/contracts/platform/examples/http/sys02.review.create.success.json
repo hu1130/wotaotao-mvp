@@ -1,0 +1,31 @@
+{
+  "operationId": "sys02.review.create",
+  "method": "POST",
+  "path": "/api/v1/mall/reviews",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "REVIEW_CREATE:{orderId}:{subOrderId}:{skuId}:{buyerUserId}"
+    },
+    "body": {
+      "orderId": "ord_001",
+      "subOrderId": "sor_001",
+      "productId": "prd_001",
+      "skuId": "sku_001",
+      "rating": 5,
+      "text": "商品很好",
+      "imageRefs": []
+    }
+  },
+  "status": 201,
+  "response": {
+    "data": {
+      "reviewId": "rev_001",
+      "status": "PENDING_MODERATION",
+      "version": 1
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

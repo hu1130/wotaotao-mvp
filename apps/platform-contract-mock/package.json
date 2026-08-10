@@ -1,0 +1,19 @@
+{
+  "name": "@wotao/platform-contract-mock",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.mjs",
+    "build": "node --check src/contract.mjs && node --check src/server.mjs",
+    "typecheck": "node --check src/contract.mjs && node --check src/server.mjs",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "ajv": "8.17.1",
+    "ajv-formats": "3.0.1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

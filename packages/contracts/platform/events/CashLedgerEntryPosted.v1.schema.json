@@ -1,0 +1,331 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.wotaotao.com/events/ledger.cash-entry.posted.v1/envelope.schema.json",
+  "title": "CashLedgerEntryPosted envelope v1",
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable evt_ identifier",
+      "pattern": "^evt_[A-Za-z0-9_-]+$"
+    },
+    "eventType": {
+      "type": "string",
+      "const": "CashLedgerEntryPosted"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Business occurrence time"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Outbox publication time"
+    },
+    "producer": {
+      "type": "string",
+      "const": "SYS-08"
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "DEV",
+        "TEST",
+        "STAGING",
+        "PROD"
+      ]
+    },
+    "audience": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SYS-06"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "enterpriseId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "aggregateType": {
+      "type": "string",
+      "const": "LedgerEntry"
+    },
+    "aggregateId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable aggregate identifier"
+    },
+    "aggregateVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causationId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable evt_ identifier",
+          "pattern": "^evt_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "correlationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable business idempotency key; unchanged on retry"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "ledgerEntryId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable le_ identifier",
+          "pattern": "^le_[A-Za-z0-9_-]+$"
+        },
+        "journalId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable jrnl_ identifier",
+          "pattern": "^jrnl_[A-Za-z0-9_-]+$"
+        },
+        "enterpriseId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "description": "Stable ent_ identifier",
+              "pattern": "^ent_[A-Za-z0-9_-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "subjectType": {
+          "type": "string",
+          "enum": [
+            "ENTERPRISE",
+            "OPC_PROVIDER",
+            "PLATFORM",
+            "MERCHANT",
+            "SUPPLIER"
+          ]
+        },
+        "subjectId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "accountCode": {
+          "type": "string",
+          "minLength": 1
+        },
+        "direction": {
+          "type": "string",
+          "enum": [
+            "DEBIT",
+            "CREDIT"
+          ]
+        },
+        "amountFen": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Non-negative integer amount in fen"
+        },
+        "currency": {
+          "type": "string",
+          "enum": [
+            "CNY"
+          ]
+        },
+        "metricBucket": {
+          "type": "string",
+          "minLength": 1
+        },
+        "metricBucketVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "metricEffect": {
+          "type": "string",
+          "enum": [
+            "INCREASE",
+            "DECREASE"
+          ]
+        },
+        "signedMetricAmountFen": {
+          "type": "integer"
+        },
+        "businessType": {
+          "type": "string",
+          "minLength": 1
+        },
+        "businessNo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceEventId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "description": "Stable evt_ identifier",
+              "pattern": "^evt_[A-Za-z0-9_-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "originalLedgerEntryId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "description": "Stable le_ identifier",
+              "pattern": "^le_[A-Za-z0-9_-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ruleVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "postedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "ledgerEntryId",
+        "journalId",
+        "enterpriseId",
+        "subjectType",
+        "subjectId",
+        "accountCode",
+        "direction",
+        "amountFen",
+        "currency",
+        "metricBucket",
+        "metricBucketVersion",
+        "metricEffect",
+        "signedMetricAmountFen",
+        "businessType",
+        "businessNo",
+        "sourceEventId",
+        "originalLedgerEntryId",
+        "ruleVersion",
+        "postedAt"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://contracts.wotaotao.com/events/ledger.cash-entry.posted.v1/payload.schema.json",
+      "title": "CashLedgerEntryPosted payload v1"
+    }
+  },
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "occurredAt",
+    "publishedAt",
+    "producer",
+    "environment",
+    "audience",
+    "enterpriseId",
+    "aggregateType",
+    "aggregateId",
+    "aggregateVersion",
+    "traceId",
+    "causationId",
+    "correlationId",
+    "idempotencyKey",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "description": "The only cash metric input for SYS-06. Reversals append a new entry referencing originalLedgerEntryId.",
+  "examples": [
+    {
+      "eventId": "evt_cashledgerentryposted_001",
+      "eventType": "CashLedgerEntryPosted",
+      "schemaVersion": 1,
+      "occurredAt": "2026-08-10T02:00:00Z",
+      "publishedAt": "2026-08-10T02:00:01Z",
+      "producer": "SYS-08",
+      "environment": "DEV",
+      "audience": [
+        "SYS-06"
+      ],
+      "enterpriseId": "ent_contract_001",
+      "aggregateType": "LedgerEntry",
+      "aggregateId": "le_contract_001",
+      "aggregateVersion": 1,
+      "traceId": "trace_contract_fixture_001",
+      "causationId": null,
+      "correlationId": "corr_contract_fixture_001",
+      "idempotencyKey": "CASH_LEDGER_ENTRY:le_contract_001",
+      "payload": {
+        "ledgerEntryId": "le_contract_001",
+        "journalId": "jrnl_contract_001",
+        "enterpriseId": "ent_contract_001",
+        "subjectType": "ENTERPRISE",
+        "subjectId": "ent_contract_001",
+        "accountCode": "ENTERPRISE_AVAILABLE",
+        "direction": "CREDIT",
+        "amountFen": 1200,
+        "currency": "CNY",
+        "metricBucket": "ENTERPRISE_REVENUE",
+        "metricBucketVersion": 1,
+        "metricEffect": "INCREASE",
+        "signedMetricAmountFen": 1200,
+        "businessType": "ORDER_SETTLEMENT",
+        "businessNo": "subord_contract_001",
+        "sourceEventId": "evt_contract_source_001",
+        "originalLedgerEntryId": null,
+        "ruleVersion": 1,
+        "postedAt": "2026-08-17T02:00:00Z"
+      }
+    }
+  ],
+  "x-topic": "ledger.cash-entry.posted.v1",
+  "x-producer": "SYS-08",
+  "x-consumers": [
+    "SYS-06"
+  ],
+  "x-idempotency-key-format": "CASH_LEDGER_ENTRY:{ledgerEntryId}"
+}

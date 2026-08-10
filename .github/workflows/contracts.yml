@@ -1,0 +1,167 @@
+name: contracts
+
+on:
+  pull_request:
+    branches: [integration, main]
+    paths:
+      - ".github/workflows/contracts.yml"
+      - "apps/**"
+      - "infra/dev/**"
+      - "packages/**"
+      - "scripts/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "tsconfig.base.json"
+  push:
+    branches: [integration, main]
+    paths:
+      - ".github/workflows/contracts.yml"
+      - "apps/**"
+      - "infra/dev/**"
+      - "packages/**"
+      - "scripts/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "tsconfig.base.json"
+  workflow_dispatch:
+    inputs:
+      trusted_base_ref:
+        description: "Previously protected commit or release tag used for compatibility and baseline immutability checks"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: contracts-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "22"
+  PNPM_VERSION: "11.9.0"
+
+jobs:
+  contract-generated:
+    name: contract-generated
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm contracts:generate:check
+      - name: Generated files are committed
+        run: git diff --exit-code
+
+  sdk-generated:
+    name: sdk-generated
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm sdk:generate:check
+      - run: pnpm sdk:package:test
+      - name: Generated SDK is committed
+        run: git diff --exit-code
+
+  provider-contracts:
+    name: provider-contracts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm contracts:test:provider
+
+  consumer-contracts:
+    name: consumer-contracts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm contracts:test:consumer
+
+  breaking-change:
+    name: breaking-change
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Compare with pull-request base
+        if: github.event_name == 'pull_request'
+        run: node scripts/run-contract-gates-from-base.mjs --base-ref "origin/${{ github.base_ref }}"
+      - name: Compare pushed commit with protected predecessor
+        if: github.event_name == 'push'
+        run: node scripts/run-contract-gates-from-base.mjs --base-ref "${{ github.event.before }}"
+      - name: Compare manual run with trusted release reference
+        if: github.event_name == 'workflow_dispatch'
+        run: pnpm contracts:breaking --base-ref "${{ inputs.trusted_base_ref }}"
+
+  typecheck:
+    name: typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: Validate local Dev Compose
+        run: docker compose --env-file infra/dev/.env.example -f infra/dev/compose.yaml config --quiet

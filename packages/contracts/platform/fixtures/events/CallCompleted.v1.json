@@ -1,0 +1,38 @@
+{
+  "eventId": "evt_callcompleted_001",
+  "eventType": "CallCompleted",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-04",
+  "environment": "DEV",
+  "audience": [
+    "SYS-06"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "Call",
+  "aggregateId": "call_contract_001",
+  "aggregateVersion": 1,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "AI_CALL_RESULT:provider_account_contract_001:call_contract_001:1",
+  "payload": {
+    "callId": "call_contract_001",
+    "callTaskId": "ctask_contract_001",
+    "callCampaignId": "ccmp_contract_001",
+    "enterpriseId": "ent_contract_001",
+    "customerId": "cus_contract_001",
+    "resultVersion": 1,
+    "status": "COMPLETED",
+    "connected": true,
+    "durationSeconds": 92,
+    "intentLevel": "HIGH",
+    "humanFollowupRequired": true,
+    "isRealAiCall": true,
+    "analyticsSnapshotRef": "mas_contract_call_001",
+    "analyticsSnapshotVersion": 1,
+    "analyticsSnapshotHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "completedAt": "2026-08-10T02:00:00Z"
+  }
+}

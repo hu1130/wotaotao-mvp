@@ -1,0 +1,40 @@
+{
+  "operationId": "sys02.aftersale.create",
+  "method": "POST",
+  "path": "/api/v1/mall/after-sales",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "AFTERSALE_CREATE:{consumerProfileId}:{clientRequestId}"
+    },
+    "body": {
+      "clientRequestId": "req_aftersale_001",
+      "orderId": "ord_001",
+      "subOrderId": "sor_001",
+      "items": [
+        {
+          "skuId": "sku_001",
+          "quantity": 1
+        }
+      ],
+      "type": "REFUND_ONLY",
+      "reason": "商品破损",
+      "amountFen": 9900,
+      "evidenceRefs": [
+        "evd_010"
+      ]
+    }
+  },
+  "status": 201,
+  "response": {
+    "data": {
+      "aftersaleId": "afs_001",
+      "status": "SUBMITTED",
+      "deadlineAt": "2026-08-12T02:00:00Z",
+      "version": 1
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

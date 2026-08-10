@@ -1,0 +1,32 @@
+{
+  "operationId": "sys03.inventory.commitReservation",
+  "method": "POST",
+  "path": "/internal/v1/commerce/inventory-reservations/{reservationId}/commit",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "idempotency-key": "INVENTORY_COMMIT:{reservationId}:{paymentId}"
+    },
+    "params": {
+      "reservationId": "irs_001"
+    },
+    "body": {
+      "commandId": "cmd_commit_001",
+      "orderId": "ord_001",
+      "subOrderId": "sor_001",
+      "paymentId": "pay_001",
+      "orderVersion": 2,
+      "paidAt": "2026-08-10T02:10:00Z",
+      "traceId": "trace_contract_example_001"
+    }
+  },
+  "status": 403,
+  "response": {
+    "code": "FORBIDDEN",
+    "message": "The authenticated actor is not allowed to perform the action.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "operationId": "sys08.points.createQuote",
+  "method": "POST",
+  "path": "/api/v1/points/quotes",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "POINTS_QUOTE:{enterpriseId}:{agentRunId}:{chargeCode}:{inputVersion}"
+    },
+    "body": {
+      "agentRunId": "agr_001",
+      "toolCallId": "atc_001",
+      "chargeCode": "CONTENT_GENERATION",
+      "billingPoint": "GENERATION_ACCEPTED",
+      "inputVersion": 1
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

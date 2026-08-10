@@ -1,0 +1,241 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.wotaotao.com/events/opc.account-assignment.unavailable.v1/envelope.schema.json",
+  "title": "AccountAssignmentUnavailable envelope v1",
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable evt_ identifier",
+      "pattern": "^evt_[A-Za-z0-9_-]+$"
+    },
+    "eventType": {
+      "type": "string",
+      "const": "AccountAssignmentUnavailable"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Business occurrence time"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Outbox publication time"
+    },
+    "producer": {
+      "type": "string",
+      "const": "SYS-07"
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "DEV",
+        "TEST",
+        "STAGING",
+        "PROD"
+      ]
+    },
+    "audience": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SYS-05"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "enterpriseId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "aggregateType": {
+      "type": "string",
+      "const": "AccountAssignmentRequest"
+    },
+    "aggregateId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable aggregate identifier"
+    },
+    "aggregateVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonic aggregate version"
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causationId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable evt_ identifier",
+          "pattern": "^evt_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "correlationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable business idempotency key; unchanged on retry"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "enterpriseId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        "publicationPlanId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable pplan_ identifier",
+          "pattern": "^pplan_[A-Za-z0-9_-]+$"
+        },
+        "channelPublicationId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable cpub_ identifier",
+          "pattern": "^cpub_[A-Za-z0-9_-]+$"
+        },
+        "assignmentRequestVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "resultVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "reasonCode": {
+          "type": "string",
+          "minLength": 1
+        },
+        "retryAfter": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sourceVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "decidedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "enterpriseId",
+        "publicationPlanId",
+        "channelPublicationId",
+        "assignmentRequestVersion",
+        "resultVersion",
+        "reasonCode",
+        "retryAfter",
+        "sourceVersion",
+        "decidedAt"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://contracts.wotaotao.com/events/opc.account-assignment.unavailable.v1/payload.schema.json",
+      "title": "AccountAssignmentUnavailable payload v1"
+    }
+  },
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "occurredAt",
+    "publishedAt",
+    "producer",
+    "environment",
+    "audience",
+    "enterpriseId",
+    "aggregateType",
+    "aggregateId",
+    "aggregateVersion",
+    "traceId",
+    "causationId",
+    "correlationId",
+    "idempotencyKey",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "description": "Completed and Unavailable are mutually exclusive for a request version",
+  "examples": [
+    {
+      "eventId": "evt_accountassignmentunavailable_001",
+      "eventType": "AccountAssignmentUnavailable",
+      "schemaVersion": 1,
+      "occurredAt": "2026-08-10T02:00:00Z",
+      "publishedAt": "2026-08-10T02:00:01Z",
+      "producer": "SYS-07",
+      "environment": "DEV",
+      "audience": [
+        "SYS-05"
+      ],
+      "enterpriseId": "ent_contract_001",
+      "aggregateType": "AccountAssignmentRequest",
+      "aggregateId": "cpub_contract_001",
+      "aggregateVersion": 1,
+      "traceId": "trace_contract_fixture_001",
+      "causationId": null,
+      "correlationId": "corr_contract_fixture_001",
+      "idempotencyKey": "ACCOUNT_ASSIGNMENT_RESULT:cpub_contract_001:1",
+      "payload": {
+        "enterpriseId": "ent_contract_001",
+        "publicationPlanId": "pplan_contract_001",
+        "channelPublicationId": "cpub_contract_001",
+        "assignmentRequestVersion": 1,
+        "resultVersion": 1,
+        "reasonCode": "NO_HEALTHY_ACCOUNT",
+        "retryAfter": "2026-08-10T02:30:00Z",
+        "sourceVersion": 2,
+        "decidedAt": "2026-08-10T02:01:00Z"
+      }
+    }
+  ],
+  "x-topic": "opc.account-assignment.unavailable.v1",
+  "x-producer": "SYS-07",
+  "x-consumers": [
+    "SYS-05"
+  ],
+  "x-idempotency-key-format": "ACCOUNT_ASSIGNMENT_RESULT:{channelPublicationId}:{assignmentRequestVersion}"
+}

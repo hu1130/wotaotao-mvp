@@ -1,0 +1,26 @@
+{
+  "operationId": "sys05.assignment.getReleaseEligibility",
+  "method": "GET",
+  "path": "/internal/v1/content/channel-publications/{channelPublicationId}/executions/{executionId}/assignment-release-eligibility",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001"
+    },
+    "params": {
+      "channelPublicationId": "chp_dy_001",
+      "executionId": "exe_001"
+    }
+  },
+  "status": 200,
+  "response": {
+    "data": {
+      "accountAssignmentId": "aas_001",
+      "executionStatus": "SUCCEEDED",
+      "sourceVersion": 5,
+      "releaseEligible": true,
+      "reasonCode": "PUBLICATION_COMPLETED"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

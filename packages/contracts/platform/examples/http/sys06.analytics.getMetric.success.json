@@ -1,0 +1,42 @@
+{
+  "operationId": "sys06.analytics.getMetric",
+  "method": "GET",
+  "path": "/api/v1/analytics/metrics/{metricId}",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>"
+    },
+    "params": {
+      "metricId": "met_sales_paid"
+    },
+    "query": {
+      "period": "DAY",
+      "dimensions": [
+        "STORE"
+      ]
+    }
+  },
+  "status": 200,
+  "response": {
+    "data": {
+      "metricId": "met_sales_paid",
+      "metricVersion": 1,
+      "numerator": 9900,
+      "denominator": null,
+      "points": [
+        {
+          "bucketStartAt": "2026-08-09T16:00:00Z",
+          "value": 9900,
+          "dimensionValues": {
+            "STORE": "sto_001"
+          }
+        }
+      ],
+      "dataCutoffAt": "2026-08-10T01:59:00Z",
+      "healthStatus": "HEALTHY"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

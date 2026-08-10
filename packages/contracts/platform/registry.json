@@ -1,0 +1,3636 @@
+{
+  "contractVersion": "1.0.0",
+  "generatedFrom": [
+    "packages/contracts/src/platform/http-contracts.ts",
+    "packages/contracts/src/platform/event-contracts.ts"
+  ],
+  "topicAddressRule": "wotao.{environment}.{logicalTopic}",
+  "errors": {
+    "VALIDATION_ERROR": {
+      "code": "VALIDATION_ERROR",
+      "httpStatus": 400,
+      "retryable": false,
+      "description": "Request shape or field validation failed."
+    },
+    "AUTH_REQUIRED": {
+      "code": "AUTH_REQUIRED",
+      "httpStatus": 401,
+      "retryable": false,
+      "description": "A valid user session is required."
+    },
+    "FORBIDDEN": {
+      "code": "FORBIDDEN",
+      "httpStatus": 403,
+      "retryable": false,
+      "description": "The authenticated actor is not allowed to perform the action."
+    },
+    "TENANT_SCOPE_VIOLATION": {
+      "code": "TENANT_SCOPE_VIOLATION",
+      "httpStatus": 403,
+      "retryable": false,
+      "description": "The object is outside the trusted enterprise/provider scope."
+    },
+    "OBJECT_NOT_FOUND": {
+      "code": "OBJECT_NOT_FOUND",
+      "httpStatus": 404,
+      "retryable": false,
+      "description": "The object is absent or intentionally hidden from this caller."
+    },
+    "VERSION_CONFLICT": {
+      "code": "VERSION_CONFLICT",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "The aggregate version changed and must be re-read."
+    },
+    "IDEMPOTENCY_CONFLICT": {
+      "code": "IDEMPOTENCY_CONFLICT",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "The same idempotency key was reused with a different payload hash."
+    },
+    "RATE_LIMITED": {
+      "code": "RATE_LIMITED",
+      "httpStatus": 429,
+      "retryable": true,
+      "description": "The caller must wait for the supplied retry interval."
+    },
+    "DEPENDENCY_UNAVAILABLE": {
+      "code": "DEPENDENCY_UNAVAILABLE",
+      "httpStatus": 503,
+      "retryable": true,
+      "description": "A required dependency is temporarily unavailable."
+    },
+    "CALLBACK_SIGNATURE_INVALID": {
+      "code": "CALLBACK_SIGNATURE_INVALID",
+      "httpStatus": 401,
+      "retryable": false,
+      "description": "Provider signature, timestamp, nonce or credential binding failed."
+    },
+    "CALLBACK_PAYLOAD_MISMATCH": {
+      "code": "CALLBACK_PAYLOAD_MISMATCH",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "A provider business key was replayed with different facts."
+    },
+    "ENTERPRISE_INIT_REQUIRED": {
+      "code": "ENTERPRISE_INIT_REQUIRED",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "The user does not yet have an initialized enterprise."
+    },
+    "ENTERPRISE_REVIEW_REQUIRED": {
+      "code": "ENTERPRISE_REVIEW_REQUIRED",
+      "httpStatus": 403,
+      "retryable": false,
+      "description": "Enterprise review is required for this capability."
+    },
+    "WHITELIST_REQUIRED": {
+      "code": "WHITELIST_REQUIRED",
+      "httpStatus": 403,
+      "retryable": false,
+      "description": "The enterprise or user is not in the controlled rollout."
+    },
+    "FEATURE_DISABLED": {
+      "code": "FEATURE_DISABLED",
+      "httpStatus": 403,
+      "retryable": false,
+      "description": "The feature flag is disabled for the current scope."
+    },
+    "REVIEW_SUBMISSION_CONFLICT": {
+      "code": "REVIEW_SUBMISSION_CONFLICT",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "An active review already exists for this profile version."
+    },
+    "APPROVAL_AUTHORIZATION_DENIED": {
+      "code": "APPROVAL_AUTHORIZATION_DENIED",
+      "httpStatus": 403,
+      "retryable": false,
+      "description": "Permission, data scope or separation-of-duty validation failed."
+    },
+    "TOOL_AUTHORIZATION_INVALID": {
+      "code": "TOOL_AUTHORIZATION_INVALID",
+      "httpStatus": 403,
+      "retryable": false,
+      "description": "The short-lived tool authorization is invalid or mismatched."
+    },
+    "TOOL_RESULT_VERSION_CONFLICT": {
+      "code": "TOOL_RESULT_VERSION_CONFLICT",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "A tool result version is stale or conflicts with saved payload."
+    },
+    "CONSUMER_TRIAL_WHITELIST_REQUIRED": {
+      "code": "CONSUMER_TRIAL_WHITELIST_REQUIRED",
+      "httpStatus": 403,
+      "retryable": false,
+      "description": "The consumer cannot start a new controlled-rollout transaction."
+    },
+    "TRIAL_INVITATION_INVALID": {
+      "code": "TRIAL_INVITATION_INVALID",
+      "httpStatus": 422,
+      "retryable": false,
+      "description": "The trial invitation is invalid, expired or exhausted."
+    },
+    "PRODUCT_UNAVAILABLE": {
+      "code": "PRODUCT_UNAVAILABLE",
+      "httpStatus": 422,
+      "retryable": false,
+      "description": "The product/version is not currently sellable."
+    },
+    "PRODUCT_SALES_MODEL_INVALID": {
+      "code": "PRODUCT_SALES_MODEL_INVALID",
+      "httpStatus": 422,
+      "retryable": false,
+      "description": "Required sales-model or payee facts are missing or invalid."
+    },
+    "PRICE_CHANGED": {
+      "code": "PRICE_CHANGED",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "The checkout price differs from the preview."
+    },
+    "OUT_OF_STOCK": {
+      "code": "OUT_OF_STOCK",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "One or more requested SKU quantities are unavailable."
+    },
+    "CART_STORE_CONFLICT": {
+      "code": "CART_STORE_CONFLICT",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "The cart would contain incompatible stores."
+    },
+    "ORDER_STATE_CONFLICT": {
+      "code": "ORDER_STATE_CONFLICT",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "The order is not in a legal state for the command."
+    },
+    "PAYMENT_PENDING": {
+      "code": "PAYMENT_PENDING",
+      "httpStatus": 409,
+      "retryable": true,
+      "description": "The existing payment result is still unknown."
+    },
+    "PAYMENT_CHANNEL_UNAVAILABLE": {
+      "code": "PAYMENT_CHANNEL_UNAVAILABLE",
+      "httpStatus": 503,
+      "retryable": true,
+      "description": "The selected payment channel is unavailable."
+    },
+    "INVENTORY_RESERVATION_CONFLICT": {
+      "code": "INVENTORY_RESERVATION_CONFLICT",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "The inventory reservation conflicts with current order facts."
+    },
+    "ORDER_INVENTORY_NOT_COMMITTED": {
+      "code": "ORDER_INVENTORY_NOT_COMMITTED",
+      "httpStatus": 409,
+      "retryable": true,
+      "description": "Shipment is blocked until committed inventory is confirmed."
+    },
+    "AFTERSALE_NOT_ELIGIBLE": {
+      "code": "AFTERSALE_NOT_ELIGIBLE",
+      "httpStatus": 422,
+      "retryable": false,
+      "description": "The order item, amount, deadline or state is not eligible."
+    },
+    "REVIEW_NOT_ELIGIBLE": {
+      "code": "REVIEW_NOT_ELIGIBLE",
+      "httpStatus": 422,
+      "retryable": false,
+      "description": "The completed order item is not eligible for this review action."
+    },
+    "PUBLISHED_SNAPSHOT_VERSION_MISMATCH": {
+      "code": "PUBLISHED_SNAPSHOT_VERSION_MISMATCH",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "The immutable product snapshot version does not match."
+    },
+    "PUBLISHED_SNAPSHOT_HASH_MISMATCH": {
+      "code": "PUBLISHED_SNAPSHOT_HASH_MISMATCH",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "The immutable product snapshot hash does not match."
+    },
+    "DISTRIBUTION_CONTEXT_PENDING": {
+      "code": "DISTRIBUTION_CONTEXT_PENDING",
+      "httpStatus": 202,
+      "retryable": true,
+      "description": "Transaction may proceed, but profit distribution remains blocked."
+    },
+    "COMMERCE_NOT_ENABLED": {
+      "code": "COMMERCE_NOT_ENABLED",
+      "httpStatus": 403,
+      "retryable": false,
+      "description": "Commerce is disabled for the current enterprise."
+    },
+    "STORE_NOT_ACTIVE": {
+      "code": "STORE_NOT_ACTIVE",
+      "httpStatus": 422,
+      "retryable": false,
+      "description": "The store is not active."
+    },
+    "SOURCE_NOT_AUTHORIZED": {
+      "code": "SOURCE_NOT_AUTHORIZED",
+      "httpStatus": 403,
+      "retryable": false,
+      "description": "Source acquisition or commercial-use evidence is not authorized."
+    },
+    "COMMERCIAL_USE_NOT_CLEARED": {
+      "code": "COMMERCIAL_USE_NOT_CLEARED",
+      "httpStatus": 422,
+      "retryable": false,
+      "description": "Commercial-use clearance is incomplete."
+    },
+    "PRODUCT_REVIEW_REQUIRED": {
+      "code": "PRODUCT_REVIEW_REQUIRED",
+      "httpStatus": 422,
+      "retryable": false,
+      "description": "The current product version requires review."
+    },
+    "INVENTORY_CONFLICT": {
+      "code": "INVENTORY_CONFLICT",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "Inventory version, quantity or terminal state conflicts."
+    },
+    "INVENTORY_RESERVATION_NOT_FOUND": {
+      "code": "INVENTORY_RESERVATION_NOT_FOUND",
+      "httpStatus": 404,
+      "retryable": false,
+      "description": "The inventory reservation does not exist in this scope."
+    },
+    "COMMAND_IDEMPOTENCY_PAYLOAD_MISMATCH": {
+      "code": "COMMAND_IDEMPOTENCY_PAYLOAD_MISMATCH",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "The command key was replayed with a different canonical payload."
+    },
+    "APPROVAL_REF_REQUIRED": {
+      "code": "APPROVAL_REF_REQUIRED",
+      "httpStatus": 422,
+      "retryable": false,
+      "description": "A non-null approval reference is required for this action."
+    },
+    "COST_INCOMPLETE": {
+      "code": "COST_INCOMPLETE",
+      "httpStatus": 422,
+      "retryable": true,
+      "description": "Required settlement evidence is incomplete."
+    },
+    "MARKETING_CONTEXT_UNAVAILABLE": {
+      "code": "MARKETING_CONTEXT_UNAVAILABLE",
+      "httpStatus": 503,
+      "retryable": true,
+      "description": "Trusted enterprise marketing context is unavailable."
+    },
+    "SOURCE_LICENSE_MISSING": {
+      "code": "SOURCE_LICENSE_MISSING",
+      "httpStatus": 422,
+      "retryable": false,
+      "description": "The source record has no valid license/consent evidence."
+    },
+    "CONTACT_DETERMINISTIC_DUPLICATE": {
+      "code": "CONTACT_DETERMINISTIC_DUPLICATE",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "The contact deterministically matches an existing record."
+    },
+    "CRM_STAGE_CONFLICT": {
+      "code": "CRM_STAGE_CONFLICT",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "The requested CRM stage transition is illegal."
+    },
+    "TOUCH_NOT_AUTHORIZED": {
+      "code": "TOUCH_NOT_AUTHORIZED",
+      "httpStatus": 403,
+      "retryable": false,
+      "description": "Consent, purpose, suppression or time policy denies contact."
+    },
+    "CALL_CAMPAIGN_NOT_APPROVED": {
+      "code": "CALL_CAMPAIGN_NOT_APPROVED",
+      "httpStatus": 422,
+      "retryable": false,
+      "description": "The call campaign is not approved for execution."
+    },
+    "CALL_ADAPTER_UNHEALTHY": {
+      "code": "CALL_ADAPTER_UNHEALTHY",
+      "httpStatus": 503,
+      "retryable": true,
+      "description": "The real AI-calling adapter is unhealthy."
+    },
+    "CALL_RESULT_INCOMPLETE": {
+      "code": "CALL_RESULT_INCOMPLETE",
+      "httpStatus": 422,
+      "retryable": true,
+      "description": "The provider callback does not contain a complete terminal result."
+    },
+    "WECHAT_ADAPTER_UNHEALTHY": {
+      "code": "WECHAT_ADAPTER_UNHEALTHY",
+      "httpStatus": 503,
+      "retryable": true,
+      "description": "The WeChat adapter is unhealthy."
+    },
+    "HUMAN_HANDOFF_REQUIRED": {
+      "code": "HUMAN_HANDOFF_REQUIRED",
+      "httpStatus": 422,
+      "retryable": false,
+      "description": "Automation must stop and create a human handoff."
+    },
+    "ATTRIBUTION_FREEZE_PENDING": {
+      "code": "ATTRIBUTION_FREEZE_PENDING",
+      "httpStatus": 202,
+      "retryable": true,
+      "description": "Attribution resolution is pending and must not be guessed."
+    },
+    "CONTENT_VERSION_LOCKED": {
+      "code": "CONTENT_VERSION_LOCKED",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "The submitted/locked content version is immutable."
+    },
+    "CONTENT_NOT_APPROVED": {
+      "code": "CONTENT_NOT_APPROVED",
+      "httpStatus": 422,
+      "retryable": false,
+      "description": "The content/channel version has no valid approval."
+    },
+    "PUBLICATION_STATE_CONFLICT": {
+      "code": "PUBLICATION_STATE_CONFLICT",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "The publication state does not allow the requested action."
+    },
+    "PUBLICATION_CHARGE_NOT_RESERVED": {
+      "code": "PUBLICATION_CHARGE_NOT_RESERVED",
+      "httpStatus": 409,
+      "retryable": true,
+      "description": "No matching ChannelPublicationReserved fact exists."
+    },
+    "ASSIGNMENT_UNAVAILABLE": {
+      "code": "ASSIGNMENT_UNAVAILABLE",
+      "httpStatus": 422,
+      "retryable": true,
+      "description": "No compliant account assignment is currently available."
+    },
+    "ASSIGNMENT_RESULT_CONFLICT": {
+      "code": "ASSIGNMENT_RESULT_CONFLICT",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "Account-assignment result facts conflict."
+    },
+    "EXECUTION_STATUS_UNKNOWN": {
+      "code": "EXECUTION_STATUS_UNKNOWN",
+      "httpStatus": 409,
+      "retryable": true,
+      "description": "External execution status is unknown; blind retry/release is forbidden."
+    },
+    "ASSIGNMENT_RELEASE_NOT_ALLOWED": {
+      "code": "ASSIGNMENT_RELEASE_NOT_ALLOWED",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "The assignment cannot be released from the current execution state."
+    },
+    "METRIC_NOT_FOUND": {
+      "code": "METRIC_NOT_FOUND",
+      "httpStatus": 404,
+      "retryable": false,
+      "description": "The approved metric definition does not exist."
+    },
+    "ANALYTICS_DIMENSION_DENIED": {
+      "code": "ANALYTICS_DIMENSION_DENIED",
+      "httpStatus": 400,
+      "retryable": false,
+      "description": "The requested dimension or expression is not allowlisted."
+    },
+    "ANALYTICS_DATA_STALE": {
+      "code": "ANALYTICS_DATA_STALE",
+      "httpStatus": 503,
+      "retryable": true,
+      "description": "Required source cutoffs are too stale for this operation."
+    },
+    "EXPORT_LIMIT_EXCEEDED": {
+      "code": "EXPORT_LIMIT_EXCEEDED",
+      "httpStatus": 422,
+      "retryable": false,
+      "description": "The export exceeds row, frequency or field limits."
+    },
+    "PROFILE_VALIDATION_FAILED": {
+      "code": "PROFILE_VALIDATION_FAILED",
+      "httpStatus": 422,
+      "retryable": false,
+      "description": "The OPC identity profile failed validation."
+    },
+    "OPC_FORBIDDEN": {
+      "code": "OPC_FORBIDDEN",
+      "httpStatus": 403,
+      "retryable": false,
+      "description": "The provider does not own or cannot access the OPC object."
+    },
+    "DUPLICATE_ACCOUNT": {
+      "code": "DUPLICATE_ACCOUNT",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "The submitted channel account already exists."
+    },
+    "INVALID_EVIDENCE": {
+      "code": "INVALID_EVIDENCE",
+      "httpStatus": 422,
+      "retryable": false,
+      "description": "Required account evidence is invalid."
+    },
+    "ACCOUNT_NOT_USABLE": {
+      "code": "ACCOUNT_NOT_USABLE",
+      "httpStatus": 409,
+      "retryable": true,
+      "description": "The assigned account is paused, risky, unhealthy or released."
+    },
+    "SESSION_GRANT_EXPIRED": {
+      "code": "SESSION_GRANT_EXPIRED",
+      "httpStatus": 401,
+      "retryable": false,
+      "description": "The one-time session grant expired."
+    },
+    "SCOPE_DENIED": {
+      "code": "SCOPE_DENIED",
+      "httpStatus": 403,
+      "retryable": false,
+      "description": "The requested account-session scope is not allowed."
+    },
+    "REPLAY_DETECTED": {
+      "code": "REPLAY_DETECTED",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "A nonce, one-time grant or provider event was replayed."
+    },
+    "ASSIGNMENT_RELEASED": {
+      "code": "ASSIGNMENT_RELEASED",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "The account assignment has already been released."
+    },
+    "LEDGER_RULE_NOT_EFFECTIVE": {
+      "code": "LEDGER_RULE_NOT_EFFECTIVE",
+      "httpStatus": 422,
+      "retryable": true,
+      "description": "No approved effective ledger rule exists for the business time."
+    },
+    "LEDGER_COST_INCOMPLETE": {
+      "code": "LEDGER_COST_INCOMPLETE",
+      "httpStatus": 422,
+      "retryable": true,
+      "description": "Accounting cost evidence is incomplete."
+    },
+    "LEDGER_IDEMPOTENCY_CONFLICT": {
+      "code": "LEDGER_IDEMPOTENCY_CONFLICT",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "A ledger business key was reused with different immutable facts."
+    },
+    "LEDGER_BALANCE_RECONCILING": {
+      "code": "LEDGER_BALANCE_RECONCILING",
+      "httpStatus": 409,
+      "retryable": true,
+      "description": "Balance reconciliation blocks withdrawals and adjustments."
+    },
+    "QUOTA_INSUFFICIENT": {
+      "code": "QUOTA_INSUFFICIENT",
+      "httpStatus": 422,
+      "retryable": false,
+      "description": "No quota or valid 500-fen service-payment source is available."
+    },
+    "PUBLICATION_SOURCE_INVALID": {
+      "code": "PUBLICATION_SOURCE_INVALID",
+      "httpStatus": 422,
+      "retryable": false,
+      "description": "Publication charge sources are missing, conflicting or invalid."
+    },
+    "OPC_FACTS_INCOMPLETE": {
+      "code": "OPC_FACTS_INCOMPLETE",
+      "httpStatus": 422,
+      "retryable": true,
+      "description": "Required effective-publication and assignment facts are incomplete."
+    },
+    "POINTS_INSUFFICIENT": {
+      "code": "POINTS_INSUFFICIENT",
+      "httpStatus": 422,
+      "retryable": false,
+      "description": "The enterprise points balance is insufficient."
+    },
+    "WITHDRAWAL_PAYOUT_PROFILE_INVALID": {
+      "code": "WITHDRAWAL_PAYOUT_PROFILE_INVALID",
+      "httpStatus": 422,
+      "retryable": false,
+      "description": "The payout profile is unverified or belongs to another subject."
+    },
+    "WITHDRAWAL_DUTY_CONFLICT": {
+      "code": "WITHDRAWAL_DUTY_CONFLICT",
+      "httpStatus": 409,
+      "retryable": false,
+      "description": "Initial and final withdrawal reviewers must be different people."
+    }
+  },
+  "topics": [
+    {
+      "eventType": "UserRegistered",
+      "messageKind": "EVENT",
+      "logicalTopic": "platform.identity.user.registered.v1",
+      "physicalTopicTemplate": "wotao.{environment}.platform.identity.user.registered.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-01",
+      "consumers": [
+        "SYS-01"
+      ],
+      "audience": [
+        "SYS-01"
+      ],
+      "schema": "events/UserRegistered.v1.schema.json",
+      "idempotencyKeyFormat": "USER_REGISTERED:{userId}:{userVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No phone number, verification code, OAuth code or session token."
+    },
+    {
+      "eventType": "EnterpriseInitialized",
+      "messageKind": "EVENT",
+      "logicalTopic": "platform.enterprise.initialized.v1",
+      "physicalTopicTemplate": "wotao.{environment}.platform.enterprise.initialized.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-01",
+      "consumers": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-05",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "audience": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-05",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schema": "events/EnterpriseInitialized.v1.schema.json",
+      "idempotencyKeyFormat": "INIT_ENTERPRISE_BENEFITS:{enterpriseId}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "EnterpriseProfileUpdated",
+      "messageKind": "EVENT",
+      "logicalTopic": "platform.enterprise.profile_updated.v1",
+      "physicalTopicTemplate": "wotao.{environment}.platform.enterprise.profile_updated.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-01",
+      "consumers": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-05",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-05",
+        "SYS-06"
+      ],
+      "schema": "events/EnterpriseProfileUpdated.v1.schema.json",
+      "idempotencyKeyFormat": "ENTERPRISE_PROFILE:{enterpriseId}:{profileVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "EnterpriseReviewChanged",
+      "messageKind": "EVENT",
+      "logicalTopic": "platform.enterprise.review-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.platform.enterprise.review-changed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-01",
+      "consumers": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-05"
+      ],
+      "audience": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-05"
+      ],
+      "schema": "events/EnterpriseReviewChanged.v1.schema.json",
+      "idempotencyKeyFormat": "ENTERPRISE_REVIEW:{reviewSubmissionId}:{decisionVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "EnterpriseWhitelistChanged",
+      "messageKind": "EVENT",
+      "logicalTopic": "platform.enterprise.whitelist-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.platform.enterprise.whitelist-changed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-01",
+      "consumers": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-05",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "audience": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-05",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schema": "events/EnterpriseWhitelistChanged.v1.schema.json",
+      "idempotencyKeyFormat": "ENTERPRISE_WHITELIST:{scopeRef}:{version}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "EnterpriseMemberChanged",
+      "messageKind": "EVENT",
+      "logicalTopic": "platform.enterprise.member_changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.platform.enterprise.member_changed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-01",
+      "consumers": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-05",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "audience": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-05",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schema": "events/EnterpriseMemberChanged.v1.schema.json",
+      "idempotencyKeyFormat": "ENTERPRISE_MEMBER:{enterpriseMemberId}:{version}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "FeatureFlagChanged",
+      "messageKind": "EVENT",
+      "logicalTopic": "platform.feature-flag.changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.platform.feature-flag.changed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-01",
+      "consumers": [
+        "SYS-02",
+        "SYS-03",
+        "SYS-04",
+        "SYS-05",
+        "SYS-06",
+        "SYS-07",
+        "SYS-08"
+      ],
+      "audience": [
+        "SYS-02",
+        "SYS-03",
+        "SYS-04",
+        "SYS-05",
+        "SYS-06",
+        "SYS-07",
+        "SYS-08"
+      ],
+      "schema": "events/FeatureFlagChanged.v1.schema.json",
+      "idempotencyKeyFormat": "FEATURE_FLAG:{flagCode}:{scopeType}:{scopeId}:{version}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "AgentToolExecutionReported",
+      "messageKind": "EVENT",
+      "logicalTopic": "platform.agent.tool-execution-reported.v1",
+      "physicalTopicTemplate": "wotao.{environment}.platform.agent.tool-execution-reported.v1",
+      "schemaVersion": 1,
+      "producer": "REGISTERED_DOMAIN_ADAPTER",
+      "consumers": [
+        "SYS-01"
+      ],
+      "audience": [
+        "SYS-01"
+      ],
+      "schema": "events/AgentToolExecutionReported.v1.schema.json",
+      "idempotencyKeyFormat": "AGENT_TOOL_RESULT:{agentRunId}:{toolRunId}:{resultVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "AgentRunStatusChanged",
+      "messageKind": "EVENT",
+      "logicalTopic": "platform.agent.run-status-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.platform.agent.run-status-changed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-01",
+      "consumers": [
+        "SYS-04",
+        "SYS-05",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-04",
+        "SYS-05",
+        "SYS-06"
+      ],
+      "schema": "events/AgentRunStatusChanged.v1.schema.json",
+      "idempotencyKeyFormat": "AGENT_RUN_STATUS:{agentRunId}:{agentRunVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "ConsumerTrialAccessChanged",
+      "messageKind": "EVENT",
+      "logicalTopic": "commerce.consumer.trial-access-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.consumer.trial-access-changed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-02",
+      "consumers": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "schema": "events/ConsumerTrialAccessChanged.v1.schema.json",
+      "idempotencyKeyFormat": "CONSUMER_TRIAL_ACCESS:{trialAccessId}:{version}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "Only a one-way subjectRefHash; never a phone number or invitation code."
+    },
+    {
+      "eventType": "ProductPublished",
+      "messageKind": "EVENT",
+      "logicalTopic": "commerce.product.published.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.product.published.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-03",
+      "consumers": [
+        "SYS-02",
+        "SYS-04",
+        "SYS-05",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-02",
+        "SYS-04",
+        "SYS-05",
+        "SYS-06"
+      ],
+      "schema": "events/ProductPublished.v1.schema.json",
+      "idempotencyKeyFormat": "PRODUCT_PUBLISHED:{productId}:{productVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "InventoryChanged",
+      "messageKind": "EVENT",
+      "logicalTopic": "commerce.inventory.changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.inventory.changed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-03",
+      "consumers": [
+        "SYS-02",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-02",
+        "SYS-06"
+      ],
+      "schema": "events/InventoryChanged.v1.schema.json",
+      "idempotencyKeyFormat": "INVENTORY_CHANGED:{skuId}:{inventoryVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "InventoryReservationCreated",
+      "messageKind": "EVENT",
+      "logicalTopic": "commerce.inventory-reservation.created.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.inventory-reservation.created.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-03",
+      "consumers": [
+        "SYS-02"
+      ],
+      "audience": [
+        "SYS-02"
+      ],
+      "schema": "events/InventoryReservationCreated.v1.schema.json",
+      "idempotencyKeyFormat": "INVENTORY_RESERVE:{orderId}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "InventoryReservationCommitted",
+      "messageKind": "EVENT",
+      "logicalTopic": "commerce.inventory-reservation.committed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.inventory-reservation.committed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-03",
+      "consumers": [
+        "SYS-02"
+      ],
+      "audience": [
+        "SYS-02"
+      ],
+      "schema": "events/InventoryReservationCommitted.v1.schema.json",
+      "idempotencyKeyFormat": "INVENTORY_COMMIT:{reservationId}:{paymentId}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "InventoryReservationReleased",
+      "messageKind": "EVENT",
+      "logicalTopic": "commerce.inventory-reservation.released.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.inventory-reservation.released.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-03",
+      "consumers": [
+        "SYS-02"
+      ],
+      "audience": [
+        "SYS-02"
+      ],
+      "schema": "events/InventoryReservationReleased.v1.schema.json",
+      "idempotencyKeyFormat": "INVENTORY_RELEASE:{reservationId}:{reason}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "ContentProductClicked",
+      "messageKind": "EVENT",
+      "logicalTopic": "commerce.content.product-clicked.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.content.product-clicked.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-02",
+      "consumers": [
+        "SYS-04",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-04",
+        "SYS-06"
+      ],
+      "schema": "events/ContentProductClicked.v1.schema.json",
+      "idempotencyKeyFormat": "CONTENT_PRODUCT_CLICK:{attributionCandidateId}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "Only customer/anonymous safe references; no contact data or device fingerprint."
+    },
+    {
+      "eventType": "OrderAttributionFrozen",
+      "messageKind": "EVENT",
+      "logicalTopic": "commerce.order.attribution-frozen.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.order.attribution-frozen.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-02",
+      "consumers": [
+        "SYS-04",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "audience": [
+        "SYS-04",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schema": "events/OrderAttributionFrozen.v1.schema.json",
+      "idempotencyKeyFormat": "ORDER_ATTRIBUTION:{attributionId}:{version}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No buyer PII, membership percentage or internal identity mapping."
+    },
+    {
+      "eventType": "OrderAttributionAdjusted",
+      "messageKind": "EVENT",
+      "logicalTopic": "commerce.order.attribution-adjusted.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.order.attribution-adjusted.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-02",
+      "consumers": [
+        "SYS-04",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "audience": [
+        "SYS-04",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schema": "events/OrderAttributionAdjusted.v1.schema.json",
+      "idempotencyKeyFormat": "ORDER_ATTRIBUTION_ADJUST:{adjustmentId}:{newVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "OrderPaid",
+      "messageKind": "EVENT",
+      "logicalTopic": "commerce.order.paid.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.order.paid.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-02",
+      "consumers": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "audience": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schema": "events/OrderPaid.v1.schema.json",
+      "idempotencyKeyFormat": "PAYMENT_SUCCESS:{paymentId}:{channelTransactionId}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No buyer userId, phone, address or payment credentials; snapshots are access-controlled refs."
+    },
+    {
+      "eventType": "OrderCancelled",
+      "messageKind": "EVENT",
+      "logicalTopic": "commerce.order.cancelled.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.order.cancelled.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-02",
+      "consumers": [
+        "SYS-03",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-03",
+        "SYS-06"
+      ],
+      "schema": "events/OrderCancelled.v1.schema.json",
+      "idempotencyKeyFormat": "ORDER_CANCEL:{orderId}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "OrderShipmentRegistered",
+      "messageKind": "EVENT",
+      "logicalTopic": "commerce.order.shipment-registered.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.order.shipment-registered.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-02",
+      "consumers": [
+        "SYS-03",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-03",
+        "SYS-06"
+      ],
+      "schema": "events/OrderShipmentRegistered.v1.schema.json",
+      "idempotencyKeyFormat": "SHIPMENT_REGISTER:{fulfillmentId}:{fulfillmentVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "Only a masked tracking number; the complete tracking number remains encrypted in SYS-03."
+    },
+    {
+      "eventType": "OrderReceived",
+      "messageKind": "EVENT",
+      "logicalTopic": "commerce.order.received.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.order.received.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-02",
+      "consumers": [
+        "SYS-03",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "audience": [
+        "SYS-03",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schema": "events/OrderReceived.v1.schema.json",
+      "idempotencyKeyFormat": "ORDER_RECEIVED:{orderId}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "OrderSettlementEligible",
+      "messageKind": "EVENT",
+      "logicalTopic": "commerce.order.settlement-eligible.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.order.settlement-eligible.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-02",
+      "consumers": [
+        "SYS-03",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "audience": [
+        "SYS-03",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schema": "events/OrderSettlementEligible.v1.schema.json",
+      "idempotencyKeyFormat": "ORDER_SETTLEMENT_ELIGIBLE:{subOrderId}:{eligibilityVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "AftersaleStatusChanged",
+      "messageKind": "EVENT",
+      "logicalTopic": "commerce.aftersale.status-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.aftersale.status-changed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-02",
+      "consumers": [
+        "SYS-03",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "audience": [
+        "SYS-03",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schema": "events/AftersaleStatusChanged.v1.schema.json",
+      "idempotencyKeyFormat": "AFTERSALE_STATUS:{aftersaleId}:{version}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "RefundRequested",
+      "messageKind": "EVENT",
+      "logicalTopic": "commerce.refund.requested.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.refund.requested.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-02",
+      "consumers": [
+        "SYS-03",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "audience": [
+        "SYS-03",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schema": "events/RefundRequested.v1.schema.json",
+      "idempotencyKeyFormat": "REFUND_REQUEST:{refundId}:{requestVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "RefundStatusChanged",
+      "messageKind": "EVENT",
+      "logicalTopic": "commerce.refund.status-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.refund.status-changed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-02",
+      "consumers": [
+        "SYS-03",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "audience": [
+        "SYS-03",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schema": "events/RefundStatusChanged.v1.schema.json",
+      "idempotencyKeyFormat": "REFUND_STATUS:{refundId}:{version}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "Only a masked channel reference; no payment credential or raw callback."
+    },
+    {
+      "eventType": "OrderRefunded",
+      "messageKind": "EVENT",
+      "logicalTopic": "commerce.order.refunded.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.order.refunded.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-02",
+      "consumers": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "audience": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schema": "events/OrderRefunded.v1.schema.json",
+      "idempotencyKeyFormat": "REFUND_RESULT:{refundId}:{channelRefundTransactionId}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No buyer PII; analytics detail is retrieved by immutable access-controlled snapshot ref."
+    },
+    {
+      "eventType": "ReviewReplyChanged",
+      "messageKind": "EVENT",
+      "logicalTopic": "commerce.review.reply-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.review.reply-changed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-02",
+      "consumers": [
+        "SYS-03",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-03",
+        "SYS-06"
+      ],
+      "schema": "events/ReviewReplyChanged.v1.schema.json",
+      "idempotencyKeyFormat": "REVIEW_REPLY:{reviewId}:{replyVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "ReviewGovernanceChanged",
+      "messageKind": "EVENT",
+      "logicalTopic": "commerce.review.governance-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.commerce.review.governance-changed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-02",
+      "consumers": [
+        "SYS-03",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-03",
+        "SYS-06"
+      ],
+      "schema": "events/ReviewGovernanceChanged.v1.schema.json",
+      "idempotencyKeyFormat": "REVIEW_GOVERNANCE:{reviewId}:{governanceVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "Only public moderation reason; internal evidence and reasons remain in SYS-02."
+    },
+    {
+      "eventType": "LeadCreated",
+      "messageKind": "EVENT",
+      "logicalTopic": "crm.lead.created.v1",
+      "physicalTopicTemplate": "wotao.{environment}.crm.lead.created.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-04",
+      "consumers": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "schema": "events/LeadCreated.v1.schema.json",
+      "idempotencyKeyFormat": "CRM_LEAD:{leadId}:{leadVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No name, company, phone, contact detail or authorization evidence body."
+    },
+    {
+      "eventType": "LeadStatusChanged",
+      "messageKind": "EVENT",
+      "logicalTopic": "crm.lead.status_changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.crm.lead.status_changed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-04",
+      "consumers": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "schema": "events/LeadStatusChanged.v1.schema.json",
+      "idempotencyKeyFormat": "CRM_LEAD_STATUS:{leadId}:{leadVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No contact fields or evidence bodies."
+    },
+    {
+      "eventType": "CustomerUpdated",
+      "messageKind": "EVENT",
+      "logicalTopic": "crm.customer.updated.v1",
+      "physicalTopicTemplate": "wotao.{environment}.crm.customer.updated.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-04",
+      "consumers": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "schema": "events/CustomerUpdated.v1.schema.json",
+      "idempotencyKeyFormat": "CRM_CUSTOMER:{customerId}:{customerVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No name, company, tags, phone or contact identifiers."
+    },
+    {
+      "eventType": "CustomerAssigned",
+      "messageKind": "EVENT",
+      "logicalTopic": "crm.customer.assigned.v1",
+      "physicalTopicTemplate": "wotao.{environment}.crm.customer.assigned.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-04",
+      "consumers": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "schema": "events/CustomerAssigned.v1.schema.json",
+      "idempotencyKeyFormat": "CRM_CUSTOMER_ASSIGN:{customerId}:{assignmentVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "OpportunityStageChanged",
+      "messageKind": "EVENT",
+      "logicalTopic": "crm.opportunity.stage-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.crm.opportunity.stage-changed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-04",
+      "consumers": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "schema": "events/OpportunityStageChanged.v1.schema.json",
+      "idempotencyKeyFormat": "CRM_OPPORTUNITY_STAGE:{opportunityId}:{opportunityVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "CallCompleted",
+      "messageKind": "EVENT",
+      "logicalTopic": "crm.call.completed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.crm.call.completed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-04",
+      "consumers": [
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-06"
+      ],
+      "schema": "events/CallCompleted.v1.schema.json",
+      "idempotencyKeyFormat": "AI_CALL_RESULT:{providerAccountId}:{callId}:{resultVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No recording, transcript, summary, phone or provider credential; analytics uses an immutable safe snapshot."
+    },
+    {
+      "eventType": "WeChatHandoffRequested",
+      "messageKind": "EVENT",
+      "logicalTopic": "crm.wechat.handoff-requested.v1",
+      "physicalTopicTemplate": "wotao.{environment}.crm.wechat.handoff-requested.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-04",
+      "consumers": [
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-06"
+      ],
+      "schema": "events/WeChatHandoffRequested.v1.schema.json",
+      "idempotencyKeyFormat": "WECHAT_HANDOFF:{handoffRef}:{handoffVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No messageId, external WeChat ID, message body or conversation body."
+    },
+    {
+      "eventType": "GlobalMarketingRefusalChanged",
+      "messageKind": "EVENT",
+      "logicalTopic": "crm.marketing.global-refusal-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.crm.marketing.global-refusal-changed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-04",
+      "consumers": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "schema": "events/GlobalMarketingRefusalChanged.v1.schema.json",
+      "idempotencyKeyFormat": "CRM_GLOBAL_REFUSAL:{customerId}:{refusalVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "ContactSuppressionChanged",
+      "messageKind": "EVENT",
+      "logicalTopic": "crm.marketing.contact-suppression-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.crm.marketing.contact-suppression-changed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-04",
+      "consumers": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "schema": "events/ContactSuppressionChanged.v1.schema.json",
+      "idempotencyKeyFormat": "CRM_CONTACT_SUPPRESSION:{suppressionId}:{suppressionVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "ContentVersionSubmitted",
+      "messageKind": "EVENT",
+      "logicalTopic": "content.version.submitted.v1",
+      "physicalTopicTemplate": "wotao.{environment}.content.version.submitted.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-05",
+      "consumers": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "schema": "events/ContentVersionSubmitted.v1.schema.json",
+      "idempotencyKeyFormat": "CONTENT_SUBMIT:{channelVersionId}:{contentVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No full media or evidence body; only safe references and hash."
+    },
+    {
+      "eventType": "ContentReviewCompleted",
+      "messageKind": "EVENT",
+      "logicalTopic": "content.review.completed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.content.review.completed.v1",
+      "schemaVersion": 1,
+      "producer": "REVIEW_CENTER",
+      "consumers": [
+        "SYS-05",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-05",
+        "SYS-06"
+      ],
+      "schema": "events/ContentReviewCompleted.v1.schema.json",
+      "idempotencyKeyFormat": "CONTENT_REVIEW:{reviewId}:{decisionVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "PublicationConfirmed",
+      "messageKind": "EVENT",
+      "logicalTopic": "publication.confirmed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.publication.confirmed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-05",
+      "consumers": [
+        "SYS-01",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "audience": [
+        "SYS-01",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schema": "events/PublicationConfirmed.v1.schema.json",
+      "idempotencyKeyFormat": "PUBLICATION_CONFIRM:{confirmationId}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "PublicationServiceOrderChanged",
+      "messageKind": "EVENT",
+      "logicalTopic": "ledger.publication-service-order.changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.publication-service-order.changed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-08",
+      "consumers": [
+        "SYS-01",
+        "SYS-05"
+      ],
+      "audience": [
+        "SYS-01",
+        "SYS-05"
+      ],
+      "schema": "events/PublicationServiceOrderChanged.v1.schema.json",
+      "idempotencyKeyFormat": "PUBLICATION_SERVICE_ORDER:{channelPublicationId}:{sourceVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "ChannelPublicationReserved",
+      "messageKind": "EVENT",
+      "logicalTopic": "ledger.publication.charge-reserved.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.publication.charge-reserved.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-08",
+      "consumers": [
+        "SYS-05",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-05",
+        "SYS-06"
+      ],
+      "schema": "events/ChannelPublicationReserved.v1.schema.json",
+      "idempotencyKeyFormat": "PUBLICATION_CHARGE:{channelPublicationId}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "ChannelPublicationFirstVisible",
+      "messageKind": "EVENT",
+      "logicalTopic": "publication.channel.first_visible.v1",
+      "physicalTopicTemplate": "wotao.{environment}.publication.channel.first_visible.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-05",
+      "consumers": [
+        "SYS-06",
+        "SYS-07",
+        "SYS-08"
+      ],
+      "audience": [
+        "SYS-06",
+        "SYS-07",
+        "SYS-08"
+      ],
+      "schema": "events/ChannelPublicationFirstVisible.v1.schema.json",
+      "idempotencyKeyFormat": "PUBLICATION_FIRST_VISIBLE:{channelPublicationId}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "ChannelPublicationEffective",
+      "messageKind": "EVENT",
+      "logicalTopic": "publication.channel.effective.v1",
+      "physicalTopicTemplate": "wotao.{environment}.publication.channel.effective.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-05",
+      "consumers": [
+        "SYS-06",
+        "SYS-07",
+        "SYS-08"
+      ],
+      "audience": [
+        "SYS-06",
+        "SYS-07",
+        "SYS-08"
+      ],
+      "schema": "events/ChannelPublicationEffective.v1.schema.json",
+      "idempotencyKeyFormat": "PUBLICATION_EFFECTIVE:{validPublicationId}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "ChannelPublicationFailed",
+      "messageKind": "EVENT",
+      "logicalTopic": "publication.channel.failed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.publication.channel.failed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-05",
+      "consumers": [
+        "SYS-06",
+        "SYS-07",
+        "SYS-08"
+      ],
+      "audience": [
+        "SYS-06",
+        "SYS-07",
+        "SYS-08"
+      ],
+      "schema": "events/ChannelPublicationFailed.v1.schema.json",
+      "idempotencyKeyFormat": "PUBLICATION_FAILED:{channelPublicationId}:{sourceVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "ChannelPublicationRefundEligible",
+      "messageKind": "EVENT",
+      "logicalTopic": "publication.channel.refund-eligible.v1",
+      "physicalTopicTemplate": "wotao.{environment}.publication.channel.refund-eligible.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-05",
+      "consumers": [
+        "SYS-06",
+        "SYS-08"
+      ],
+      "audience": [
+        "SYS-06",
+        "SYS-08"
+      ],
+      "schema": "events/ChannelPublicationRefundEligible.v1.schema.json",
+      "idempotencyKeyFormat": "LIABILITY_REFUND_ELIGIBLE:{validPublicationId}:{refundReasonCode}:{responsibilityVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "ChannelPublicationChargeReleased",
+      "messageKind": "EVENT",
+      "logicalTopic": "ledger.publication.charge-released.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.publication.charge-released.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-08",
+      "consumers": [
+        "SYS-05",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-05",
+        "SYS-06"
+      ],
+      "schema": "events/ChannelPublicationChargeReleased.v1.schema.json",
+      "idempotencyKeyFormat": "PUB_CHARGE_REFUND:{validPublicationId}:{refundReasonCode}:{responsibilityVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "AccountAssignmentRequested",
+      "messageKind": "COMMAND",
+      "logicalTopic": "publication.account-assignment.requested.v1",
+      "physicalTopicTemplate": "wotao.{environment}.publication.account-assignment.requested.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-05",
+      "consumers": [
+        "SYS-07"
+      ],
+      "audience": [
+        "SYS-07"
+      ],
+      "schema": "events/AccountAssignmentRequested.v1.schema.json",
+      "idempotencyKeyFormat": "ACCOUNT_ASSIGNMENT_REQUEST:{channelPublicationId}:{assignmentRequestVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "AccountAssignmentCompleted",
+      "messageKind": "EVENT",
+      "logicalTopic": "opc.account-assignment.completed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.opc.account-assignment.completed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-07",
+      "consumers": [
+        "SYS-05"
+      ],
+      "audience": [
+        "SYS-05"
+      ],
+      "schema": "events/AccountAssignmentCompleted.v1.schema.json",
+      "idempotencyKeyFormat": "ACCOUNT_ASSIGNMENT_RESULT:{channelPublicationId}:{assignmentRequestVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No sessionRef, platformAccountId, login name, Cookie, token or credential."
+    },
+    {
+      "eventType": "AccountAssignmentUnavailable",
+      "messageKind": "EVENT",
+      "logicalTopic": "opc.account-assignment.unavailable.v1",
+      "physicalTopicTemplate": "wotao.{environment}.opc.account-assignment.unavailable.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-07",
+      "consumers": [
+        "SYS-05"
+      ],
+      "audience": [
+        "SYS-05"
+      ],
+      "schema": "events/AccountAssignmentUnavailable.v1.schema.json",
+      "idempotencyKeyFormat": "ACCOUNT_ASSIGNMENT_RESULT:{channelPublicationId}:{assignmentRequestVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "AccountAssignmentReleaseRequested",
+      "messageKind": "COMMAND",
+      "logicalTopic": "publication.account-assignment.release-requested.v1",
+      "physicalTopicTemplate": "wotao.{environment}.publication.account-assignment.release-requested.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-05",
+      "consumers": [
+        "SYS-07"
+      ],
+      "audience": [
+        "SYS-07"
+      ],
+      "schema": "events/AccountAssignmentReleaseRequested.v1.schema.json",
+      "idempotencyKeyFormat": "ACCOUNT_ASSIGNMENT_RELEASE:{accountAssignmentId}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "AccountAssignmentReleased",
+      "messageKind": "EVENT",
+      "logicalTopic": "opc.account-assignment.released.v1",
+      "physicalTopicTemplate": "wotao.{environment}.opc.account-assignment.released.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-07",
+      "consumers": [
+        "SYS-05"
+      ],
+      "audience": [
+        "SYS-05"
+      ],
+      "schema": "events/AccountAssignmentReleased.v1.schema.json",
+      "idempotencyKeyFormat": "ACCOUNT_ASSIGNMENT_RELEASE:{accountAssignmentId}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "Confirms secret revocation status only; contains no secret or session-grant identifier."
+    },
+    {
+      "eventType": "OpcAccountStatusChanged",
+      "messageKind": "EVENT",
+      "logicalTopic": "opc.account.status-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.opc.account.status-changed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-07",
+      "consumers": [
+        "SYS-05",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-05",
+        "SYS-06"
+      ],
+      "schema": "events/OpcAccountStatusChanged.v1.schema.json",
+      "idempotencyKeyFormat": "OPC_ACCOUNT_STATUS:{opcAccountId}:{accountVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No external login, platformAccountId, sessionRef or credential."
+    },
+    {
+      "eventType": "RequestOpcEarningSettlement",
+      "messageKind": "COMMAND",
+      "logicalTopic": "ledger.command.request-opc-earning-settlement.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.command.request-opc-earning-settlement.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-07",
+      "consumers": [
+        "SYS-08"
+      ],
+      "audience": [
+        "SYS-08"
+      ],
+      "schema": "events/RequestOpcEarningSettlement.v1.schema.json",
+      "idempotencyKeyFormat": "OPC_EARNING:{validPublicationId}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "OpcEarningSettled",
+      "messageKind": "EVENT",
+      "logicalTopic": "ledger.opc-earning.settled.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.opc-earning.settled.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-08",
+      "consumers": [
+        "SYS-07"
+      ],
+      "audience": [
+        "SYS-07"
+      ],
+      "schema": "events/OpcEarningSettled.v1.schema.json",
+      "idempotencyKeyFormat": "OPC_EARNING:{validPublicationId}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "OpcEarningReversed",
+      "messageKind": "EVENT",
+      "logicalTopic": "ledger.opc-earning.reversed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.opc-earning.reversed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-08",
+      "consumers": [
+        "SYS-07"
+      ],
+      "audience": [
+        "SYS-07"
+      ],
+      "schema": "events/OpcEarningReversed.v1.schema.json",
+      "idempotencyKeyFormat": "OPC_EARNING_REVERSE:{originalLedgerEntryId}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "MembershipChanged",
+      "messageKind": "EVENT",
+      "logicalTopic": "ledger.membership.changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.membership.changed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-08",
+      "consumers": [
+        "SYS-01",
+        "SYS-05",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-01",
+        "SYS-05",
+        "SYS-06"
+      ],
+      "schema": "events/MembershipChanged.v1.schema.json",
+      "idempotencyKeyFormat": "MEMBERSHIP:{membershipId}:{membershipVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "BenefitQuotaChanged",
+      "messageKind": "EVENT",
+      "logicalTopic": "ledger.benefit-quota.changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.benefit-quota.changed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-08",
+      "consumers": [
+        "SYS-01",
+        "SYS-05",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-01",
+        "SYS-05",
+        "SYS-06"
+      ],
+      "schema": "events/BenefitQuotaChanged.v1.schema.json",
+      "idempotencyKeyFormat": "BENEFIT_QUOTA:{quotaAccountId}:{quotaVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "ProfitBaseFrozen",
+      "messageKind": "EVENT",
+      "logicalTopic": "ledger.profit-base.frozen.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.profit-base.frozen.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-08",
+      "consumers": [
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-06"
+      ],
+      "schema": "events/ProfitBaseFrozen.v1.schema.json",
+      "idempotencyKeyFormat": "PROFIT_FREEZE:{subOrderId}:{settlementVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "ProfitBaseAllocated",
+      "messageKind": "EVENT",
+      "logicalTopic": "ledger.profit-base.allocated.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.profit-base.allocated.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-08",
+      "consumers": [
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-06"
+      ],
+      "schema": "events/ProfitBaseAllocated.v1.schema.json",
+      "idempotencyKeyFormat": "PROFIT_ALLOCATE:{profitBaseId}:{targetPlanVersionId}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "ProfitBaseReversed",
+      "messageKind": "EVENT",
+      "logicalTopic": "ledger.profit-base.reversed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.profit-base.reversed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-08",
+      "consumers": [
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-06"
+      ],
+      "schema": "events/ProfitBaseReversed.v1.schema.json",
+      "idempotencyKeyFormat": "PROFIT_REVERSE:{profitBaseId}:{originalAllocationVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "MerchantSettlementChanged",
+      "messageKind": "EVENT",
+      "logicalTopic": "ledger.merchant-settlement.changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.merchant-settlement.changed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-08",
+      "consumers": [
+        "SYS-03",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-03",
+        "SYS-06"
+      ],
+      "schema": "events/MerchantSettlementChanged.v1.schema.json",
+      "idempotencyKeyFormat": "ORDER_SETTLE:{subOrderId}:{settlementVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "PointsLedgerEntryPosted",
+      "messageKind": "EVENT",
+      "logicalTopic": "ledger.points-entry.posted.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.points-entry.posted.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-08",
+      "consumers": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "schema": "events/PointsLedgerEntryPosted.v1.schema.json",
+      "idempotencyKeyFormat": "POINTS_ENTRY:{pointsEntryId}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "PointsBalanceChanged",
+      "messageKind": "EVENT",
+      "logicalTopic": "ledger.points-balance.changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.points-balance.changed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-08",
+      "consumers": [
+        "SYS-01"
+      ],
+      "audience": [
+        "SYS-01"
+      ],
+      "schema": "events/PointsBalanceChanged.v1.schema.json",
+      "idempotencyKeyFormat": "POINTS_BALANCE:{pointsAccountId}:{balanceVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "WithdrawalStatusChanged",
+      "messageKind": "EVENT",
+      "logicalTopic": "ledger.withdrawal.status-changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.withdrawal.status-changed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-08",
+      "consumers": [
+        "SYS-01",
+        "SYS-06",
+        "SYS-07"
+      ],
+      "audience": [
+        "SYS-01",
+        "SYS-06",
+        "SYS-07"
+      ],
+      "schema": "events/WithdrawalStatusChanged.v1.schema.json",
+      "idempotencyKeyFormat": "WITHDRAWAL_STATUS:{withdrawalId}:{version}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No payout profile or complete channel number. OPC uses ownerType=OPC_PROVIDER and ownerId=providerId."
+    },
+    {
+      "eventType": "CashLedgerEntryPosted",
+      "messageKind": "EVENT",
+      "logicalTopic": "ledger.cash-entry.posted.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.cash-entry.posted.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-08",
+      "consumers": [
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-06"
+      ],
+      "schema": "events/CashLedgerEntryPosted.v1.schema.json",
+      "idempotencyKeyFormat": "CASH_LEDGER_ENTRY:{ledgerEntryId}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "EnterpriseBalanceChanged",
+      "messageKind": "EVENT",
+      "logicalTopic": "ledger.enterprise-balance.changed.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.enterprise-balance.changed.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-08",
+      "consumers": [
+        "SYS-01"
+      ],
+      "audience": [
+        "SYS-01"
+      ],
+      "schema": "events/EnterpriseBalanceChanged.v1.schema.json",
+      "idempotencyKeyFormat": "ENTERPRISE_BALANCE:{enterpriseId}:{balanceVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No credentials, tokens, cookies, complete payout details, contact details or raw evidence."
+    },
+    {
+      "eventType": "LedgerAnomalyDetected",
+      "messageKind": "EVENT",
+      "logicalTopic": "ledger.anomaly.detected.v1",
+      "physicalTopicTemplate": "wotao.{environment}.ledger.anomaly.detected.v1",
+      "schemaVersion": 1,
+      "producer": "SYS-08",
+      "consumers": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "audience": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "schema": "events/LedgerAnomalyDetected.v1.schema.json",
+      "idempotencyKeyFormat": "LEDGER_ANOMALY:{anomalyId}:{anomalyVersion}",
+      "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED",
+      "compatibility": {
+        "withinSchemaVersion": "ADDITIVE_OPTIONAL_FIELDS_ONLY",
+        "breakingChange": "NEW_EVENT_TYPE_TOPIC_AND_SCHEMA_VERSION",
+        "unknownSchema": "SECURITY_QUARANTINE_AND_DEAD_LETTER",
+        "replay": "SAME_EVENT_ID_AND_BYTE_STABLE_PAYLOAD"
+      },
+      "piiPolicy": "No raw payment callback, payout details or reconciliation evidence body."
+    }
+  ],
+  "idempotency": {
+    "http": [
+      {
+        "operationId": "sys01.auth.sendPhoneCode",
+        "method": "POST",
+        "path": "/api/v1/auth/phone/code",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "PHONE_CODE:{phoneHash}:{purpose}:{timeWindow}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys01.auth.createPhoneSession",
+        "method": "POST",
+        "path": "/api/v1/auth/phone/session",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "PHONE_SESSION:{phoneHash}:{clientType}:{clientRequestId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys01.enterprise.create",
+        "method": "POST",
+        "path": "/api/v1/enterprises",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "ENTERPRISE_CREATE:{userId}:{requestId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys01.enterprise.updateProfile",
+        "method": "PUT",
+        "path": "/api/v1/enterprises/{enterpriseId}/profile",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "ENTERPRISE_PROFILE:{enterpriseId}:{expectedVersion}:{requestId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys01.enterprise.submitReview",
+        "method": "POST",
+        "path": "/api/v1/enterprises/{enterpriseId}/review-submissions",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "ENTERPRISE_REVIEW:{enterpriseId}:{profileVersion}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys01.enterprise.decideReview",
+        "method": "POST",
+        "path": "/api/v1/admin/enterprise-review-submissions/{reviewSubmissionId}/decision",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "ENTERPRISE_REVIEW_DECISION:{reviewSubmissionId}:{expectedVersion}:{decision}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys01.authorization.decide",
+        "method": "POST",
+        "path": "/internal/v1/authorization/decisions",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "AUTHZ_DECISION:{approvalRef}:{actorUserId}:{stepCode}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys01.authorization.createDelegation",
+        "method": "POST",
+        "path": "/api/v1/authorization/delegations",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "USER_DELEGATION:{sessionId}:{commandId}:{payloadHash}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys01.approvals.putProjection",
+        "method": "PUT",
+        "path": "/internal/v1/approval-task-projections/{approvalRef}",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "APPROVAL_PROJECTION:{approvalRef}:{sourceVersion}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys01.agents.createRun",
+        "method": "POST",
+        "path": "/api/v1/agent-runs",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "AGENT_RUN:{enterpriseId}:{clientRequestId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys01.agents.reportToolResult",
+        "method": "POST",
+        "path": "/internal/v1/agent-runs/{agentRunId}/tool-results",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "AGENT_TOOL_RESULT:{agentRunId}:{toolRunId}:{resultVersion}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys08.membership.createOrder",
+        "method": "POST",
+        "path": "/api/v1/membership/orders",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "MEMBERSHIP_ORDER:{enterpriseId}:{planVersionId}:{clientRequestId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys08.points.createQuote",
+        "method": "POST",
+        "path": "/api/v1/points/quotes",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "POINTS_QUOTE:{enterpriseId}:{agentRunId}:{chargeCode}:{inputVersion}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys08.points.reserve",
+        "method": "POST",
+        "path": "/api/v1/points/reservations",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "POINTS_RESERVE:{agentRunId}:{chargeCode}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys08.points.commitReservation",
+        "method": "POST",
+        "path": "/internal/v1/points/reservations/{reservationId}/commit",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "POINTS_COMMIT:{agentRunId}:{chargeCode}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys08.points.releaseReservation",
+        "method": "POST",
+        "path": "/internal/v1/points/reservations/{reservationId}/release",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "POINTS_RELEASE:{reservationId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys08.publicationService.createOrder",
+        "method": "POST",
+        "path": "/api/v1/publication-service-orders",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "PUBLICATION_SERVICE_ORDER:{channelPublicationId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys08.publicationCharge.reserve",
+        "method": "POST",
+        "path": "/internal/v1/ledger/publication-charge-reservations",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "PUBLICATION_CHARGE:{channelPublicationId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys08.distribution.resolveContext",
+        "method": "POST",
+        "path": "/internal/v1/ledger/distribution-context:resolve",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "DISTRIBUTION_CONTEXT_RESOLVE:{orderId}:{attributionId}:{requestHash}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys08.opc.createWithdrawal",
+        "method": "POST",
+        "path": "/internal/v1/opc/withdrawals",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "OPC_WITHDRAWAL:{providerId}:{clientRequestId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys08.enterprise.createWithdrawal",
+        "method": "POST",
+        "path": "/api/v1/withdrawals",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "ENTERPRISE_WITHDRAWAL:{enterpriseId}:{clientRequestId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys08.payment.receiveResult",
+        "method": "POST",
+        "path": "/callbacks/v1/payments/{channel}",
+        "source": "PROVIDER_EVENT",
+        "headerName": null,
+        "keyFormat": "PAYMENT_SUCCESS:{paymentId}:{channelTransactionId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys08.refund.receiveResult",
+        "method": "POST",
+        "path": "/callbacks/v1/refunds/{channel}",
+        "source": "PROVIDER_EVENT",
+        "headerName": null,
+        "keyFormat": "REFUND_RESULT:{refundId}:{channelRefundTransactionId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys08.payout.receiveResult",
+        "method": "POST",
+        "path": "/callbacks/v1/payouts/{channel}",
+        "source": "PROVIDER_EVENT",
+        "headerName": null,
+        "keyFormat": "WITHDRAW_RESULT:{withdrawalId}:{channelResultId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys08.admin.finalReviewWithdrawal",
+        "method": "POST",
+        "path": "/api/v1/admin/withdrawals/{withdrawalId}/final-review",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "WITHDRAWAL_FINAL_REVIEW:{withdrawalId}:{expectedVersion}:{decision}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys06.analytics.createExport",
+        "method": "POST",
+        "path": "/api/v1/analytics/exports",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "ANALYTICS_EXPORT:{actorId}:{querySnapshotRef}:{fieldSetHash}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys06.analytics.retrySyncJob",
+        "method": "POST",
+        "path": "/api/v1/analytics/sync-jobs/{syncJobId}/retry",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "SYNC_JOB_RETRY:{syncJobId}:{checkpointVersion}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys07.opc.updateProfile",
+        "method": "PUT",
+        "path": "/api/v1/opc/me/profile",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "OPC_PROFILE:{providerId}:{expectedVersion}:{clientRequestId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys07.account.create",
+        "method": "POST",
+        "path": "/api/v1/opc/accounts",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "OPC_ACCOUNT:{providerId}:{channel}:{externalAccountHash}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys07.account.pause",
+        "method": "POST",
+        "path": "/api/v1/opc/accounts/{opcAccountId}/pause",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "OPC_ACCOUNT_PAUSE:{opcAccountId}:{expectedVersion}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys07.withdrawal.createIntent",
+        "method": "POST",
+        "path": "/api/v1/opc/withdrawal-intents",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "OPC_WITHDRAWAL:{providerId}:{clientRequestId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys07.admin.decideAccountReview",
+        "method": "POST",
+        "path": "/api/v1/admin/opc/reviews/{reviewId}/decision",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "OPC_REVIEW_DECISION:{reviewId}:{expectedVersion}:{decision}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys07.assignment.createSessionGrant",
+        "method": "POST",
+        "path": "/internal/v1/opc/assignments/{accountAssignmentId}/session-grants",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "SESSION_GRANT:{accountAssignmentId}:{executionId}:{nonce}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys04.lead.create",
+        "method": "POST",
+        "path": "/api/v1/marketing/leads",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "LEAD_CREATE:{enterpriseId}:{sourceRecordId}:{clientRequestId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys04.customer.update",
+        "method": "PATCH",
+        "path": "/api/v1/marketing/customers/{customerId}",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "CUSTOMER_UPDATE:{customerId}:{expectedVersion}:{clientRequestId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys04.customer.createFollowup",
+        "method": "POST",
+        "path": "/api/v1/marketing/customers/{customerId}/followups",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "FOLLOWUP:{customerId}:{clientRequestId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys04.touchPolicy.evaluate",
+        "method": "POST",
+        "path": "/api/v1/marketing/touch-policy/evaluate",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "TOUCH_POLICY:{customerId}:{channel}:{purpose}:{evaluationBucket}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys04.attribution.resolve",
+        "method": "POST",
+        "path": "/internal/v1/marketing/attribution/resolve",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "ATTRIBUTION_RESOLVE:{orderId}:{inputHash}:{ruleVersion}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys04.calling.createAdapterTask",
+        "method": "POST",
+        "path": "/internal/v1/adapters/ai-calling/tasks",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "AI_CALL_TASK:{callTaskId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys04.calling.receiveResult",
+        "method": "POST",
+        "path": "/callbacks/v1/ai-calling/results",
+        "source": "PROVIDER_EVENT",
+        "headerName": null,
+        "keyFormat": "AI_CALL_RESULT:{providerAccountId}:{callId}:{resultVersion}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys04.wechat.receiveMessage",
+        "method": "POST",
+        "path": "/callbacks/v1/wechat/messages",
+        "source": "PROVIDER_EVENT",
+        "headerName": null,
+        "keyFormat": "WECHAT_MESSAGE:{wechatAccountId}:{messageId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys04.wechat.requestHandoff",
+        "method": "POST",
+        "path": "/api/v1/marketing/wechat/conversations/{conversationId}/handoff",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "WECHAT_HANDOFF:{conversationId}:{activeConversationVersion}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys05.asset.createUploadSession",
+        "method": "POST",
+        "path": "/api/v1/content/assets/uploads",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "ASSET_UPLOAD:{enterpriseId}:{fileHash}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys05.content.create",
+        "method": "POST",
+        "path": "/api/v1/content/items",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "CONTENT_CREATE:{enterpriseId}:{clientRequestId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys05.content.update",
+        "method": "PATCH",
+        "path": "/api/v1/content/items/{contentId}",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "CONTENT_UPDATE:{contentId}:{expectedVersion}:{clientRequestId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys05.content.createChannelVersion",
+        "method": "POST",
+        "path": "/api/v1/content/items/{contentId}/channel-versions",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "CHANNEL_VERSION:{contentId}:{masterVersion}:{channel}:{clientRequestId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys05.review.submitOrDecide",
+        "method": "POST",
+        "path": "/api/v1/content/channel-versions/{channelVersionId}/reviews",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "CONTENT_REVIEW:{channelVersionId}:{expectedVersion}:{action}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys05.publication.confirm",
+        "method": "POST",
+        "path": "/api/v1/content/publication-confirmations",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "PUBLICATION_CONFIRM:{wotaoVersionId}:{douyinVersionId}:{clientRequestId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys05.publication.cancelPlan",
+        "method": "POST",
+        "path": "/api/v1/content/publication-plans/{publicationPlanId}/cancel",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "PUBLICATION_PLAN_CANCEL:{publicationPlanId}:{expectedVersion}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys05.publication.retry",
+        "method": "POST",
+        "path": "/api/v1/content/channel-publications/{channelPublicationId}/retry",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "PUBLICATION_RETRY:{channelPublicationId}:{retryRequestId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys05.publication.createVisibilityCheck",
+        "method": "POST",
+        "path": "/api/v1/content/channel-publications/{channelPublicationId}/visibility-checks",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "VISIBILITY_CHECK:{channelPublicationId}:{checkpoint}:{evidenceHash}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys03.access.createRequest",
+        "method": "POST",
+        "path": "/api/v1/commerce/access-requests",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "COMMERCE_ACCESS:{enterpriseId}:{clientRequestId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys03.store.create",
+        "method": "POST",
+        "path": "/api/v1/commerce/stores",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "STORE_CREATE:{enterpriseId}:{clientRequestId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys03.product.create",
+        "method": "POST",
+        "path": "/api/v1/commerce/products",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "PRODUCT_CREATE:{enterpriseId}:{draftId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys03.inventory.command",
+        "method": "POST",
+        "path": "/api/v1/commerce/inventories/{inventoryId}/commands",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "INVENTORY_COMMAND:{inventoryId}:{businessKey}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys03.inventory.reserve",
+        "method": "POST",
+        "path": "/internal/v1/commerce/inventory-reservations",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "INVENTORY_RESERVE:{orderId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys03.inventory.commitReservation",
+        "method": "POST",
+        "path": "/internal/v1/commerce/inventory-reservations/{reservationId}/commit",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "INVENTORY_COMMIT:{reservationId}:{paymentId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys03.inventory.releaseReservation",
+        "method": "POST",
+        "path": "/internal/v1/commerce/commands/release-inventory-reservation",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "INVENTORY_RELEASE:{reservationId}:{reasonFamily}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys03.product.decideAudit",
+        "method": "POST",
+        "path": "/api/v1/admin/commerce/product-audits/{auditId}/decision",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "PRODUCT_AUDIT_DECISION:{auditId}:{expectedVersion}:{decision}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys03.product.publish",
+        "method": "POST",
+        "path": "/api/v1/commerce/products/{productId}/publication-commands",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "PRODUCT_PUBLICATION:{productId}:{productVersion}:{action}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys03.fulfillment.create",
+        "method": "POST",
+        "path": "/api/v1/commerce/orders/{orderId}/fulfillments",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "FULFILLMENT:{orderId}:{clientRequestId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys02.consumer.mergeAnonymousSubject",
+        "method": "POST",
+        "path": "/internal/v1/mall/anonymous-subjects/{anonymousId}/merge",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "ANON_MERGE:{anonymousId}:{userId}:{mergePurpose}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys02.publication.putChannelPublication",
+        "method": "PUT",
+        "path": "/internal/v1/mall/channel-publications/{channelPublicationId}",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "WTT_PUBLISH:{channelPublicationId}:{publicationVersion}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys02.attribution.createCandidate",
+        "method": "POST",
+        "path": "/api/v1/mall/attribution-candidates",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "ATTRIBUTION_CANDIDATE:{visitorSubject}:{channelPublicationId}:{clickedAtBucket}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys02.cart.addItem",
+        "method": "POST",
+        "path": "/api/v1/mall/carts/items",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "CART_ITEM:{cartOwner}:{skuId}:{clientRequestId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys02.checkout.preview",
+        "method": "POST",
+        "path": "/api/v1/mall/checkout/preview",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "CHECKOUT_PREVIEW:{consumerProfileId}:{cartVersion}:{addressRef}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys02.order.create",
+        "method": "POST",
+        "path": "/api/v1/mall/orders",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "ORDER_CREATE:{consumerProfileId}:{clientRequestId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys02.payment.create",
+        "method": "POST",
+        "path": "/api/v1/mall/orders/{orderId}/payments",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "MALL_PAYMENT:{orderId}:{channel}:{clientRequestId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys02.order.registerShipment",
+        "method": "POST",
+        "path": "/internal/v1/mall/commands/register-order-shipment",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "SHIPMENT_REGISTER:{fulfillmentId}:{fulfillmentVersion}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys02.aftersale.create",
+        "method": "POST",
+        "path": "/api/v1/mall/after-sales",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "AFTERSALE_CREATE:{consumerProfileId}:{clientRequestId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      },
+      {
+        "operationId": "sys02.review.create",
+        "method": "POST",
+        "path": "/api/v1/mall/reviews",
+        "source": "HEADER",
+        "headerName": "Idempotency-Key",
+        "keyFormat": "REVIEW_CREATE:{orderId}:{subOrderId}:{skuId}:{buyerUserId}",
+        "replayBehavior": "Same key and canonical payload hash returns the original result; a different payload returns HTTP 409.",
+        "payloadConflictHttpStatus": 409
+      }
+    ],
+    "events": [
+      {
+        "eventType": "UserRegistered",
+        "topic": "platform.identity.user.registered.v1",
+        "keyFormat": "USER_REGISTERED:{userId}:{userVersion}",
+        "example": "USER_REGISTERED:usr_contract_001:1",
+        "businessUniqueness": "userId + userVersion",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "EnterpriseInitialized",
+        "topic": "platform.enterprise.initialized.v1",
+        "keyFormat": "INIT_ENTERPRISE_BENEFITS:{enterpriseId}",
+        "example": "INIT_ENTERPRISE_BENEFITS:ent_contract_001",
+        "businessUniqueness": "enterpriseId initializationVersion=1; SYS-08 creates FREE benefits once",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "EnterpriseProfileUpdated",
+        "topic": "platform.enterprise.profile_updated.v1",
+        "keyFormat": "ENTERPRISE_PROFILE:{enterpriseId}:{profileVersion}",
+        "example": "ENTERPRISE_PROFILE:ent_contract_001:2",
+        "businessUniqueness": "enterpriseId + profileVersion; old versions remain addressable",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "EnterpriseReviewChanged",
+        "topic": "platform.enterprise.review-changed.v1",
+        "keyFormat": "ENTERPRISE_REVIEW:{reviewSubmissionId}:{decisionVersion}",
+        "example": "ENTERPRISE_REVIEW:ers_contract_001:1",
+        "businessUniqueness": "reviewSubmissionId + decisionVersion",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "EnterpriseWhitelistChanged",
+        "topic": "platform.enterprise.whitelist-changed.v1",
+        "keyFormat": "ENTERPRISE_WHITELIST:{scopeRef}:{version}",
+        "example": "ENTERPRISE_WHITELIST:wls_contract_001:1",
+        "businessUniqueness": "scopeRef + version; active enterprise/user/ability scope is unique",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "EnterpriseMemberChanged",
+        "topic": "platform.enterprise.member_changed.v1",
+        "keyFormat": "ENTERPRISE_MEMBER:{enterpriseMemberId}:{version}",
+        "example": "ENTERPRISE_MEMBER:emr_contract_001:2",
+        "businessUniqueness": "enterpriseMemberId + version; one active enterprise/user relationship",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "FeatureFlagChanged",
+        "topic": "platform.feature-flag.changed.v1",
+        "keyFormat": "FEATURE_FLAG:{flagCode}:{scopeType}:{scopeId}:{version}",
+        "example": "FEATURE_FLAG:DOUYIN_AUTO_PUBLISH:ENTERPRISE:ent_contract_001:2",
+        "businessUniqueness": "flagCode + scopeType + scopeId + version",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "AgentToolExecutionReported",
+        "topic": "platform.agent.tool-execution-reported.v1",
+        "keyFormat": "AGENT_TOOL_RESULT:{agentRunId}:{toolRunId}:{resultVersion}",
+        "example": "AGENT_TOOL_RESULT:arun_contract_001:trun_contract_001:1",
+        "businessUniqueness": "agentRunId + toolRunId + resultVersion",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "AgentRunStatusChanged",
+        "topic": "platform.agent.run-status-changed.v1",
+        "keyFormat": "AGENT_RUN_STATUS:{agentRunId}:{agentRunVersion}",
+        "example": "AGENT_RUN_STATUS:arun_contract_001:2",
+        "businessUniqueness": "agentRunId + agentRunVersion; SYS-01 is the only run-status aggregator",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "ConsumerTrialAccessChanged",
+        "topic": "commerce.consumer.trial-access-changed.v1",
+        "keyFormat": "CONSUMER_TRIAL_ACCESS:{trialAccessId}:{version}",
+        "example": "CONSUMER_TRIAL_ACCESS:cta_contract_001:2",
+        "businessUniqueness": "trialAccessId + version",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "ProductPublished",
+        "topic": "commerce.product.published.v1",
+        "keyFormat": "PRODUCT_PUBLISHED:{productId}:{productVersion}",
+        "example": "PRODUCT_PUBLISHED:prd_contract_001:3",
+        "businessUniqueness": "productId + productVersion; snapshotRef content hash is immutable",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "InventoryChanged",
+        "topic": "commerce.inventory.changed.v1",
+        "keyFormat": "INVENTORY_CHANGED:{skuId}:{inventoryVersion}",
+        "example": "INVENTORY_CHANGED:sku_contract_001:4",
+        "businessUniqueness": "skuId + inventoryVersion",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "InventoryReservationCreated",
+        "topic": "commerce.inventory-reservation.created.v1",
+        "keyFormat": "INVENTORY_RESERVE:{orderId}",
+        "example": "INVENTORY_RESERVE:ord_contract_001",
+        "businessUniqueness": "one active reservationId per orderId; commandId is globally unique",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "InventoryReservationCommitted",
+        "topic": "commerce.inventory-reservation.committed.v1",
+        "keyFormat": "INVENTORY_COMMIT:{reservationId}:{paymentId}",
+        "example": "INVENTORY_COMMIT:ires_contract_001:pay_contract_001",
+        "businessUniqueness": "reservationId + paymentId; COMMITTED and RELEASED are mutually exclusive",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "InventoryReservationReleased",
+        "topic": "commerce.inventory-reservation.released.v1",
+        "keyFormat": "INVENTORY_RELEASE:{reservationId}:{reason}",
+        "example": "INVENTORY_RELEASE:ires_contract_001:USER_CANCEL",
+        "businessUniqueness": "reservationId + legal reason family; COMMITTED and RELEASED are mutually exclusive",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "ContentProductClicked",
+        "topic": "commerce.content.product-clicked.v1",
+        "keyFormat": "CONTENT_PRODUCT_CLICK:{attributionCandidateId}",
+        "example": "CONTENT_PRODUCT_CLICK:atc_contract_001",
+        "businessUniqueness": "attributionCandidateId; eventId is an independent delivery dedupe key",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "OrderAttributionFrozen",
+        "topic": "commerce.order.attribution-frozen.v1",
+        "keyFormat": "ORDER_ATTRIBUTION:{attributionId}:{version}",
+        "example": "ORDER_ATTRIBUTION:atr_contract_001:1",
+        "businessUniqueness": "attributionId + version; version 1 is frozen with the order transaction",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "OrderAttributionAdjusted",
+        "topic": "commerce.order.attribution-adjusted.v1",
+        "keyFormat": "ORDER_ATTRIBUTION_ADJUST:{adjustmentId}:{newVersion}",
+        "example": "ORDER_ATTRIBUTION_ADJUST:adj_contract_001:2",
+        "businessUniqueness": "adjustmentId + newVersion; corrections append and never overwrite",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "OrderPaid",
+        "topic": "commerce.order.paid.v1",
+        "keyFormat": "PAYMENT_SUCCESS:{paymentId}:{channelTransactionId}",
+        "example": "PAYMENT_SUCCESS:pay_contract_001:txn_contract_001",
+        "businessUniqueness": "paymentId + outcomeVersion; payment channel transaction is independently unique",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "OrderCancelled",
+        "topic": "commerce.order.cancelled.v1",
+        "keyFormat": "ORDER_CANCEL:{orderId}",
+        "example": "ORDER_CANCEL:ord_contract_001",
+        "businessUniqueness": "orderId + CANCEL action",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "OrderShipmentRegistered",
+        "topic": "commerce.order.shipment-registered.v1",
+        "keyFormat": "SHIPMENT_REGISTER:{fulfillmentId}:{fulfillmentVersion}",
+        "example": "SHIPMENT_REGISTER:ful_contract_001:1",
+        "businessUniqueness": "fulfillmentId + fulfillmentVersion; one first shipment for a P0 subOrderId",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "OrderReceived",
+        "topic": "commerce.order.received.v1",
+        "keyFormat": "ORDER_RECEIVED:{orderId}",
+        "example": "ORDER_RECEIVED:ord_contract_001",
+        "businessUniqueness": "orderId + CONFIRM_RECEIPT action",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "OrderSettlementEligible",
+        "topic": "commerce.order.settlement-eligible.v1",
+        "keyFormat": "ORDER_SETTLEMENT_ELIGIBLE:{subOrderId}:{eligibilityVersion}",
+        "example": "ORDER_SETTLEMENT_ELIGIBLE:subord_contract_001:1",
+        "businessUniqueness": "subOrderId + eligibilityVersion; source snapshot is immutable",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "AftersaleStatusChanged",
+        "topic": "commerce.aftersale.status-changed.v1",
+        "keyFormat": "AFTERSALE_STATUS:{aftersaleId}:{version}",
+        "example": "AFTERSALE_STATUS:afs_contract_001:2",
+        "businessUniqueness": "aftersaleId + version",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "RefundRequested",
+        "topic": "commerce.refund.requested.v1",
+        "keyFormat": "REFUND_REQUEST:{refundId}:{requestVersion}",
+        "example": "REFUND_REQUEST:rfd_contract_001:1",
+        "businessUniqueness": "refundId + requestVersion",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "RefundStatusChanged",
+        "topic": "commerce.refund.status-changed.v1",
+        "keyFormat": "REFUND_STATUS:{refundId}:{version}",
+        "example": "REFUND_STATUS:rfd_contract_001:2",
+        "businessUniqueness": "refundId + version",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "OrderRefunded",
+        "topic": "commerce.order.refunded.v1",
+        "keyFormat": "REFUND_RESULT:{refundId}:{channelRefundTransactionId}",
+        "example": "REFUND_RESULT:rfd_contract_001:rtxn_contract_001",
+        "businessUniqueness": "refundId + outcomeVersion; cumulative amount cannot exceed original paid amount",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "ReviewReplyChanged",
+        "topic": "commerce.review.reply-changed.v1",
+        "keyFormat": "REVIEW_REPLY:{reviewId}:{replyVersion}",
+        "example": "REVIEW_REPLY:rev_contract_001:1",
+        "businessUniqueness": "reviewId + replyVersion; old replies remain immutable",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "ReviewGovernanceChanged",
+        "topic": "commerce.review.governance-changed.v1",
+        "keyFormat": "REVIEW_GOVERNANCE:{reviewId}:{governanceVersion}",
+        "example": "REVIEW_GOVERNANCE:rev_contract_001:2",
+        "businessUniqueness": "reviewId + governanceVersion",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "LeadCreated",
+        "topic": "crm.lead.created.v1",
+        "keyFormat": "CRM_LEAD:{leadId}:{leadVersion}",
+        "example": "CRM_LEAD:lead_contract_001:1",
+        "businessUniqueness": "leadId + leadVersion; source create key is independently unique",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "LeadStatusChanged",
+        "topic": "crm.lead.status_changed.v1",
+        "keyFormat": "CRM_LEAD_STATUS:{leadId}:{leadVersion}",
+        "example": "CRM_LEAD_STATUS:lead_contract_001:2",
+        "businessUniqueness": "leadId + leadVersion",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "CustomerUpdated",
+        "topic": "crm.customer.updated.v1",
+        "keyFormat": "CRM_CUSTOMER:{customerId}:{customerVersion}",
+        "example": "CRM_CUSTOMER:cus_contract_001:3",
+        "businessUniqueness": "customerId + customerVersion",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "CustomerAssigned",
+        "topic": "crm.customer.assigned.v1",
+        "keyFormat": "CRM_CUSTOMER_ASSIGN:{customerId}:{assignmentVersion}",
+        "example": "CRM_CUSTOMER_ASSIGN:cus_contract_001:2",
+        "businessUniqueness": "one active owner per customer; customerId + assignmentVersion",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "OpportunityStageChanged",
+        "topic": "crm.opportunity.stage-changed.v1",
+        "keyFormat": "CRM_OPPORTUNITY_STAGE:{opportunityId}:{opportunityVersion}",
+        "example": "CRM_OPPORTUNITY_STAGE:opp_contract_001:2",
+        "businessUniqueness": "opportunityId + opportunityVersion",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "CallCompleted",
+        "topic": "crm.call.completed.v1",
+        "keyFormat": "AI_CALL_RESULT:{providerAccountId}:{callId}:{resultVersion}",
+        "example": "AI_CALL_RESULT:provider_account_contract_001:call_contract_001:1",
+        "businessUniqueness": "trusted providerAccountId + callId + resultVersion",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "WeChatHandoffRequested",
+        "topic": "crm.wechat.handoff-requested.v1",
+        "keyFormat": "WECHAT_HANDOFF:{handoffRef}:{handoffVersion}",
+        "example": "WECHAT_HANDOFF:whf_contract_001:1",
+        "businessUniqueness": "handoffRef + handoffVersion; one active handoff task per conversation",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "GlobalMarketingRefusalChanged",
+        "topic": "crm.marketing.global-refusal-changed.v1",
+        "keyFormat": "CRM_GLOBAL_REFUSAL:{customerId}:{refusalVersion}",
+        "example": "CRM_GLOBAL_REFUSAL:cus_contract_001:2",
+        "businessUniqueness": "customerId + refusalVersion",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "ContactSuppressionChanged",
+        "topic": "crm.marketing.contact-suppression-changed.v1",
+        "keyFormat": "CRM_CONTACT_SUPPRESSION:{suppressionId}:{suppressionVersion}",
+        "example": "CRM_CONTACT_SUPPRESSION:sup_contract_001:2",
+        "businessUniqueness": "suppressionId + suppressionVersion; channel suppression does not change the CRM main stage",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "ContentVersionSubmitted",
+        "topic": "content.version.submitted.v1",
+        "keyFormat": "CONTENT_SUBMIT:{channelVersionId}:{contentVersion}",
+        "example": "CONTENT_SUBMIT:cver_contract_001:2",
+        "businessUniqueness": "channelVersionId + contentVersion; submitted snapshot is immutable",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "ContentReviewCompleted",
+        "topic": "content.review.completed.v1",
+        "keyFormat": "CONTENT_REVIEW:{reviewId}:{decisionVersion}",
+        "example": "CONTENT_REVIEW:crev_contract_001:1",
+        "businessUniqueness": "reviewId + decisionVersion; one decision per submitted content version",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "PublicationConfirmed",
+        "topic": "publication.confirmed.v1",
+        "keyFormat": "PUBLICATION_CONFIRM:{confirmationId}",
+        "example": "PUBLICATION_CONFIRM:pcfm_contract_001",
+        "businessUniqueness": "confirmationId maps to at most one active publicationPlanId; plan + channel is unique",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "PublicationServiceOrderChanged",
+        "topic": "ledger.publication-service-order.changed.v1",
+        "keyFormat": "PUBLICATION_SERVICE_ORDER:{channelPublicationId}:{sourceVersion}",
+        "example": "PUBLICATION_SERVICE_ORDER:cpub_contract_001:2",
+        "businessUniqueness": "one serviceOrderId per channelPublicationId; sourceVersion is monotonic",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "ChannelPublicationReserved",
+        "topic": "ledger.publication.charge-reserved.v1",
+        "keyFormat": "PUBLICATION_CHARGE:{channelPublicationId}",
+        "example": "PUBLICATION_CHARGE:cpub_contract_001",
+        "businessUniqueness": "one active chargeReservationId per channelPublicationId",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "ChannelPublicationFirstVisible",
+        "topic": "publication.channel.first_visible.v1",
+        "keyFormat": "PUBLICATION_FIRST_VISIBLE:{channelPublicationId}",
+        "example": "PUBLICATION_FIRST_VISIBLE:cpub_contract_001",
+        "businessUniqueness": "first visibility freezes once per channelPublicationId; evidence hash is immutable",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "ChannelPublicationEffective",
+        "topic": "publication.channel.effective.v1",
+        "keyFormat": "PUBLICATION_EFFECTIVE:{validPublicationId}",
+        "example": "PUBLICATION_EFFECTIVE:vpub_contract_001",
+        "businessUniqueness": "one validPublicationId per Douyin channelPublicationId",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "ChannelPublicationFailed",
+        "topic": "publication.channel.failed.v1",
+        "keyFormat": "PUBLICATION_FAILED:{channelPublicationId}:{sourceVersion}",
+        "example": "PUBLICATION_FAILED:cpub_contract_001:4",
+        "businessUniqueness": "channelPublicationId + sourceVersion; late failure cannot overwrite an effective publication",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "ChannelPublicationRefundEligible",
+        "topic": "publication.channel.refund-eligible.v1",
+        "keyFormat": "LIABILITY_REFUND_ELIGIBLE:{validPublicationId}:{refundReasonCode}:{responsibilityVersion}",
+        "example": "LIABILITY_REFUND_ELIGIBLE:vpub_contract_001:PLATFORM_RESPONSIBILITY_REMOVAL:1",
+        "businessUniqueness": "liabilityEventId and validPublicationId + reason + responsibilityVersion",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "ChannelPublicationChargeReleased",
+        "topic": "ledger.publication.charge-released.v1",
+        "keyFormat": "PUB_CHARGE_REFUND:{validPublicationId}:{refundReasonCode}:{responsibilityVersion}",
+        "example": "PUB_CHARGE_REFUND:vpub_contract_001:PLATFORM_RESPONSIBILITY_REMOVAL:1",
+        "businessUniqueness": "releaseId + sourceVersion; same liability/evidence/reservation must be stable",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "AccountAssignmentRequested",
+        "topic": "publication.account-assignment.requested.v1",
+        "keyFormat": "ACCOUNT_ASSIGNMENT_REQUEST:{channelPublicationId}:{assignmentRequestVersion}",
+        "example": "ACCOUNT_ASSIGNMENT_REQUEST:cpub_contract_001:1",
+        "businessUniqueness": "one result and one active assignment per channelPublicationId + assignmentRequestVersion",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "AccountAssignmentCompleted",
+        "topic": "opc.account-assignment.completed.v1",
+        "keyFormat": "ACCOUNT_ASSIGNMENT_RESULT:{channelPublicationId}:{assignmentRequestVersion}",
+        "example": "ACCOUNT_ASSIGNMENT_RESULT:cpub_contract_001:1",
+        "businessUniqueness": "Completed and Unavailable are mutually exclusive for a request version",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "AccountAssignmentUnavailable",
+        "topic": "opc.account-assignment.unavailable.v1",
+        "keyFormat": "ACCOUNT_ASSIGNMENT_RESULT:{channelPublicationId}:{assignmentRequestVersion}",
+        "example": "ACCOUNT_ASSIGNMENT_RESULT:cpub_contract_001:1",
+        "businessUniqueness": "Completed and Unavailable are mutually exclusive for a request version",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "AccountAssignmentReleaseRequested",
+        "topic": "publication.account-assignment.release-requested.v1",
+        "keyFormat": "ACCOUNT_ASSIGNMENT_RELEASE:{accountAssignmentId}",
+        "example": "ACCOUNT_ASSIGNMENT_RELEASE:aasg_contract_001",
+        "businessUniqueness": "one effective release action per accountAssignmentId; sourceVersion only rejects stale commands",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "AccountAssignmentReleased",
+        "topic": "opc.account-assignment.released.v1",
+        "keyFormat": "ACCOUNT_ASSIGNMENT_RELEASE:{accountAssignmentId}",
+        "example": "ACCOUNT_ASSIGNMENT_RELEASE:aasg_contract_001",
+        "businessUniqueness": "one release terminal result per accountAssignmentId",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "OpcAccountStatusChanged",
+        "topic": "opc.account.status-changed.v1",
+        "keyFormat": "OPC_ACCOUNT_STATUS:{opcAccountId}:{accountVersion}",
+        "example": "OPC_ACCOUNT_STATUS:opca_contract_001:3",
+        "businessUniqueness": "opcAccountId + accountVersion",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "RequestOpcEarningSettlement",
+        "topic": "ledger.command.request-opc-earning-settlement.v1",
+        "keyFormat": "OPC_EARNING:{validPublicationId}",
+        "example": "OPC_EARNING:vpub_contract_001",
+        "businessUniqueness": "validPublicationId; provider/assignment changes under this key are conflicts",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "OpcEarningSettled",
+        "topic": "ledger.opc-earning.settled.v1",
+        "keyFormat": "OPC_EARNING:{validPublicationId}",
+        "example": "OPC_EARNING:vpub_contract_001",
+        "businessUniqueness": "one settled earning per validPublicationId",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "OpcEarningReversed",
+        "topic": "ledger.opc-earning.reversed.v1",
+        "keyFormat": "OPC_EARNING_REVERSE:{originalLedgerEntryId}",
+        "example": "OPC_EARNING_REVERSE:le_contract_opc_001",
+        "businessUniqueness": "one approved reversal per original earning ledger entry; reversal appends",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "MembershipChanged",
+        "topic": "ledger.membership.changed.v1",
+        "keyFormat": "MEMBERSHIP:{membershipId}:{membershipVersion}",
+        "example": "MEMBERSHIP:mem_contract_001:2",
+        "businessUniqueness": "membershipId + membershipVersion; historical rules remain immutable",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "BenefitQuotaChanged",
+        "topic": "ledger.benefit-quota.changed.v1",
+        "keyFormat": "BENEFIT_QUOTA:{quotaAccountId}:{quotaVersion}",
+        "example": "BENEFIT_QUOTA:bqa_contract_001:3",
+        "businessUniqueness": "quotaAccountId + quotaVersion",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "ProfitBaseFrozen",
+        "topic": "ledger.profit-base.frozen.v1",
+        "keyFormat": "PROFIT_FREEZE:{subOrderId}:{settlementVersion}",
+        "example": "PROFIT_FREEZE:subord_contract_001:1",
+        "businessUniqueness": "subOrderId + settlementVersion",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "ProfitBaseAllocated",
+        "topic": "ledger.profit-base.allocated.v1",
+        "keyFormat": "PROFIT_ALLOCATE:{profitBaseId}:{targetPlanVersionId}",
+        "example": "PROFIT_ALLOCATE:pb_contract_001:mpv_contract_001",
+        "businessUniqueness": "profitBaseId + target membership plan version",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "ProfitBaseReversed",
+        "topic": "ledger.profit-base.reversed.v1",
+        "keyFormat": "PROFIT_REVERSE:{profitBaseId}:{originalAllocationVersion}",
+        "example": "PROFIT_REVERSE:pb_contract_001:2",
+        "businessUniqueness": "profitBaseId + original allocation version; reversal appends",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "MerchantSettlementChanged",
+        "topic": "ledger.merchant-settlement.changed.v1",
+        "keyFormat": "ORDER_SETTLE:{subOrderId}:{settlementVersion}",
+        "example": "ORDER_SETTLE:subord_contract_001:2",
+        "businessUniqueness": "settlementId + sourceVersion; merchant and supplier payables obey the frozen sales model",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "PointsLedgerEntryPosted",
+        "topic": "ledger.points-entry.posted.v1",
+        "keyFormat": "POINTS_ENTRY:{pointsEntryId}",
+        "example": "POINTS_ENTRY:pe_contract_001",
+        "businessUniqueness": "pointsEntryId exactly once; same ID must remain byte-stable",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "PointsBalanceChanged",
+        "topic": "ledger.points-balance.changed.v1",
+        "keyFormat": "POINTS_BALANCE:{pointsAccountId}:{balanceVersion}",
+        "example": "POINTS_BALANCE:pa_contract_001:2",
+        "businessUniqueness": "pointsAccountId + balanceVersion",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "WithdrawalStatusChanged",
+        "topic": "ledger.withdrawal.status-changed.v1",
+        "keyFormat": "WITHDRAWAL_STATUS:{withdrawalId}:{version}",
+        "example": "WITHDRAWAL_STATUS:wd_contract_001:3",
+        "businessUniqueness": "withdrawalId + version; channel result key is independently unique",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "CashLedgerEntryPosted",
+        "topic": "ledger.cash-entry.posted.v1",
+        "keyFormat": "CASH_LEDGER_ENTRY:{ledgerEntryId}",
+        "example": "CASH_LEDGER_ENTRY:le_contract_001",
+        "businessUniqueness": "ledgerEntryId exactly once; same ID must keep amount, sign, bucket, subject and business refs byte-stable",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "EnterpriseBalanceChanged",
+        "topic": "ledger.enterprise-balance.changed.v1",
+        "keyFormat": "ENTERPRISE_BALANCE:{enterpriseId}:{balanceVersion}",
+        "example": "ENTERPRISE_BALANCE:ent_contract_001:4",
+        "businessUniqueness": "enterpriseId + balanceVersion",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      },
+      {
+        "eventType": "LedgerAnomalyDetected",
+        "topic": "ledger.anomaly.detected.v1",
+        "keyFormat": "LEDGER_ANOMALY:{anomalyId}:{anomalyVersion}",
+        "example": "LEDGER_ANOMALY:lan_contract_001:1",
+        "businessUniqueness": "anomalyId + anomalyVersion",
+        "conflictPolicy": "SAME_KEY_SAME_PAYLOAD_RETURNS_ORIGINAL_DIFFERENT_PAYLOAD_QUARANTINED"
+      }
+    ]
+  }
+}

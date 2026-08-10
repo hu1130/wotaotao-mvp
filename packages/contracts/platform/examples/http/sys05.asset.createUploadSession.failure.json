@@ -1,0 +1,29 @@
+{
+  "operationId": "sys05.asset.createUploadSession",
+  "method": "POST",
+  "path": "/api/v1/content/assets/uploads",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "ASSET_UPLOAD:{enterpriseId}:{fileHash}"
+    },
+    "body": {
+      "fileName": "cover.jpg",
+      "mediaType": "IMAGE",
+      "contentType": "image/jpeg",
+      "sizeBytes": 102400,
+      "fileHash": "4444444444444444444444444444444444444444444444444444444444444444",
+      "rightsStatus": "OWNED"
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "eventId": "evt_profitbasereversed_001",
+  "eventType": "ProfitBaseReversed",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-08",
+  "environment": "DEV",
+  "audience": [
+    "SYS-06"
+  ],
+  "enterpriseId": null,
+  "aggregateType": "ProfitBase",
+  "aggregateId": "pb_contract_001",
+  "aggregateVersion": 3,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "PROFIT_REVERSE:pb_contract_001:2",
+  "payload": {
+    "profitBaseId": "pb_contract_001",
+    "originalAllocationVersion": 2,
+    "reversalBatchId": "revbatch_contract_001",
+    "reversalLedgerRefs": [
+      "le_contract_reversal_001"
+    ],
+    "reasonCode": "ATTRIBUTION_ADJUSTED",
+    "approvalRef": "approval_contract_006",
+    "sourceVersion": 3,
+    "reversedAt": "2026-08-18T02:00:00Z"
+  }
+}

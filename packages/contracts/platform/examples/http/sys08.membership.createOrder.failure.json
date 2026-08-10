@@ -1,0 +1,27 @@
+{
+  "operationId": "sys08.membership.createOrder",
+  "method": "POST",
+  "path": "/api/v1/membership/orders",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "x-csrf-token": "csrf_example_token_001",
+      "idempotency-key": "MEMBERSHIP_ORDER:{enterpriseId}:{planVersionId}:{clientRequestId}"
+    },
+    "body": {
+      "planVersionId": "mpv_pro_003",
+      "channel": "WECHAT",
+      "clientRequestId": "req_membership_001"
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

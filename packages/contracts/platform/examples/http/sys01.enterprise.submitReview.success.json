@@ -1,0 +1,33 @@
+{
+  "operationId": "sys01.enterprise.submitReview",
+  "method": "POST",
+  "path": "/api/v1/enterprises/{enterpriseId}/review-submissions",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "ENTERPRISE_REVIEW:{enterpriseId}:{profileVersion}"
+    },
+    "params": {
+      "enterpriseId": "ent_001"
+    },
+    "body": {
+      "profileVersion": 4,
+      "previousSubmissionId": null,
+      "statement": "提交企业资料审核",
+      "evidenceRefs": [
+        "evd_001"
+      ]
+    }
+  },
+  "status": 201,
+  "response": {
+    "data": {
+      "reviewSubmissionId": "ers_001",
+      "reviewStatus": "SUBMITTED",
+      "submissionVersion": 1
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

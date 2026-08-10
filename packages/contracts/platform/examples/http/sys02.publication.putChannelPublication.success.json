@@ -1,0 +1,45 @@
+{
+  "operationId": "sys02.publication.putChannelPublication",
+  "method": "PUT",
+  "path": "/internal/v1/mall/channel-publications/{channelPublicationId}",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "idempotency-key": "WTT_PUBLISH:{channelPublicationId}:{publicationVersion}"
+    },
+    "params": {
+      "channelPublicationId": "chp_001"
+    },
+    "body": {
+      "contentId": "cnt_001",
+      "contentVersionId": "cnv_003",
+      "enterpriseId": "ent_001",
+      "promoterEnterpriseId": "ent_001",
+      "productRefs": [
+        {
+          "productId": "prd_001",
+          "productVersion": 3
+        }
+      ],
+      "mediaRefs": [
+        "med_001"
+      ],
+      "title": "示例内容",
+      "bodySafeRef": "bsr_001",
+      "publicationVersion": 1,
+      "snapshotHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "confirmationRef": "pcf_001",
+      "executionId": "exe_001"
+    }
+  },
+  "status": 202,
+  "response": {
+    "data": {
+      "accepted": true,
+      "publicationVersion": 1,
+      "status": "PROCESSING"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

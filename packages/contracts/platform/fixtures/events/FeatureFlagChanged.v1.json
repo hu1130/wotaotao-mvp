@@ -1,0 +1,36 @@
+{
+  "eventId": "evt_featureflagchanged_001",
+  "eventType": "FeatureFlagChanged",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-01",
+  "environment": "DEV",
+  "audience": [
+    "SYS-02",
+    "SYS-03",
+    "SYS-04",
+    "SYS-05",
+    "SYS-06",
+    "SYS-07",
+    "SYS-08"
+  ],
+  "enterpriseId": null,
+  "aggregateType": "FeatureFlag",
+  "aggregateId": "DOUYIN_AUTO_PUBLISH",
+  "aggregateVersion": 2,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "FEATURE_FLAG:DOUYIN_AUTO_PUBLISH:ENTERPRISE:ent_contract_001:2",
+  "payload": {
+    "flagCode": "DOUYIN_AUTO_PUBLISH",
+    "scopeType": "ENTERPRISE",
+    "scopeId": "ent_contract_001",
+    "value": true,
+    "version": 2,
+    "changeType": "UPDATED",
+    "reasonCode": "PILOT_OPEN",
+    "effectiveAt": "2026-08-10T02:00:00Z"
+  }
+}

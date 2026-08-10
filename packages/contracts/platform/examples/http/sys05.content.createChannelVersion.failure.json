@@ -1,0 +1,30 @@
+{
+  "operationId": "sys05.content.createChannelVersion",
+  "method": "POST",
+  "path": "/api/v1/content/items/{contentId}/channel-versions",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "CHANNEL_VERSION:{contentId}:{masterVersion}:{channel}:{clientRequestId}"
+    },
+    "params": {
+      "contentId": "cnt_001"
+    },
+    "body": {
+      "masterVersion": 2,
+      "channel": "DOUYIN",
+      "generationMode": "AI",
+      "clientRequestId": "req_channel_version_001"
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "operationId": "sys03.inventory.reserve",
+  "method": "POST",
+  "path": "/internal/v1/commerce/inventory-reservations",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "idempotency-key": "INVENTORY_RESERVE:{orderId}"
+    },
+    "body": {
+      "commandId": "cmd_reserve_001",
+      "orderId": "ord_001",
+      "subOrderId": "sor_001",
+      "enterpriseId": "ent_001",
+      "storeId": "sto_001",
+      "items": [
+        {
+          "skuId": "sku_001",
+          "quantity": 1,
+          "productVersion": 3
+        }
+      ],
+      "expiresAt": "2026-08-10T02:30:00Z",
+      "traceId": "trace_contract_example_001",
+      "actorType": "SERVICE"
+    }
+  },
+  "status": 403,
+  "response": {
+    "code": "FORBIDDEN",
+    "message": "The authenticated actor is not allowed to perform the action.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

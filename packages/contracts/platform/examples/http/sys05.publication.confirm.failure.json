@@ -1,0 +1,31 @@
+{
+  "operationId": "sys05.publication.confirm",
+  "method": "POST",
+  "path": "/api/v1/content/publication-confirmations",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "x-csrf-token": "csrf_example_token_001",
+      "idempotency-key": "PUBLICATION_CONFIRM:{wotaoVersionId}:{douyinVersionId}:{clientRequestId}"
+    },
+    "body": {
+      "clientRequestId": "req_confirm_001",
+      "wotaoChannelVersionId": "cnv_wtt_001",
+      "douyinChannelVersionId": "cnv_dy_001",
+      "douyinExecutionMode": "OPC_RENTED",
+      "accountPolicyRef": "acp_001",
+      "scheduledAt": null,
+      "chargeSourceIntent": "QUOTA"
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

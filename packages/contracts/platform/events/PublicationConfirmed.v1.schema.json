@@ -1,0 +1,275 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.wotaotao.com/events/publication.confirmed.v1/envelope.schema.json",
+  "title": "PublicationConfirmed envelope v1",
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable evt_ identifier",
+      "pattern": "^evt_[A-Za-z0-9_-]+$"
+    },
+    "eventType": {
+      "type": "string",
+      "const": "PublicationConfirmed"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Business occurrence time"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Outbox publication time"
+    },
+    "producer": {
+      "type": "string",
+      "const": "SYS-05"
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "DEV",
+        "TEST",
+        "STAGING",
+        "PROD"
+      ]
+    },
+    "audience": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SYS-01",
+          "SYS-06",
+          "SYS-08"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "enterpriseId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "aggregateType": {
+      "type": "string",
+      "const": "PublicationPlan"
+    },
+    "aggregateId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable aggregate identifier"
+    },
+    "aggregateVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonic aggregate version"
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causationId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable evt_ identifier",
+          "pattern": "^evt_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "correlationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable business idempotency key; unchanged on retry"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "confirmationId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable pcfm_ identifier",
+          "pattern": "^pcfm_[A-Za-z0-9_-]+$"
+        },
+        "publicationPlanId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable pplan_ identifier",
+          "pattern": "^pplan_[A-Za-z0-9_-]+$"
+        },
+        "enterpriseId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        "planVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "channelPublications": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "channelPublicationId": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Stable cpub_ identifier",
+                "pattern": "^cpub_[A-Za-z0-9_-]+$"
+              },
+              "channel": {
+                "type": "string",
+                "enum": [
+                  "WOTAO",
+                  "DOUYIN"
+                ]
+              },
+              "contentVersionId": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Stable cver_ identifier",
+                "pattern": "^cver_[A-Za-z0-9_-]+$"
+              }
+            },
+            "required": [
+              "channelPublicationId",
+              "channel",
+              "contentVersionId"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 2
+        },
+        "confirmedBy": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable usr_ identifier",
+          "pattern": "^usr_[A-Za-z0-9_-]+$"
+        },
+        "confirmationRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confirmedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "confirmationId",
+        "publicationPlanId",
+        "enterpriseId",
+        "planVersion",
+        "channelPublications",
+        "confirmedBy",
+        "confirmationRef",
+        "confirmedAt"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://contracts.wotaotao.com/events/publication.confirmed.v1/payload.schema.json",
+      "title": "PublicationConfirmed payload v1"
+    }
+  },
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "occurredAt",
+    "publishedAt",
+    "producer",
+    "environment",
+    "audience",
+    "enterpriseId",
+    "aggregateType",
+    "aggregateId",
+    "aggregateVersion",
+    "traceId",
+    "causationId",
+    "correlationId",
+    "idempotencyKey",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "description": "confirmationId maps to at most one active publicationPlanId; plan + channel is unique",
+  "examples": [
+    {
+      "eventId": "evt_publicationconfirmed_001",
+      "eventType": "PublicationConfirmed",
+      "schemaVersion": 1,
+      "occurredAt": "2026-08-10T02:00:00Z",
+      "publishedAt": "2026-08-10T02:00:01Z",
+      "producer": "SYS-05",
+      "environment": "DEV",
+      "audience": [
+        "SYS-01",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "enterpriseId": "ent_contract_001",
+      "aggregateType": "PublicationPlan",
+      "aggregateId": "pplan_contract_001",
+      "aggregateVersion": 1,
+      "traceId": "trace_contract_fixture_001",
+      "causationId": null,
+      "correlationId": "corr_contract_fixture_001",
+      "idempotencyKey": "PUBLICATION_CONFIRM:pcfm_contract_001",
+      "payload": {
+        "confirmationId": "pcfm_contract_001",
+        "publicationPlanId": "pplan_contract_001",
+        "enterpriseId": "ent_contract_001",
+        "planVersion": 1,
+        "channelPublications": [
+          {
+            "channelPublicationId": "cpub_wotao_contract_001",
+            "channel": "WOTAO",
+            "contentVersionId": "cver_wotao_contract_001"
+          },
+          {
+            "channelPublicationId": "cpub_contract_001",
+            "channel": "DOUYIN",
+            "contentVersionId": "cver_contract_001"
+          }
+        ],
+        "confirmedBy": "usr_contract_001",
+        "confirmationRef": "confirmation_contract_001",
+        "confirmedAt": "2026-08-10T02:00:00Z"
+      }
+    }
+  ],
+  "x-topic": "publication.confirmed.v1",
+  "x-producer": "SYS-05",
+  "x-consumers": [
+    "SYS-01",
+    "SYS-06",
+    "SYS-08"
+  ],
+  "x-idempotency-key-format": "PUBLICATION_CONFIRM:{confirmationId}"
+}

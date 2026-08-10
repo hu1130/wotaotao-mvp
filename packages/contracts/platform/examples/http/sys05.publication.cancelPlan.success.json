@@ -1,0 +1,32 @@
+{
+  "operationId": "sys05.publication.cancelPlan",
+  "method": "POST",
+  "path": "/api/v1/content/publication-plans/{publicationPlanId}/cancel",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "x-csrf-token": "csrf_example_token_001",
+      "idempotency-key": "PUBLICATION_PLAN_CANCEL:{publicationPlanId}:{expectedVersion}"
+    },
+    "params": {
+      "publicationPlanId": "ppl_001"
+    },
+    "body": {
+      "reason": "运营取消",
+      "expectedVersion": 2
+    }
+  },
+  "status": 202,
+  "response": {
+    "data": {
+      "publicationPlanId": "ppl_001",
+      "status": "CANCELLED",
+      "channelStatuses": [],
+      "assignmentReleaseStatus": "PENDING",
+      "version": 3
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

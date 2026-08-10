@@ -1,0 +1,31 @@
+{
+  "operationId": "sys03.product.publish",
+  "method": "POST",
+  "path": "/api/v1/commerce/products/{productId}/publication-commands",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "x-csrf-token": "csrf_example_token_001",
+      "idempotency-key": "PRODUCT_PUBLICATION:{productId}:{productVersion}:{action}"
+    },
+    "params": {
+      "productId": "prd_001"
+    },
+    "body": {
+      "action": "PUBLISH",
+      "productVersion": 3,
+      "confirmation": true,
+      "reason": "审核通过后发布"
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

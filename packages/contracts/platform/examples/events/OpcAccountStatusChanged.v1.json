@@ -1,0 +1,32 @@
+{
+  "eventId": "evt_opcaccountstatuschanged_001",
+  "eventType": "OpcAccountStatusChanged",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-07",
+  "environment": "DEV",
+  "audience": [
+    "SYS-05",
+    "SYS-06"
+  ],
+  "enterpriseId": null,
+  "aggregateType": "OpcAccount",
+  "aggregateId": "opca_contract_001",
+  "aggregateVersion": 3,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "OPC_ACCOUNT_STATUS:opca_contract_001:3",
+  "payload": {
+    "providerId": "prov_contract_001",
+    "opcAccountId": "opca_contract_001",
+    "channelAccountId": "chacc_contract_001",
+    "admissionStatus": "APPROVED",
+    "operatingStatus": "ACTIVE",
+    "healthStatus": "HEALTHY",
+    "pauseReasonCode": null,
+    "accountVersion": 3,
+    "changedAt": "2026-08-10T02:00:00Z"
+  }
+}

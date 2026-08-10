@@ -1,0 +1,30 @@
+{
+  "operationId": "sys07.account.create",
+  "method": "POST",
+  "path": "/api/v1/opc/accounts",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "x-csrf-token": "csrf_example_token_001",
+      "idempotency-key": "OPC_ACCOUNT:{providerId}:{channel}:{externalAccountHash}"
+    },
+    "body": {
+      "channel": "DOUYIN",
+      "externalAccountHash": "6666666666666666666666666666666666666666666666666666666666666666",
+      "displayNameMasked": "抖音号 ****001",
+      "evidenceRefs": [
+        "evd_001"
+      ]
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

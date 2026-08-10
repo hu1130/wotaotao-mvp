@@ -1,0 +1,32 @@
+{
+  "operationId": "sys04.attribution.resolve",
+  "method": "POST",
+  "path": "/internal/v1/marketing/attribution/resolve",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "idempotency-key": "ATTRIBUTION_RESOLVE:{orderId}:{inputHash}:{ruleVersion}"
+    },
+    "body": {
+      "orderId": "ord_001",
+      "subOrderId": "sor_001",
+      "customerId": "cus_001",
+      "anonymousId": null,
+      "productId": "prd_001",
+      "sellerEnterpriseId": "ent_001",
+      "orderCreatedAt": "2026-08-10T02:00:00Z",
+      "ruleVersion": 2,
+      "candidateCutoffSequence": 100,
+      "inputHash": "1111111111111111111111111111111111111111111111111111111111111111"
+    }
+  },
+  "status": 403,
+  "response": {
+    "code": "FORBIDDEN",
+    "message": "The authenticated actor is not allowed to perform the action.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

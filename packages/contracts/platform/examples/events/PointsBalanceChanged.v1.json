@@ -1,0 +1,29 @@
+{
+  "eventId": "evt_pointsbalancechanged_001",
+  "eventType": "PointsBalanceChanged",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-08",
+  "environment": "DEV",
+  "audience": [
+    "SYS-01"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "PointsAccount",
+  "aggregateId": "pa_contract_001",
+  "aggregateVersion": 2,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "POINTS_BALANCE:pa_contract_001:2",
+  "payload": {
+    "pointsAccountId": "pa_contract_001",
+    "enterpriseId": "ent_contract_001",
+    "availablePoints": 980,
+    "reservedPoints": 0,
+    "balanceVersion": 2,
+    "lastPointsEntryId": "pe_contract_001",
+    "changedAt": "2026-08-10T02:00:00Z"
+  }
+}

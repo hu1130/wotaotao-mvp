@@ -1,0 +1,29 @@
+{
+  "operationId": "sys08.publicationService.createOrder",
+  "method": "POST",
+  "path": "/api/v1/publication-service-orders",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "x-csrf-token": "csrf_example_token_001",
+      "idempotency-key": "PUBLICATION_SERVICE_ORDER:{channelPublicationId}"
+    },
+    "body": {
+      "publicationPlanId": "ppl_001",
+      "channelPublicationId": "chp_dy_001",
+      "channel": "DOUYIN",
+      "amountFen": 500,
+      "paymentChannel": "WECHAT"
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

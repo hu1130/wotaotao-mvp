@@ -1,0 +1,36 @@
+{
+  "operationId": "sys02.publication.getChannelPublication",
+  "method": "GET",
+  "path": "/internal/v1/mall/channel-publications/{channelPublicationId}",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001"
+    },
+    "params": {
+      "channelPublicationId": "chp_001"
+    },
+    "query": {
+      "publicationVersion": 1,
+      "expectedHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    }
+  },
+  "status": 200,
+  "response": {
+    "data": {
+      "status": "ACCESSIBLE",
+      "publicUrlRef": "url_001",
+      "productCardStatuses": [
+        {
+          "productId": "prd_001",
+          "status": "MATCHED"
+        }
+      ],
+      "publicationVersion": 1,
+      "snapshotHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "firstAccessibleAt": "2026-08-10T02:05:00Z",
+      "checkedAt": "2026-08-10T02:06:00Z"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

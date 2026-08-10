@@ -1,0 +1,336 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.wotaotao.com/events/publication.channel.effective.v1/envelope.schema.json",
+  "title": "ChannelPublicationEffective envelope v1",
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable evt_ identifier",
+      "pattern": "^evt_[A-Za-z0-9_-]+$"
+    },
+    "eventType": {
+      "type": "string",
+      "const": "ChannelPublicationEffective"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Business occurrence time"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Outbox publication time"
+    },
+    "producer": {
+      "type": "string",
+      "const": "SYS-05"
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "DEV",
+        "TEST",
+        "STAGING",
+        "PROD"
+      ]
+    },
+    "audience": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SYS-06",
+          "SYS-07",
+          "SYS-08"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "enterpriseId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "aggregateType": {
+      "type": "string",
+      "const": "ValidPublication"
+    },
+    "aggregateId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable aggregate identifier"
+    },
+    "aggregateVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causationId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable evt_ identifier",
+          "pattern": "^evt_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "correlationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable business idempotency key; unchanged on retry"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "validPublicationId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable vpub_ identifier",
+          "pattern": "^vpub_[A-Za-z0-9_-]+$"
+        },
+        "enterpriseId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        "publicationPlanId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable pplan_ identifier",
+          "pattern": "^pplan_[A-Za-z0-9_-]+$"
+        },
+        "channelPublicationId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable cpub_ identifier",
+          "pattern": "^cpub_[A-Za-z0-9_-]+$"
+        },
+        "executionId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable exec_ identifier",
+          "pattern": "^exec_[A-Za-z0-9_-]+$"
+        },
+        "externalWorkRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "chargeReservationId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable pcr_ identifier",
+          "pattern": "^pcr_[A-Za-z0-9_-]+$"
+        },
+        "douyinExecutionMode": {
+          "type": "string",
+          "enum": [
+            "SELF_ACCOUNT",
+            "PLATFORM_OPERATED",
+            "OPC_RENTED"
+          ]
+        },
+        "accountOwnershipType": {
+          "type": "string",
+          "enum": [
+            "ENTERPRISE_OWNED",
+            "PLATFORM_OWNED",
+            "OPC_RENTED"
+          ]
+        },
+        "accountAssignmentId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "description": "Stable aasg_ identifier",
+              "pattern": "^aasg_[A-Za-z0-9_-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "providerId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "description": "Stable prov_ identifier",
+              "pattern": "^prov_[A-Za-z0-9_-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "opcAccountId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "description": "Stable opca_ identifier",
+              "pattern": "^opca_[A-Za-z0-9_-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "channelAccountId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable chacc_ identifier",
+          "pattern": "^chacc_[A-Za-z0-9_-]+$"
+        },
+        "firstVisibleAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "effectiveAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "evidenceSnapshotRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidenceHash": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Lower-case SHA-256 digest",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "sourceVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        }
+      },
+      "required": [
+        "validPublicationId",
+        "enterpriseId",
+        "publicationPlanId",
+        "channelPublicationId",
+        "executionId",
+        "externalWorkRef",
+        "chargeReservationId",
+        "douyinExecutionMode",
+        "accountOwnershipType",
+        "accountAssignmentId",
+        "providerId",
+        "opcAccountId",
+        "channelAccountId",
+        "firstVisibleAt",
+        "effectiveAt",
+        "evidenceSnapshotRef",
+        "evidenceHash",
+        "sourceVersion"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://contracts.wotaotao.com/events/publication.channel.effective.v1/payload.schema.json",
+      "title": "ChannelPublicationEffective payload v1"
+    }
+  },
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "occurredAt",
+    "publishedAt",
+    "producer",
+    "environment",
+    "audience",
+    "enterpriseId",
+    "aggregateType",
+    "aggregateId",
+    "aggregateVersion",
+    "traceId",
+    "causationId",
+    "correlationId",
+    "idempotencyKey",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "description": "For OPC_RENTED all assignment/provider/OPC/channel-account references are required by business validation.",
+  "examples": [
+    {
+      "eventId": "evt_channelpublicationeffective_001",
+      "eventType": "ChannelPublicationEffective",
+      "schemaVersion": 1,
+      "occurredAt": "2026-08-10T02:00:00Z",
+      "publishedAt": "2026-08-10T02:00:01Z",
+      "producer": "SYS-05",
+      "environment": "DEV",
+      "audience": [
+        "SYS-06",
+        "SYS-07",
+        "SYS-08"
+      ],
+      "enterpriseId": "ent_contract_001",
+      "aggregateType": "ValidPublication",
+      "aggregateId": "vpub_contract_001",
+      "aggregateVersion": 1,
+      "traceId": "trace_contract_fixture_001",
+      "causationId": null,
+      "correlationId": "corr_contract_fixture_001",
+      "idempotencyKey": "PUBLICATION_EFFECTIVE:vpub_contract_001",
+      "payload": {
+        "validPublicationId": "vpub_contract_001",
+        "enterpriseId": "ent_contract_001",
+        "publicationPlanId": "pplan_contract_001",
+        "channelPublicationId": "cpub_contract_001",
+        "executionId": "exec_contract_001",
+        "externalWorkRef": "douyin_work_safe_contract_001",
+        "chargeReservationId": "pcr_contract_001",
+        "douyinExecutionMode": "OPC_RENTED",
+        "accountOwnershipType": "OPC_RENTED",
+        "accountAssignmentId": "aasg_contract_001",
+        "providerId": "prov_contract_001",
+        "opcAccountId": "opca_contract_001",
+        "channelAccountId": "chacc_contract_001",
+        "firstVisibleAt": "2026-08-10T02:00:00Z",
+        "effectiveAt": "2026-08-11T02:00:00Z",
+        "evidenceSnapshotRef": "evidence_contract_002",
+        "evidenceHash": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "sourceVersion": 3
+      }
+    }
+  ],
+  "x-topic": "publication.channel.effective.v1",
+  "x-producer": "SYS-05",
+  "x-consumers": [
+    "SYS-06",
+    "SYS-07",
+    "SYS-08"
+  ],
+  "x-idempotency-key-format": "PUBLICATION_EFFECTIVE:{validPublicationId}"
+}

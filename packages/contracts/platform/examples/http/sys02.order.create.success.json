@@ -1,0 +1,33 @@
+{
+  "operationId": "sys02.order.create",
+  "method": "POST",
+  "path": "/api/v1/mall/orders",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "ORDER_CREATE:{consumerProfileId}:{clientRequestId}"
+    },
+    "body": {
+      "previewVersion": "cpv_001",
+      "addressRef": "adr_001",
+      "attributionCandidateRef": "atc_001",
+      "clientRequestId": "req_order_001"
+    }
+  },
+  "status": 201,
+  "response": {
+    "data": {
+      "orderId": "ord_001",
+      "subOrderId": "sor_001",
+      "reservationId": "irs_001",
+      "salesModel": "MERCHANT",
+      "distributionContextStatus": "RESOLVED",
+      "expiresAt": "2026-08-10T02:30:00Z",
+      "payableFen": 9900,
+      "currency": "CNY"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

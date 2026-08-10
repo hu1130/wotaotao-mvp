@@ -1,0 +1,26 @@
+{
+  "operationId": "sys02.attribution.createCandidate",
+  "method": "POST",
+  "path": "/api/v1/mall/attribution-candidates",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "idempotency-key": "ATTRIBUTION_CANDIDATE:{visitorSubject}:{channelPublicationId}:{clickedAtBucket}"
+    },
+    "body": {
+      "contentId": "cnt_001",
+      "channelPublicationId": "chp_001",
+      "productId": "prd_001",
+      "clickedAt": "2026-08-10T02:00:00Z"
+    }
+  },
+  "status": 202,
+  "response": {
+    "data": {
+      "attributionCandidateId": "atc_001",
+      "acceptedAt": "2026-08-10T02:00:00Z"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

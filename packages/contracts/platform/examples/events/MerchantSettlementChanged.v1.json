@@ -1,0 +1,37 @@
+{
+  "eventId": "evt_merchantsettlementchanged_001",
+  "eventType": "MerchantSettlementChanged",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-08",
+  "environment": "DEV",
+  "audience": [
+    "SYS-03",
+    "SYS-06"
+  ],
+  "enterpriseId": null,
+  "aggregateType": "MerchantSettlement",
+  "aggregateId": "mst_contract_001",
+  "aggregateVersion": 2,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "ORDER_SETTLE:subord_contract_001:2",
+  "payload": {
+    "settlementId": "mst_contract_001",
+    "orderId": "ord_contract_001",
+    "subOrderId": "subord_contract_001",
+    "sellerEnterpriseId": "ent_contract_001",
+    "storeId": "store_contract_001",
+    "supplierId": null,
+    "merchantPayableFen": 9000,
+    "supplierPayableFen": 0,
+    "status": "POSTED",
+    "ledgerRefs": [
+      "le_contract_merchant_001"
+    ],
+    "sourceVersion": 2,
+    "changedAt": "2026-08-17T02:00:00Z"
+  }
+}

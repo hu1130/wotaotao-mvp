@@ -1,0 +1,32 @@
+{
+  "operationId": "sys04.customer.createFollowup",
+  "method": "POST",
+  "path": "/api/v1/marketing/customers/{customerId}/followups",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "FOLLOWUP:{customerId}:{clientRequestId}"
+    },
+    "params": {
+      "customerId": "cus_001"
+    },
+    "body": {
+      "clientRequestId": "req_followup_001",
+      "type": "PHONE",
+      "contentSafeRef": "csr_001",
+      "attachmentRefs": [],
+      "nextActionAt": "2026-08-11T02:00:00Z"
+    }
+  },
+  "status": 201,
+  "response": {
+    "data": {
+      "followupId": "fup_001",
+      "customerId": "cus_001",
+      "createdAt": "2026-08-10T02:00:00Z"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "operationId": "sys04.calling.createAdapterTask",
+  "method": "POST",
+  "path": "/internal/v1/adapters/ai-calling/tasks",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "idempotency-key": "AI_CALL_TASK:{callTaskId}"
+    },
+    "body": {
+      "callTaskId": "clt_001",
+      "customerSafeRef": "csr_001",
+      "scriptVersionRef": "scv_001",
+      "lineRef": "lin_001",
+      "policyVersion": 3
+    }
+  },
+  "status": 202,
+  "response": {
+    "data": {
+      "callTaskId": "clt_001",
+      "providerTaskRef": "ptk_001",
+      "status": "ACCEPTED"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

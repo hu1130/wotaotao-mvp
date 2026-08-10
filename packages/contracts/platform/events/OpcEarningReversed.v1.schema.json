@@ -1,0 +1,282 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.wotaotao.com/events/ledger.opc-earning.reversed.v1/envelope.schema.json",
+  "title": "OpcEarningReversed envelope v1",
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable evt_ identifier",
+      "pattern": "^evt_[A-Za-z0-9_-]+$"
+    },
+    "eventType": {
+      "type": "string",
+      "const": "OpcEarningReversed"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Business occurrence time"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Outbox publication time"
+    },
+    "producer": {
+      "type": "string",
+      "const": "SYS-08"
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "DEV",
+        "TEST",
+        "STAGING",
+        "PROD"
+      ]
+    },
+    "audience": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SYS-07"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "enterpriseId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "aggregateType": {
+      "type": "string",
+      "const": "OpcEarning"
+    },
+    "aggregateId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable aggregate identifier"
+    },
+    "aggregateVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonic aggregate version"
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causationId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable evt_ identifier",
+          "pattern": "^evt_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "correlationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable business idempotency key; unchanged on retry"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "earningId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable oearn_ identifier",
+          "pattern": "^oearn_[A-Za-z0-9_-]+$"
+        },
+        "originalLedgerEntryId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable le_ identifier",
+          "pattern": "^le_[A-Za-z0-9_-]+$"
+        },
+        "reversalLedgerEntryId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable le_ identifier",
+          "pattern": "^le_[A-Za-z0-9_-]+$"
+        },
+        "validPublicationId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable vpub_ identifier",
+          "pattern": "^vpub_[A-Za-z0-9_-]+$"
+        },
+        "enterpriseId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        "channelPublicationId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable cpub_ identifier",
+          "pattern": "^cpub_[A-Za-z0-9_-]+$"
+        },
+        "accountAssignmentId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable aasg_ identifier",
+          "pattern": "^aasg_[A-Za-z0-9_-]+$"
+        },
+        "providerId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable prov_ identifier",
+          "pattern": "^prov_[A-Za-z0-9_-]+$"
+        },
+        "opcAccountId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable opca_ identifier",
+          "pattern": "^opca_[A-Za-z0-9_-]+$"
+        },
+        "channelAccountId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable chacc_ identifier",
+          "pattern": "^chacc_[A-Za-z0-9_-]+$"
+        },
+        "amountFen": {
+          "type": "integer",
+          "const": 200
+        },
+        "reasonCode": {
+          "type": "string",
+          "minLength": 1
+        },
+        "approvalRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "reversedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "earningId",
+        "originalLedgerEntryId",
+        "reversalLedgerEntryId",
+        "validPublicationId",
+        "enterpriseId",
+        "channelPublicationId",
+        "accountAssignmentId",
+        "providerId",
+        "opcAccountId",
+        "channelAccountId",
+        "amountFen",
+        "reasonCode",
+        "approvalRef",
+        "sourceVersion",
+        "reversedAt"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://contracts.wotaotao.com/events/ledger.opc-earning.reversed.v1/payload.schema.json",
+      "title": "OpcEarningReversed payload v1"
+    }
+  },
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "occurredAt",
+    "publishedAt",
+    "producer",
+    "environment",
+    "audience",
+    "enterpriseId",
+    "aggregateType",
+    "aggregateId",
+    "aggregateVersion",
+    "traceId",
+    "causationId",
+    "correlationId",
+    "idempotencyKey",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "description": "one approved reversal per original earning ledger entry; reversal appends",
+  "examples": [
+    {
+      "eventId": "evt_opcearningreversed_001",
+      "eventType": "OpcEarningReversed",
+      "schemaVersion": 1,
+      "occurredAt": "2026-08-10T02:00:00Z",
+      "publishedAt": "2026-08-10T02:00:01Z",
+      "producer": "SYS-08",
+      "environment": "DEV",
+      "audience": [
+        "SYS-07"
+      ],
+      "enterpriseId": "ent_contract_001",
+      "aggregateType": "OpcEarning",
+      "aggregateId": "oearn_contract_001",
+      "aggregateVersion": 2,
+      "traceId": "trace_contract_fixture_001",
+      "causationId": null,
+      "correlationId": "corr_contract_fixture_001",
+      "idempotencyKey": "OPC_EARNING_REVERSE:le_contract_opc_001",
+      "payload": {
+        "earningId": "oearn_contract_001",
+        "originalLedgerEntryId": "le_contract_opc_001",
+        "reversalLedgerEntryId": "le_contract_opc_reversal_001",
+        "validPublicationId": "vpub_contract_001",
+        "enterpriseId": "ent_contract_001",
+        "channelPublicationId": "cpub_contract_001",
+        "accountAssignmentId": "aasg_contract_001",
+        "providerId": "prov_contract_001",
+        "opcAccountId": "opca_contract_001",
+        "channelAccountId": "chacc_contract_001",
+        "amountFen": 200,
+        "reasonCode": "APPROVED_ADJUSTMENT",
+        "approvalRef": "approval_contract_005",
+        "sourceVersion": 2,
+        "reversedAt": "2026-08-12T02:00:00Z"
+      }
+    }
+  ],
+  "x-topic": "ledger.opc-earning.reversed.v1",
+  "x-producer": "SYS-08",
+  "x-consumers": [
+    "SYS-07"
+  ],
+  "x-idempotency-key-format": "OPC_EARNING_REVERSE:{originalLedgerEntryId}"
+}

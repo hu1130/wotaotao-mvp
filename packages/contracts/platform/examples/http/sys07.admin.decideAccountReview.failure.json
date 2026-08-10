@@ -1,0 +1,33 @@
+{
+  "operationId": "sys07.admin.decideAccountReview",
+  "method": "POST",
+  "path": "/api/v1/admin/opc/reviews/{reviewId}/decision",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "x-csrf-token": "csrf_example_token_001",
+      "idempotency-key": "OPC_REVIEW_DECISION:{reviewId}:{expectedVersion}:{decision}"
+    },
+    "params": {
+      "reviewId": "opr_001"
+    },
+    "body": {
+      "decision": "APPROVE",
+      "reason": "账号与授权材料有效",
+      "evidenceRefs": [
+        "evd_010"
+      ],
+      "expectedVersion": 1
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

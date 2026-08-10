@@ -1,0 +1,30 @@
+{
+  "operationId": "sys04.touchPolicy.evaluate",
+  "method": "POST",
+  "path": "/api/v1/marketing/touch-policy/evaluate",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "TOUCH_POLICY:{customerId}:{channel}:{purpose}:{evaluationBucket}"
+    },
+    "body": {
+      "customerId": "cus_001",
+      "channel": "PHONE",
+      "purpose": "SALES_FOLLOWUP",
+      "campaignId": "cmp_001",
+      "proposedAt": "2026-08-10T02:00:00Z"
+    }
+  },
+  "status": 200,
+  "response": {
+    "data": {
+      "allowed": true,
+      "reasonCodes": [],
+      "policyVersion": 7,
+      "evaluatedAt": "2026-08-10T02:00:00Z"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

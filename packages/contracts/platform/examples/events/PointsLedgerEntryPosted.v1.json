@@ -1,0 +1,38 @@
+{
+  "eventId": "evt_pointsledgerentryposted_001",
+  "eventType": "PointsLedgerEntryPosted",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-08",
+  "environment": "DEV",
+  "audience": [
+    "SYS-01",
+    "SYS-06"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "PointsEntry",
+  "aggregateId": "pe_contract_001",
+  "aggregateVersion": 1,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "POINTS_ENTRY:pe_contract_001",
+  "payload": {
+    "pointsEntryId": "pe_contract_001",
+    "pointsAccountId": "pa_contract_001",
+    "enterpriseId": "ent_contract_001",
+    "sourceOrChargeCode": "AGENT_CONTENT_GENERATION",
+    "direction": "SPEND",
+    "points": 20,
+    "signedPoints": -20,
+    "businessType": "AGENT_TOOL",
+    "businessNo": "arun_contract_001",
+    "agentRunId": "arun_contract_001",
+    "toolCallId": "tcall_contract_001",
+    "reservationId": "points_res_contract_001",
+    "originalPointsEntryId": null,
+    "ruleVersion": 1,
+    "postedAt": "2026-08-10T02:00:00Z"
+  }
+}

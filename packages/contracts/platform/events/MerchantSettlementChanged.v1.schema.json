@@ -1,0 +1,274 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.wotaotao.com/events/ledger.merchant-settlement.changed.v1/envelope.schema.json",
+  "title": "MerchantSettlementChanged envelope v1",
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable evt_ identifier",
+      "pattern": "^evt_[A-Za-z0-9_-]+$"
+    },
+    "eventType": {
+      "type": "string",
+      "const": "MerchantSettlementChanged"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Business occurrence time"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Outbox publication time"
+    },
+    "producer": {
+      "type": "string",
+      "const": "SYS-08"
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "DEV",
+        "TEST",
+        "STAGING",
+        "PROD"
+      ]
+    },
+    "audience": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SYS-03",
+          "SYS-06"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "enterpriseId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "aggregateType": {
+      "type": "string",
+      "const": "MerchantSettlement"
+    },
+    "aggregateId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable aggregate identifier"
+    },
+    "aggregateVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonic aggregate version"
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causationId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable evt_ identifier",
+          "pattern": "^evt_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "correlationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable business idempotency key; unchanged on retry"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "settlementId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable mst_ identifier",
+          "pattern": "^mst_[A-Za-z0-9_-]+$"
+        },
+        "orderId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ord_ identifier",
+          "pattern": "^ord_[A-Za-z0-9_-]+$"
+        },
+        "subOrderId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable subord_ identifier",
+          "pattern": "^subord_[A-Za-z0-9_-]+$"
+        },
+        "sellerEnterpriseId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        "storeId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable store_ identifier",
+          "pattern": "^store_[A-Za-z0-9_-]+$"
+        },
+        "supplierId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "merchantPayableFen": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Non-negative integer amount in fen"
+        },
+        "supplierPayableFen": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Non-negative integer amount in fen"
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ledgerRefs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Stable le_ identifier",
+            "pattern": "^le_[A-Za-z0-9_-]+$"
+          },
+          "minItems": 0
+        },
+        "sourceVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "changedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "settlementId",
+        "orderId",
+        "subOrderId",
+        "sellerEnterpriseId",
+        "storeId",
+        "supplierId",
+        "merchantPayableFen",
+        "supplierPayableFen",
+        "status",
+        "ledgerRefs",
+        "sourceVersion",
+        "changedAt"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://contracts.wotaotao.com/events/ledger.merchant-settlement.changed.v1/payload.schema.json",
+      "title": "MerchantSettlementChanged payload v1"
+    }
+  },
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "occurredAt",
+    "publishedAt",
+    "producer",
+    "environment",
+    "audience",
+    "enterpriseId",
+    "aggregateType",
+    "aggregateId",
+    "aggregateVersion",
+    "traceId",
+    "causationId",
+    "correlationId",
+    "idempotencyKey",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "description": "Read projection only. Cash metrics consume CashLedgerEntryPosted.",
+  "examples": [
+    {
+      "eventId": "evt_merchantsettlementchanged_001",
+      "eventType": "MerchantSettlementChanged",
+      "schemaVersion": 1,
+      "occurredAt": "2026-08-10T02:00:00Z",
+      "publishedAt": "2026-08-10T02:00:01Z",
+      "producer": "SYS-08",
+      "environment": "DEV",
+      "audience": [
+        "SYS-03",
+        "SYS-06"
+      ],
+      "enterpriseId": null,
+      "aggregateType": "MerchantSettlement",
+      "aggregateId": "mst_contract_001",
+      "aggregateVersion": 2,
+      "traceId": "trace_contract_fixture_001",
+      "causationId": null,
+      "correlationId": "corr_contract_fixture_001",
+      "idempotencyKey": "ORDER_SETTLE:subord_contract_001:2",
+      "payload": {
+        "settlementId": "mst_contract_001",
+        "orderId": "ord_contract_001",
+        "subOrderId": "subord_contract_001",
+        "sellerEnterpriseId": "ent_contract_001",
+        "storeId": "store_contract_001",
+        "supplierId": null,
+        "merchantPayableFen": 9000,
+        "supplierPayableFen": 0,
+        "status": "POSTED",
+        "ledgerRefs": [
+          "le_contract_merchant_001"
+        ],
+        "sourceVersion": 2,
+        "changedAt": "2026-08-17T02:00:00Z"
+      }
+    }
+  ],
+  "x-topic": "ledger.merchant-settlement.changed.v1",
+  "x-producer": "SYS-08",
+  "x-consumers": [
+    "SYS-03",
+    "SYS-06"
+  ],
+  "x-idempotency-key-format": "ORDER_SETTLE:{subOrderId}:{settlementVersion}"
+}

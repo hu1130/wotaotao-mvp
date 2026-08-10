@@ -1,0 +1,32 @@
+{
+  "eventId": "evt_enterprisereviewchanged_001",
+  "eventType": "EnterpriseReviewChanged",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-01",
+  "environment": "DEV",
+  "audience": [
+    "SYS-03",
+    "SYS-04",
+    "SYS-05"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "EnterpriseReviewSubmission",
+  "aggregateId": "ers_contract_001",
+  "aggregateVersion": 1,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "ENTERPRISE_REVIEW:ers_contract_001:1",
+  "payload": {
+    "reviewSubmissionId": "ers_contract_001",
+    "enterpriseId": "ent_contract_001",
+    "profileVersion": 2,
+    "changeType": "APPROVED",
+    "reviewStatus": "APPROVED",
+    "decisionVersion": 1,
+    "reasonCode": null,
+    "changedAt": "2026-08-10T02:10:00Z"
+  }
+}

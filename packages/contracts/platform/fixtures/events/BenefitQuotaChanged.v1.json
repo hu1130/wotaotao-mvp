@@ -1,0 +1,35 @@
+{
+  "eventId": "evt_benefitquotachanged_001",
+  "eventType": "BenefitQuotaChanged",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-08",
+  "environment": "DEV",
+  "audience": [
+    "SYS-01",
+    "SYS-05",
+    "SYS-06"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "BenefitQuota",
+  "aggregateId": "bqa_contract_001",
+  "aggregateVersion": 3,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "BENEFIT_QUOTA:bqa_contract_001:3",
+  "payload": {
+    "quotaAccountId": "bqa_contract_001",
+    "enterpriseId": "ent_contract_001",
+    "benefitCode": "DOUYIN_VIDEO_PUBLICATION",
+    "availableCount": 4,
+    "reservedCount": 1,
+    "usedCount": 0,
+    "expiredCount": 0,
+    "changeReason": "PUBLICATION_RESERVED",
+    "businessNo": "cpub_contract_001",
+    "quotaVersion": 3,
+    "changedAt": "2026-08-10T02:00:00Z"
+  }
+}

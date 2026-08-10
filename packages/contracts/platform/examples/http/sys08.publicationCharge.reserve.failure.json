@@ -1,0 +1,33 @@
+{
+  "operationId": "sys08.publicationCharge.reserve",
+  "method": "POST",
+  "path": "/internal/v1/ledger/publication-charge-reservations",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "idempotency-key": "PUBLICATION_CHARGE:{channelPublicationId}"
+    },
+    "body": {
+      "publicationPlanId": "ppl_001",
+      "channelPublicationId": "chp_dy_001",
+      "enterpriseId": "ent_001",
+      "channel": "DOUYIN",
+      "douyinExecutionMode": "OPC_RENTED",
+      "sourceType": "QUOTA",
+      "sourceVersion": 1,
+      "quotaBatchId": "qtb_001",
+      "serviceOrderId": null,
+      "paymentId": null,
+      "authorizedBalanceRef": null
+    }
+  },
+  "status": 403,
+  "response": {
+    "code": "FORBIDDEN",
+    "message": "The authenticated actor is not allowed to perform the action.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

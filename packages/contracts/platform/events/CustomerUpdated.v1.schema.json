@@ -1,0 +1,253 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.wotaotao.com/events/crm.customer.updated.v1/envelope.schema.json",
+  "title": "CustomerUpdated envelope v1",
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable evt_ identifier",
+      "pattern": "^evt_[A-Za-z0-9_-]+$"
+    },
+    "eventType": {
+      "type": "string",
+      "const": "CustomerUpdated"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Business occurrence time"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Outbox publication time"
+    },
+    "producer": {
+      "type": "string",
+      "const": "SYS-04"
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "DEV",
+        "TEST",
+        "STAGING",
+        "PROD"
+      ]
+    },
+    "audience": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SYS-01",
+          "SYS-06"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "enterpriseId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "aggregateType": {
+      "type": "string",
+      "const": "Customer"
+    },
+    "aggregateId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable aggregate identifier"
+    },
+    "aggregateVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonic aggregate version"
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causationId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable evt_ identifier",
+          "pattern": "^evt_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "correlationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable business idempotency key; unchanged on retry"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "customerId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable cus_ identifier",
+          "pattern": "^cus_[A-Za-z0-9_-]+$"
+        },
+        "enterpriseId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        "mainStage": {
+          "type": "string",
+          "minLength": 1
+        },
+        "globalRefusalStatus": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ownerId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "description": "Stable usr_ identifier",
+              "pattern": "^usr_[A-Za-z0-9_-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "customerVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "analyticsSnapshotRef": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable mas_ identifier",
+          "pattern": "^mas_[A-Za-z0-9_-]+$"
+        },
+        "analyticsSnapshotVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "analyticsSnapshotHash": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Lower-case SHA-256 digest",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "customerId",
+        "enterpriseId",
+        "mainStage",
+        "globalRefusalStatus",
+        "ownerId",
+        "customerVersion",
+        "analyticsSnapshotRef",
+        "analyticsSnapshotVersion",
+        "analyticsSnapshotHash",
+        "updatedAt"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://contracts.wotaotao.com/events/crm.customer.updated.v1/payload.schema.json",
+      "title": "CustomerUpdated payload v1"
+    }
+  },
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "occurredAt",
+    "publishedAt",
+    "producer",
+    "environment",
+    "audience",
+    "enterpriseId",
+    "aggregateType",
+    "aggregateId",
+    "aggregateVersion",
+    "traceId",
+    "causationId",
+    "correlationId",
+    "idempotencyKey",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "description": "customerId + customerVersion",
+  "examples": [
+    {
+      "eventId": "evt_customerupdated_001",
+      "eventType": "CustomerUpdated",
+      "schemaVersion": 1,
+      "occurredAt": "2026-08-10T02:00:00Z",
+      "publishedAt": "2026-08-10T02:00:01Z",
+      "producer": "SYS-04",
+      "environment": "DEV",
+      "audience": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "enterpriseId": "ent_contract_001",
+      "aggregateType": "Customer",
+      "aggregateId": "cus_contract_001",
+      "aggregateVersion": 3,
+      "traceId": "trace_contract_fixture_001",
+      "causationId": null,
+      "correlationId": "corr_contract_fixture_001",
+      "idempotencyKey": "CRM_CUSTOMER:cus_contract_001:3",
+      "payload": {
+        "customerId": "cus_contract_001",
+        "enterpriseId": "ent_contract_001",
+        "mainStage": "OPPORTUNITY",
+        "globalRefusalStatus": "NONE",
+        "ownerId": "usr_contract_002",
+        "customerVersion": 3,
+        "analyticsSnapshotRef": "mas_contract_customer_003",
+        "analyticsSnapshotVersion": 3,
+        "analyticsSnapshotHash": "9999999999999999999999999999999999999999999999999999999999999999",
+        "updatedAt": "2026-08-10T02:00:00Z"
+      }
+    }
+  ],
+  "x-topic": "crm.customer.updated.v1",
+  "x-producer": "SYS-04",
+  "x-consumers": [
+    "SYS-01",
+    "SYS-06"
+  ],
+  "x-idempotency-key-format": "CRM_CUSTOMER:{customerId}:{customerVersion}"
+}

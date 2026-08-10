@@ -1,0 +1,32 @@
+{
+  "operationId": "sys03.product.decideAudit",
+  "method": "POST",
+  "path": "/api/v1/admin/commerce/product-audits/{auditId}/decision",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "x-csrf-token": "csrf_example_token_001",
+      "idempotency-key": "PRODUCT_AUDIT_DECISION:{auditId}:{expectedVersion}:{decision}"
+    },
+    "params": {
+      "auditId": "pda_001"
+    },
+    "body": {
+      "decision": "APPROVE",
+      "fieldIssues": [],
+      "reason": "商品资料合规",
+      "expectedVersion": 1
+    }
+  },
+  "status": 200,
+  "response": {
+    "data": {
+      "auditId": "pda_001",
+      "status": "APPROVED",
+      "version": 2
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

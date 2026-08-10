@@ -1,0 +1,32 @@
+{
+  "operationId": "sys08.points.createQuote",
+  "method": "POST",
+  "path": "/api/v1/points/quotes",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "POINTS_QUOTE:{enterpriseId}:{agentRunId}:{chargeCode}:{inputVersion}"
+    },
+    "body": {
+      "agentRunId": "agr_001",
+      "toolCallId": "atc_001",
+      "chargeCode": "CONTENT_GENERATION",
+      "billingPoint": "GENERATION_ACCEPTED",
+      "inputVersion": 1
+    }
+  },
+  "status": 200,
+  "response": {
+    "data": {
+      "quoteId": "pqt_001",
+      "quoteVersion": 1,
+      "chargeCode": "CONTENT_GENERATION",
+      "estimatedPoints": 20,
+      "ruleVersion": 4,
+      "expiresAt": "2026-08-10T02:05:00Z"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

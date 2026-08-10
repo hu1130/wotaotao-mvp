@@ -1,0 +1,30 @@
+{
+  "eventId": "evt_inventorychanged_001",
+  "eventType": "InventoryChanged",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-03",
+  "environment": "DEV",
+  "audience": [
+    "SYS-02",
+    "SYS-06"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "Inventory",
+  "aggregateId": "sku_contract_001",
+  "aggregateVersion": 4,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "INVENTORY_CHANGED:sku_contract_001:4",
+  "payload": {
+    "enterpriseId": "ent_contract_001",
+    "storeId": "store_contract_001",
+    "skuId": "sku_contract_001",
+    "availableQuantity": 98,
+    "inventoryVersion": 4,
+    "reasonCode": "MANUAL_ADJUSTMENT",
+    "changedAt": "2026-08-10T02:00:00Z"
+  }
+}

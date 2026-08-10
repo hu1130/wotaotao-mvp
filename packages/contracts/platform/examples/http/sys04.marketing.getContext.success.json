@@ -1,0 +1,26 @@
+{
+  "operationId": "sys04.marketing.getContext",
+  "method": "GET",
+  "path": "/api/v1/marketing/context",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>"
+    }
+  },
+  "status": 200,
+  "response": {
+    "data": {
+      "enterpriseId": "ent_001",
+      "enterpriseProfileVersion": 4,
+      "featureFlags": {
+        "aiCalling": true,
+        "wechatAutoReply": false
+      },
+      "stale": false,
+      "lastSyncedAt": "2026-08-10T02:00:00Z"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

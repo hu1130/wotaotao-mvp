@@ -1,0 +1,45 @@
+{
+  "eventId": "evt_agenttoolexecutionreported_001",
+  "eventType": "AgentToolExecutionReported",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "REGISTERED_DOMAIN_ADAPTER",
+  "environment": "DEV",
+  "audience": [
+    "SYS-01"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "AgentRun",
+  "aggregateId": "arun_contract_001",
+  "aggregateVersion": 1,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "AGENT_TOOL_RESULT:arun_contract_001:trun_contract_001:1",
+  "payload": {
+    "agentRunId": "arun_contract_001",
+    "toolRunId": "trun_contract_001",
+    "toolCallId": "tcall_contract_001",
+    "toolCode": "CONTENT_PUBLISH",
+    "domainSystem": "SYS-05",
+    "enterpriseId": "ent_contract_001",
+    "businessRefs": [
+      {
+        "type": "ChannelPublication",
+        "id": "cpub_contract_001",
+        "version": 1
+      }
+    ],
+    "inputVersion": 1,
+    "status": "SUCCEEDED",
+    "billingPoint": "PUBLICATION_ACCEPTED",
+    "retryable": false,
+    "resultVersion": 1,
+    "toolAuthorizationRef": "tauth_contract_001",
+    "resultSummary": "Publication result recorded",
+    "failureCode": null,
+    "reportedAt": "2026-08-10T02:00:00Z",
+    "traceId": "trace_contract_fixture_001"
+  }
+}

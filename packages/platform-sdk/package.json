@@ -1,0 +1,42 @@
+{
+  "name": "@wotao/platform-sdk",
+  "version": "1.0.0",
+  "private": false,
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./schema": {
+      "types": "./dist/generated/schema.d.ts",
+      "import": "./dist/generated/schema.js",
+      "default": "./dist/generated/schema.js"
+    }
+  },
+  "scripts": {
+    "generate": "openapi-typescript ../contracts/platform/openapi.json -o src/generated/schema.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "prepack": "pnpm build"
+  },
+  "dependencies": {
+    "openapi-fetch": "0.17.0"
+  },
+  "devDependencies": {
+    "openapi-typescript": "7.13.0",
+    "typescript": "5.9.3",
+    "vitest": "3.2.4"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  }
+}

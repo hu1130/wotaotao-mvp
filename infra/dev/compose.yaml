@@ -1,0 +1,80 @@
+name: wotao-platform-dev
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DEV_POSTGRES_DB:-wotao_dev}
+      POSTGRES_USER: ${DEV_POSTGRES_USER:-wotao_dev}
+      POSTGRES_PASSWORD: ${DEV_POSTGRES_PASSWORD:-wotao_dev_only}
+      TZ: UTC
+    ports:
+      - "${DEV_POSTGRES_PORT:-55442}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+    networks:
+      - platform-dev
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command:
+      - redis-server
+      - --appendonly
+      - "yes"
+      - --save
+      - "60"
+      - "1"
+    ports:
+      - "${DEV_REDIS_PORT:-56379}:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 5s
+    networks:
+      - platform-dev
+
+  contract-mock:
+    build:
+      context: ../..
+      dockerfile: apps/platform-contract-mock/Dockerfile
+    restart: unless-stopped
+    environment:
+      HOST: 0.0.0.0
+      PORT: 4011
+      NODE_ENV: development
+    ports:
+      - "${DEV_CONTRACT_MOCK_PORT:-4011}:4011"
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - fetch('http://127.0.0.1:4011/healthz').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+    networks:
+      - platform-dev
+
+networks:
+  platform-dev:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  redis-data:

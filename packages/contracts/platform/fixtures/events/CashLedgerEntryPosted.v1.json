@@ -1,0 +1,41 @@
+{
+  "eventId": "evt_cashledgerentryposted_001",
+  "eventType": "CashLedgerEntryPosted",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-08",
+  "environment": "DEV",
+  "audience": [
+    "SYS-06"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "LedgerEntry",
+  "aggregateId": "le_contract_001",
+  "aggregateVersion": 1,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "CASH_LEDGER_ENTRY:le_contract_001",
+  "payload": {
+    "ledgerEntryId": "le_contract_001",
+    "journalId": "jrnl_contract_001",
+    "enterpriseId": "ent_contract_001",
+    "subjectType": "ENTERPRISE",
+    "subjectId": "ent_contract_001",
+    "accountCode": "ENTERPRISE_AVAILABLE",
+    "direction": "CREDIT",
+    "amountFen": 1200,
+    "currency": "CNY",
+    "metricBucket": "ENTERPRISE_REVENUE",
+    "metricBucketVersion": 1,
+    "metricEffect": "INCREASE",
+    "signedMetricAmountFen": 1200,
+    "businessType": "ORDER_SETTLEMENT",
+    "businessNo": "subord_contract_001",
+    "sourceEventId": "evt_contract_source_001",
+    "originalLedgerEntryId": null,
+    "ruleVersion": 1,
+    "postedAt": "2026-08-17T02:00:00Z"
+  }
+}
