@@ -1,0 +1,33 @@
+{
+  "operationId": "sys03.fulfillment.create",
+  "method": "POST",
+  "path": "/api/v1/commerce/orders/{orderId}/fulfillments",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "FULFILLMENT:{orderId}:{clientRequestId}"
+    },
+    "params": {
+      "orderId": "ord_001"
+    },
+    "body": {
+      "clientRequestId": "req_fulfill_001",
+      "carrierCode": "SF",
+      "trackingNo": "SF1234567890",
+      "note": null,
+      "expectedOrderVersion": 2
+    }
+  },
+  "status": 202,
+  "response": {
+    "data": {
+      "fulfillmentId": "ful_001",
+      "fulfillmentVersion": 1,
+      "syncStatus": "PENDING_SYS02",
+      "commandId": "cmd_ship_001"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

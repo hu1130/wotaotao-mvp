@@ -1,0 +1,260 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.wotaotao.com/events/commerce.order.shipment-registered.v1/envelope.schema.json",
+  "title": "OrderShipmentRegistered envelope v1",
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable evt_ identifier",
+      "pattern": "^evt_[A-Za-z0-9_-]+$"
+    },
+    "eventType": {
+      "type": "string",
+      "const": "OrderShipmentRegistered"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Business occurrence time"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Outbox publication time"
+    },
+    "producer": {
+      "type": "string",
+      "const": "SYS-02"
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "DEV",
+        "TEST",
+        "STAGING",
+        "PROD"
+      ]
+    },
+    "audience": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SYS-03",
+          "SYS-06"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "enterpriseId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "aggregateType": {
+      "type": "string",
+      "const": "Order"
+    },
+    "aggregateId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable aggregate identifier"
+    },
+    "aggregateVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonic aggregate version"
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causationId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable evt_ identifier",
+          "pattern": "^evt_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "correlationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable business idempotency key; unchanged on retry"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "commandId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable cmd_ identifier",
+          "pattern": "^cmd_[A-Za-z0-9_-]+$"
+        },
+        "fulfillmentId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ful_ identifier",
+          "pattern": "^ful_[A-Za-z0-9_-]+$"
+        },
+        "orderId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ord_ identifier",
+          "pattern": "^ord_[A-Za-z0-9_-]+$"
+        },
+        "subOrderId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable subord_ identifier",
+          "pattern": "^subord_[A-Za-z0-9_-]+$"
+        },
+        "sellerEnterpriseId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        "storeId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable store_ identifier",
+          "pattern": "^store_[A-Za-z0-9_-]+$"
+        },
+        "carrierCode": {
+          "type": "string",
+          "minLength": 1
+        },
+        "trackingNoMasked": {
+          "type": "string",
+          "minLength": 1
+        },
+        "shippedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "fulfillmentVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "orderVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "registeredAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "commandId",
+        "fulfillmentId",
+        "orderId",
+        "subOrderId",
+        "sellerEnterpriseId",
+        "storeId",
+        "carrierCode",
+        "trackingNoMasked",
+        "shippedAt",
+        "fulfillmentVersion",
+        "orderVersion",
+        "registeredAt"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://contracts.wotaotao.com/events/commerce.order.shipment-registered.v1/payload.schema.json",
+      "title": "OrderShipmentRegistered payload v1"
+    }
+  },
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "occurredAt",
+    "publishedAt",
+    "producer",
+    "environment",
+    "audience",
+    "enterpriseId",
+    "aggregateType",
+    "aggregateId",
+    "aggregateVersion",
+    "traceId",
+    "causationId",
+    "correlationId",
+    "idempotencyKey",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "description": "fulfillmentId + fulfillmentVersion; one first shipment for a P0 subOrderId",
+  "examples": [
+    {
+      "eventId": "evt_ordershipmentregistered_001",
+      "eventType": "OrderShipmentRegistered",
+      "schemaVersion": 1,
+      "occurredAt": "2026-08-10T02:00:00Z",
+      "publishedAt": "2026-08-10T02:00:01Z",
+      "producer": "SYS-02",
+      "environment": "DEV",
+      "audience": [
+        "SYS-03",
+        "SYS-06"
+      ],
+      "enterpriseId": null,
+      "aggregateType": "Order",
+      "aggregateId": "ord_contract_001",
+      "aggregateVersion": 3,
+      "traceId": "trace_contract_fixture_001",
+      "causationId": null,
+      "correlationId": "corr_contract_fixture_001",
+      "idempotencyKey": "SHIPMENT_REGISTER:ful_contract_001:1",
+      "payload": {
+        "commandId": "cmd_shipment_register_001",
+        "fulfillmentId": "ful_contract_001",
+        "orderId": "ord_contract_001",
+        "subOrderId": "subord_contract_001",
+        "sellerEnterpriseId": "ent_contract_001",
+        "storeId": "store_contract_001",
+        "carrierCode": "SF",
+        "trackingNoMasked": "SF****1234",
+        "shippedAt": "2026-08-10T02:00:00Z",
+        "fulfillmentVersion": 1,
+        "orderVersion": 3,
+        "registeredAt": "2026-08-10T02:00:01Z"
+      }
+    }
+  ],
+  "x-topic": "commerce.order.shipment-registered.v1",
+  "x-producer": "SYS-02",
+  "x-consumers": [
+    "SYS-03",
+    "SYS-06"
+  ],
+  "x-idempotency-key-format": "SHIPMENT_REGISTER:{fulfillmentId}:{fulfillmentVersion}"
+}

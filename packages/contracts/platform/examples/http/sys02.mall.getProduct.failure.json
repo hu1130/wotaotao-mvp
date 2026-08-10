@@ -1,0 +1,25 @@
+{
+  "operationId": "sys02.mall.getProduct",
+  "method": "GET",
+  "path": "/api/v1/mall/products/{productId}",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001"
+    },
+    "params": {
+      "productId": "prd_001"
+    },
+    "query": {
+      "regionCode": "CN-11"
+    }
+  },
+  "status": 404,
+  "response": {
+    "code": "OBJECT_NOT_FOUND",
+    "message": "The object is absent or intentionally hidden from this caller.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

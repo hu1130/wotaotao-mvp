@@ -1,0 +1,262 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.wotaotao.com/events/ledger.withdrawal.status-changed.v1/envelope.schema.json",
+  "title": "WithdrawalStatusChanged envelope v1",
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable evt_ identifier",
+      "pattern": "^evt_[A-Za-z0-9_-]+$"
+    },
+    "eventType": {
+      "type": "string",
+      "const": "WithdrawalStatusChanged"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Business occurrence time"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Outbox publication time"
+    },
+    "producer": {
+      "type": "string",
+      "const": "SYS-08"
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "DEV",
+        "TEST",
+        "STAGING",
+        "PROD"
+      ]
+    },
+    "audience": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SYS-01",
+          "SYS-06",
+          "SYS-07"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "enterpriseId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "aggregateType": {
+      "type": "string",
+      "const": "Withdrawal"
+    },
+    "aggregateId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable aggregate identifier"
+    },
+    "aggregateVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonic aggregate version"
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causationId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable evt_ identifier",
+          "pattern": "^evt_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "correlationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable business idempotency key; unchanged on retry"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "withdrawalId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable wd_ identifier",
+          "pattern": "^wd_[A-Za-z0-9_-]+$"
+        },
+        "ownerType": {
+          "type": "string",
+          "enum": [
+            "ENTERPRISE",
+            "OPC_PROVIDER"
+          ]
+        },
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "enterpriseId when ENTERPRISE; providerId when OPC_PROVIDER"
+        },
+        "amountFen": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Non-negative integer amount in fen"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "SUBMITTED",
+            "INITIAL_REVIEW",
+            "FINAL_REVIEW",
+            "PROCESSING",
+            "PAID",
+            "REJECTED",
+            "FAILED",
+            "CANCELLED"
+          ]
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "channelNoMasked": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "changedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "withdrawalId",
+        "ownerType",
+        "ownerId",
+        "amountFen",
+        "status",
+        "reason",
+        "channelNoMasked",
+        "version",
+        "changedAt"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://contracts.wotaotao.com/events/ledger.withdrawal.status-changed.v1/payload.schema.json",
+      "title": "WithdrawalStatusChanged payload v1"
+    }
+  },
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "occurredAt",
+    "publishedAt",
+    "producer",
+    "environment",
+    "audience",
+    "enterpriseId",
+    "aggregateType",
+    "aggregateId",
+    "aggregateVersion",
+    "traceId",
+    "causationId",
+    "correlationId",
+    "idempotencyKey",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "description": "ownerType/ownerId is the only frozen subject model; provider is not represented as an enterprise.",
+  "examples": [
+    {
+      "eventId": "evt_withdrawalstatuschanged_001",
+      "eventType": "WithdrawalStatusChanged",
+      "schemaVersion": 1,
+      "occurredAt": "2026-08-10T02:00:00Z",
+      "publishedAt": "2026-08-10T02:00:01Z",
+      "producer": "SYS-08",
+      "environment": "DEV",
+      "audience": [
+        "SYS-01",
+        "SYS-06",
+        "SYS-07"
+      ],
+      "enterpriseId": null,
+      "aggregateType": "Withdrawal",
+      "aggregateId": "wd_contract_001",
+      "aggregateVersion": 3,
+      "traceId": "trace_contract_fixture_001",
+      "causationId": null,
+      "correlationId": "corr_contract_fixture_001",
+      "idempotencyKey": "WITHDRAWAL_STATUS:wd_contract_001:3",
+      "payload": {
+        "withdrawalId": "wd_contract_001",
+        "ownerType": "OPC_PROVIDER",
+        "ownerId": "prov_contract_001",
+        "amountFen": 20000,
+        "status": "PAID",
+        "reason": null,
+        "channelNoMasked": "WX****9988",
+        "version": 3,
+        "changedAt": "2026-08-10T02:00:00Z"
+      }
+    }
+  ],
+  "x-topic": "ledger.withdrawal.status-changed.v1",
+  "x-producer": "SYS-08",
+  "x-consumers": [
+    "SYS-01",
+    "SYS-06",
+    "SYS-07"
+  ],
+  "x-idempotency-key-format": "WITHDRAWAL_STATUS:{withdrawalId}:{version}"
+}

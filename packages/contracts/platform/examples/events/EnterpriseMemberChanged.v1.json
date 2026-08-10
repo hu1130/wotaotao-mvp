@@ -1,0 +1,43 @@
+{
+  "eventId": "evt_enterprisememberchanged_001",
+  "eventType": "EnterpriseMemberChanged",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-01",
+  "environment": "DEV",
+  "audience": [
+    "SYS-03",
+    "SYS-04",
+    "SYS-05",
+    "SYS-06",
+    "SYS-08"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "EnterpriseMember",
+  "aggregateId": "emr_contract_001",
+  "aggregateVersion": 2,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "ENTERPRISE_MEMBER:emr_contract_001:2",
+  "payload": {
+    "enterpriseMemberId": "emr_contract_001",
+    "enterpriseId": "ent_contract_001",
+    "userId": "usr_contract_001",
+    "changeType": "ROLE_CHANGED",
+    "roleCodes": [
+      "ENTERPRISE_ADMIN"
+    ],
+    "dataScope": {
+      "storeIds": [
+        "store_contract_001"
+      ]
+    },
+    "memberStatus": "ACTIVE",
+    "source": "PLATFORM_CONTROLLED_BINDING",
+    "version": 2,
+    "effectiveAt": "2026-08-10T02:00:00Z",
+    "reasonCode": "ADMIN_APPROVED"
+  }
+}

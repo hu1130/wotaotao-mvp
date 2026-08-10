@@ -1,0 +1,31 @@
+{
+  "operationId": "sys03.product.create",
+  "method": "POST",
+  "path": "/api/v1/commerce/products",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "PRODUCT_CREATE:{enterpriseId}:{draftId}"
+    },
+    "body": {
+      "draftId": "pdr_001",
+      "storeId": "sto_001",
+      "title": "示例茶叶",
+      "salesModel": "MERCHANT",
+      "sellerEnterpriseId": "ent_001",
+      "supplierId": null,
+      "payeeType": "MERCHANT",
+      "categoryCode": "TEA"
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

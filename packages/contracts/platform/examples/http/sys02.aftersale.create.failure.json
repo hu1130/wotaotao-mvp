@@ -1,0 +1,38 @@
+{
+  "operationId": "sys02.aftersale.create",
+  "method": "POST",
+  "path": "/api/v1/mall/after-sales",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "AFTERSALE_CREATE:{consumerProfileId}:{clientRequestId}"
+    },
+    "body": {
+      "clientRequestId": "req_aftersale_001",
+      "orderId": "ord_001",
+      "subOrderId": "sor_001",
+      "items": [
+        {
+          "skuId": "sku_001",
+          "quantity": 1
+        }
+      ],
+      "type": "REFUND_ONLY",
+      "reason": "商品破损",
+      "amountFen": 9900,
+      "evidenceRefs": [
+        "evd_010"
+      ]
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

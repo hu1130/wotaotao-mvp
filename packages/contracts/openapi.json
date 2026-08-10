@@ -1,0 +1,4567 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Wotao MVP Integration API",
+    "version": "1.0.0",
+    "description": "Generated from the integration TypeScript contract manifest."
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "foundation.health",
+        "summary": "foundation.health",
+        "x-module": "01_FOUNDATION",
+        "x-auth": "PUBLIC",
+        "x-roles": [],
+        "x-errors": [
+          "INTERNAL_ERROR"
+        ],
+        "x-idempotency": "NONE",
+        "security": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "status"
+                      ],
+                      "properties": {
+                        "status": {
+                          "type": "string",
+                          "const": "ok"
+                        }
+                      }
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products": {
+      "post": {
+        "operationId": "product.create",
+        "summary": "product.create",
+        "x-module": "02_PRODUCT",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "MERCHANT"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR",
+          "PRODUCT_VALIDATION_FAILED"
+        ],
+        "x-idempotency": "NONE",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Product"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProductInput"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "product.list",
+        "summary": "product.list",
+        "x-module": "02_PRODUCT",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "MERCHANT"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR"
+        ],
+        "x-idempotency": "NONE",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ProductPage"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{productId}": {
+      "get": {
+        "operationId": "product.get",
+        "summary": "product.get",
+        "x-module": "02_PRODUCT",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "MERCHANT",
+          "OPERATOR"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR",
+          "PRODUCT_NOT_FOUND"
+        ],
+        "x-idempotency": "NONE",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ProductId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Product"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "product.update",
+        "summary": "product.update",
+        "x-module": "02_PRODUCT",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "MERCHANT"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR",
+          "PRODUCT_NOT_FOUND",
+          "PRODUCT_VALIDATION_FAILED"
+        ],
+        "x-idempotency": "NONE",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ProductId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Product"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProductInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{productId}/activate": {
+      "post": {
+        "operationId": "product.activate",
+        "summary": "product.activate",
+        "x-module": "02_PRODUCT",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "MERCHANT"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR",
+          "PRODUCT_NOT_FOUND"
+        ],
+        "x-idempotency": "NONE",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ProductId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Product"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{productId}/deactivate": {
+      "post": {
+        "operationId": "product.deactivate",
+        "summary": "product.deactivate",
+        "x-module": "02_PRODUCT",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "MERCHANT"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR",
+          "PRODUCT_NOT_FOUND"
+        ],
+        "x-idempotency": "NONE",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ProductId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Product"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/uploads/product-images": {
+      "post": {
+        "operationId": "product.uploadImage",
+        "summary": "product.uploadImage",
+        "x-module": "02_PRODUCT",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "MERCHANT"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR"
+        ],
+        "x-idempotency": "NONE",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ProductImageUploadResult"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductImageUpload"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contents/generate": {
+      "post": {
+        "operationId": "content.generate",
+        "summary": "content.generate",
+        "x-module": "03_CONTENT",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "MERCHANT"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR",
+          "PRODUCT_NOT_FOUND",
+          "PRODUCT_INACTIVE",
+          "PRODUCT_VALIDATION_FAILED"
+        ],
+        "x-idempotency": "NONE",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ContentGenerationStatusResult"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateContentInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contents/{contentId}": {
+      "get": {
+        "operationId": "content.get",
+        "summary": "content.get",
+        "x-module": "03_CONTENT",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "MERCHANT",
+          "OPERATOR"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR",
+          "CONTENT_NOT_FOUND"
+        ],
+        "x-idempotency": "NONE",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "contentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ContentId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ContentDetail"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "content.update",
+        "summary": "content.update",
+        "x-module": "03_CONTENT",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "MERCHANT"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR",
+          "CONTENT_NOT_FOUND",
+          "CONTENT_NOT_EDITABLE",
+          "CONTENT_VERSION_CONFLICT"
+        ],
+        "x-idempotency": "NONE",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "contentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ContentId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ContentDetail"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateContentInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contents/{contentId}/generation-status": {
+      "get": {
+        "operationId": "content.generationStatus",
+        "summary": "content.generationStatus",
+        "x-module": "03_CONTENT",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "MERCHANT"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR",
+          "CONTENT_NOT_FOUND"
+        ],
+        "x-idempotency": "NONE",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "contentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ContentId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ContentGenerationStatusResult"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contents/{contentId}/regenerate": {
+      "post": {
+        "operationId": "content.regenerate",
+        "summary": "content.regenerate",
+        "x-module": "03_CONTENT",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "MERCHANT"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR",
+          "CONTENT_NOT_FOUND",
+          "CONTENT_NOT_EDITABLE",
+          "CONTENT_VERSION_CONFLICT",
+          "GENERATION_IN_PROGRESS"
+        ],
+        "x-idempotency": "NONE",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "contentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ContentId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ContentGenerationStatusResult"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegenerateContentInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contents/{contentId}/submit-review": {
+      "post": {
+        "operationId": "content.submitReview",
+        "summary": "content.submitReview",
+        "x-module": "03_CONTENT",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "MERCHANT"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR",
+          "CONTENT_NOT_FOUND",
+          "CONTENT_NOT_EDITABLE",
+          "CONTENT_VERSION_CONFLICT"
+        ],
+        "x-idempotency": "NONE",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "contentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ContentId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ContentDetail"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitReviewInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reviews/pending": {
+      "get": {
+        "operationId": "review.pending",
+        "summary": "review.pending",
+        "x-module": "04_REVIEW",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "OPERATOR"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR"
+        ],
+        "x-idempotency": "NONE",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            }
+          },
+          {
+            "name": "merchantId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/MerchantId"
+            }
+          },
+          {
+            "name": "submittedFrom",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "submittedTo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/PendingReviewsPage"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reviews/{contentId}": {
+      "get": {
+        "operationId": "review.get",
+        "summary": "review.get",
+        "x-module": "04_REVIEW",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "OPERATOR"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR",
+          "CONTENT_NOT_FOUND"
+        ],
+        "x-idempotency": "NONE",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "contentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ContentId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ReviewContentDetail"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reviews/{contentId}/approve": {
+      "post": {
+        "operationId": "review.approve",
+        "summary": "review.approve",
+        "x-module": "04_REVIEW",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "OPERATOR"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR",
+          "CONTENT_NOT_FOUND",
+          "CONTENT_VERSION_CONFLICT",
+          "REVIEW_STATUS_CHANGED",
+          "REVIEW_CONFLICT"
+        ],
+        "x-idempotency": "NONE",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "contentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ContentId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ReviewDecisionResult"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApproveReviewInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reviews/{contentId}/reject": {
+      "post": {
+        "operationId": "review.reject",
+        "summary": "review.reject",
+        "x-module": "04_REVIEW",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "OPERATOR"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR",
+          "CONTENT_NOT_FOUND",
+          "CONTENT_VERSION_CONFLICT",
+          "REVIEW_STATUS_CHANGED",
+          "REVIEW_CONFLICT",
+          "REJECTION_REASON_REQUIRED"
+        ],
+        "x-idempotency": "NONE",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "contentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ContentId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ReviewDecisionResult"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RejectReviewInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contents/{contentId}/review-history": {
+      "get": {
+        "operationId": "review.history",
+        "summary": "review.history",
+        "x-module": "04_REVIEW",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "MERCHANT",
+          "OPERATOR"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR",
+          "CONTENT_NOT_FOUND"
+        ],
+        "x-idempotency": "NONE",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "contentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ContentId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ReviewRecord"
+                      }
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/authorized-accounts": {
+      "get": {
+        "operationId": "publishing.accounts",
+        "summary": "publishing.accounts",
+        "x-module": "05_PUBLISHING",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "OPERATOR"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR"
+        ],
+        "x-idempotency": "NONE",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "channel",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Channel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/AuthorizedAccount"
+                      }
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/publications": {
+      "post": {
+        "operationId": "publishing.create",
+        "summary": "publishing.create",
+        "x-module": "05_PUBLISHING",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "OPERATOR"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR",
+          "CONTENT_NOT_FOUND",
+          "CONTENT_NOT_APPROVED",
+          "ACCOUNT_NOT_AVAILABLE",
+          "IDEMPOTENCY_CONFLICT"
+        ],
+        "x-idempotency": "BODY_REQUIRED",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Publication"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePublicationInput"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "publishing.list",
+        "summary": "publishing.list",
+        "x-module": "05_PUBLISHING",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "MERCHANT",
+          "OPERATOR"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR"
+        ],
+        "x-idempotency": "NONE",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "channel",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Channel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/PublicationPage"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/publications/{publicationId}": {
+      "get": {
+        "operationId": "publishing.get",
+        "summary": "publishing.get",
+        "x-module": "05_PUBLISHING",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "MERCHANT",
+          "OPERATOR"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR",
+          "PUBLICATION_NOT_FOUND"
+        ],
+        "x-idempotency": "NONE",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "publicationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/PublicationId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Publication"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/publications/{publicationId}/retry": {
+      "post": {
+        "operationId": "publishing.retry",
+        "summary": "publishing.retry",
+        "x-module": "05_PUBLISHING",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "OPERATOR"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR",
+          "PUBLICATION_NOT_FOUND",
+          "IDEMPOTENCY_CONFLICT"
+        ],
+        "x-idempotency": "BODY_REQUIRED",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "publicationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/PublicationId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Publication"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RetryPublicationInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/publications/callback": {
+      "post": {
+        "operationId": "publishing.callback",
+        "summary": "publishing.callback",
+        "x-module": "05_PUBLISHING",
+        "x-auth": "PUBLIC",
+        "x-roles": [],
+        "x-errors": [
+          "CALLBACK_INVALID",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR"
+        ],
+        "x-idempotency": "PROVIDER_EVENT",
+        "security": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/PublicationCallbackAck"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProviderCallback"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/feed": {
+      "get": {
+        "operationId": "storefront.feed",
+        "summary": "storefront.feed",
+        "x-module": "06_STOREFRONT",
+        "x-auth": "PUBLIC",
+        "x-roles": [],
+        "x-errors": [
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR"
+        ],
+        "x-idempotency": "NONE",
+        "security": [],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/FeedPage"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/storefront/products/{productId}": {
+      "get": {
+        "operationId": "storefront.product",
+        "summary": "storefront.product",
+        "x-module": "06_STOREFRONT",
+        "x-auth": "PUBLIC",
+        "x-roles": [],
+        "x-errors": [
+          "PRODUCT_NOT_FOUND",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR"
+        ],
+        "x-idempotency": "NONE",
+        "security": [],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ProductId"
+            }
+          },
+          {
+            "name": "publicationId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/PublicationId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/StorefrontProduct"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/storefront/merchants/{merchantId}": {
+      "get": {
+        "operationId": "storefront.merchant",
+        "summary": "storefront.merchant",
+        "x-module": "06_STOREFRONT",
+        "x-auth": "PUBLIC",
+        "x-roles": [],
+        "x-errors": [
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR"
+        ],
+        "x-idempotency": "NONE",
+        "security": [],
+        "parameters": [
+          {
+            "name": "merchantId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/MerchantId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/StorefrontMerchant"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/storefront/publications/{publicationId}": {
+      "get": {
+        "operationId": "storefront.publication",
+        "summary": "storefront.publication",
+        "x-module": "06_STOREFRONT",
+        "x-auth": "PUBLIC",
+        "x-roles": [],
+        "x-errors": [
+          "PUBLICATION_NOT_FOUND",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR"
+        ],
+        "x-idempotency": "NONE",
+        "security": [],
+        "parameters": [
+          {
+            "name": "publicationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/PublicationId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/StorefrontPublication"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/inquiries": {
+      "post": {
+        "operationId": "inquiry.create",
+        "summary": "inquiry.create",
+        "x-module": "07_INQUIRY",
+        "x-auth": "PUBLIC",
+        "x-roles": [],
+        "x-errors": [
+          "VALIDATION_ERROR",
+          "PRODUCT_NOT_FOUND",
+          "PUBLICATION_NOT_FOUND",
+          "SOURCE_MISMATCH",
+          "DUPLICATE_INQUIRY",
+          "RATE_LIMITED",
+          "INTERNAL_ERROR"
+        ],
+        "x-idempotency": "NONE",
+        "security": [],
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/InquiryCreated"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateInquiryInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/merchant/inquiries": {
+      "get": {
+        "operationId": "inquiry.list",
+        "summary": "inquiry.list",
+        "x-module": "07_INQUIRY",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "MERCHANT"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR"
+        ],
+        "x-idempotency": "NONE",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/InquiryPage"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/merchant/inquiries/{inquiryId}": {
+      "get": {
+        "operationId": "inquiry.get",
+        "summary": "inquiry.get",
+        "x-module": "07_INQUIRY",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "MERCHANT"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR",
+          "INQUIRY_NOT_FOUND"
+        ],
+        "x-idempotency": "NONE",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "inquiryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/InquiryId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/InquiryDetail"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/inquiries/{inquiryId}/status": {
+      "patch": {
+        "operationId": "inquiry.updateStatus",
+        "summary": "inquiry.updateStatus",
+        "x-module": "07_INQUIRY",
+        "x-auth": "ACTOR",
+        "x-roles": [
+          "MERCHANT",
+          "OPERATOR"
+        ],
+        "x-errors": [
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "VALIDATION_ERROR",
+          "INTERNAL_ERROR",
+          "INQUIRY_NOT_FOUND",
+          "INQUIRY_STATUS_INVALID"
+        ],
+        "x-idempotency": "NONE",
+        "security": [
+          {
+            "roleHeader": [],
+            "userHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "inquiryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/InquiryId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "data",
+                    "requestId"
+                  ],
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/InquiryDetail"
+                    },
+                    "requestId": {
+                      "type": "string",
+                      "pattern": "^req_[A-Za-z0-9_-]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateInquiryStatusInput"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "roleHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-role"
+      },
+      "userHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-user-id"
+      }
+    },
+    "schemas": {
+      "MerchantId": {
+        "type": "string",
+        "pattern": "^mer_[A-Za-z0-9][A-Za-z0-9_-]*$",
+        "x-prefix": "mer_"
+      },
+      "ProductId": {
+        "type": "string",
+        "pattern": "^prd_[A-Za-z0-9][A-Za-z0-9_-]*$",
+        "x-prefix": "prd_"
+      },
+      "ContentId": {
+        "type": "string",
+        "pattern": "^cnt_[A-Za-z0-9][A-Za-z0-9_-]*$",
+        "x-prefix": "cnt_"
+      },
+      "AccountId": {
+        "type": "string",
+        "pattern": "^acc_[A-Za-z0-9][A-Za-z0-9_-]*$",
+        "x-prefix": "acc_"
+      },
+      "PublicationId": {
+        "type": "string",
+        "pattern": "^pub_[A-Za-z0-9][A-Za-z0-9_-]*$",
+        "x-prefix": "pub_"
+      },
+      "InquiryId": {
+        "type": "string",
+        "pattern": "^inq_[A-Za-z0-9][A-Za-z0-9_-]*$",
+        "x-prefix": "inq_"
+      },
+      "ReviewId": {
+        "type": "string",
+        "pattern": "^rev_[A-Za-z0-9][A-Za-z0-9_-]*$",
+        "x-prefix": "rev_"
+      },
+      "GenerationRequestId": {
+        "type": "string",
+        "pattern": "^gen_[A-Za-z0-9][A-Za-z0-9_-]*$",
+        "x-prefix": "gen_"
+      },
+      "Role": {
+        "type": "string",
+        "enum": [
+          "MERCHANT",
+          "OPERATOR",
+          "BUYER"
+        ]
+      },
+      "Channel": {
+        "type": "string",
+        "enum": [
+          "DOUYIN",
+          "XIAOHONGSHU"
+        ]
+      },
+      "ErrorCode": {
+        "type": "string",
+        "enum": [
+          "VALIDATION_ERROR",
+          "UNAUTHENTICATED",
+          "FORBIDDEN",
+          "INTERNAL_ERROR",
+          "IDEMPOTENCY_CONFLICT",
+          "PRODUCT_VALIDATION_FAILED",
+          "PRODUCT_NOT_FOUND",
+          "PRODUCT_INACTIVE",
+          "CONTENT_NOT_FOUND",
+          "CONTENT_NOT_APPROVED",
+          "CONTENT_VERSION_CONFLICT",
+          "CONTENT_NOT_EDITABLE",
+          "GENERATION_FAILED",
+          "GENERATION_IN_PROGRESS",
+          "REVIEW_STATUS_CHANGED",
+          "REVIEW_CONFLICT",
+          "REJECTION_REASON_REQUIRED",
+          "ACCOUNT_NOT_AVAILABLE",
+          "PUBLICATION_NOT_FOUND",
+          "RATE_LIMITED",
+          "EXTERNAL_TIMEOUT",
+          "CONTENT_REJECTED_BY_CHANNEL",
+          "CALLBACK_INVALID",
+          "INQUIRY_NOT_FOUND",
+          "INQUIRY_STATUS_INVALID",
+          "SOURCE_MISMATCH",
+          "DUPLICATE_INQUIRY"
+        ]
+      },
+      "ContentStatus": {
+        "type": "string",
+        "enum": [
+          "DRAFT",
+          "GENERATED",
+          "PENDING_REVIEW",
+          "APPROVED",
+          "REJECTED"
+        ],
+        "x-transitions": {
+          "DRAFT": [
+            "GENERATED"
+          ],
+          "GENERATED": [
+            "PENDING_REVIEW"
+          ],
+          "PENDING_REVIEW": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "APPROVED": [],
+          "REJECTED": [
+            "PENDING_REVIEW"
+          ]
+        }
+      },
+      "ContentGenerationStatus": {
+        "type": "string",
+        "enum": [
+          "QUEUED",
+          "PROCESSING",
+          "SUCCEEDED",
+          "FAILED"
+        ],
+        "x-transitions": {
+          "QUEUED": [
+            "PROCESSING",
+            "FAILED"
+          ],
+          "PROCESSING": [
+            "SUCCEEDED",
+            "FAILED"
+          ],
+          "SUCCEEDED": [],
+          "FAILED": []
+        }
+      },
+      "PublicationStatus": {
+        "type": "string",
+        "enum": [
+          "QUEUED",
+          "PUBLISHING",
+          "SUCCEEDED",
+          "FAILED"
+        ],
+        "x-transitions": {
+          "QUEUED": [
+            "PUBLISHING",
+            "FAILED"
+          ],
+          "PUBLISHING": [
+            "SUCCEEDED",
+            "FAILED"
+          ],
+          "SUCCEEDED": [],
+          "FAILED": [
+            "QUEUED"
+          ]
+        }
+      },
+      "InquiryStatus": {
+        "type": "string",
+        "enum": [
+          "NEW",
+          "CONTACTED",
+          "QUOTED",
+          "WON",
+          "LOST"
+        ],
+        "x-transitions": {
+          "NEW": [
+            "CONTACTED",
+            "LOST"
+          ],
+          "CONTACTED": [
+            "QUOTED",
+            "LOST"
+          ],
+          "QUOTED": [
+            "WON",
+            "LOST"
+          ],
+          "WON": [],
+          "LOST": []
+        }
+      },
+      "ProductStatus": {
+        "type": "string",
+        "enum": [
+          "DRAFT",
+          "ACTIVE",
+          "INACTIVE"
+        ],
+        "x-transitions": {
+          "DRAFT": [
+            "ACTIVE",
+            "INACTIVE"
+          ],
+          "ACTIVE": [
+            "INACTIVE"
+          ],
+          "INACTIVE": [
+            "ACTIVE"
+          ]
+        }
+      },
+      "PriceMode": {
+        "type": "string",
+        "enum": [
+          "FIXED",
+          "INQUIRY"
+        ]
+      },
+      "ReviewDecision": {
+        "type": "string",
+        "enum": [
+          "APPROVED",
+          "REJECTED"
+        ]
+      },
+      "RejectionReasonCode": {
+        "type": "string",
+        "enum": [
+          "MISLEADING_CLAIM",
+          "INCOMPLETE_INFORMATION",
+          "MEDIA_QUALITY",
+          "PLATFORM_POLICY",
+          "OTHER"
+        ]
+      },
+      "ProductImage": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "url",
+          "sortOrder",
+          "altText"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "sortOrder": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "altText": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "ProductParameter": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "key",
+          "value"
+        ],
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "Product": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "productId",
+          "merchantId",
+          "name",
+          "summary",
+          "sellingPoints",
+          "images",
+          "parameters",
+          "priceMode",
+          "price",
+          "status",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "productId": {
+            "$ref": "#/components/schemas/ProductId"
+          },
+          "merchantId": {
+            "$ref": "#/components/schemas/MerchantId"
+          },
+          "name": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "sellingPoints": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductImage"
+            }
+          },
+          "parameters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductParameter"
+            }
+          },
+          "priceMode": {
+            "$ref": "#/components/schemas/PriceMode"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "$ref": "#/components/schemas/ProductStatus"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ProductSummary": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "productId",
+          "merchantId",
+          "name",
+          "primaryImageUrl",
+          "sellingPoints",
+          "priceMode",
+          "price",
+          "status",
+          "updatedAt"
+        ],
+        "properties": {
+          "productId": {
+            "$ref": "#/components/schemas/ProductId"
+          },
+          "merchantId": {
+            "$ref": "#/components/schemas/MerchantId"
+          },
+          "name": {
+            "type": "string"
+          },
+          "primaryImageUrl": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sellingPoints": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "priceMode": {
+            "$ref": "#/components/schemas/PriceMode"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "$ref": "#/components/schemas/ProductStatus"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreateProductInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "sellingPoints",
+          "priceMode"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "sellingPoints": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductImage"
+            }
+          },
+          "parameters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductParameter"
+            }
+          },
+          "priceMode": {
+            "$ref": "#/components/schemas/PriceMode"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "UpdateProductInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "sellingPoints": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductImage"
+            }
+          },
+          "parameters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductParameter"
+            }
+          },
+          "priceMode": {
+            "$ref": "#/components/schemas/PriceMode"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "ProductImageUploadResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "url",
+          "contentType",
+          "size"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "ProductImageUpload": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "file"
+        ],
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      },
+      "GenerateContentInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "productId",
+          "targetAudience",
+          "sellingPoints",
+          "style",
+          "duration"
+        ],
+        "properties": {
+          "productId": {
+            "$ref": "#/components/schemas/ProductId"
+          },
+          "targetAudience": {
+            "type": "string"
+          },
+          "sellingPoints": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "style": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      },
+      "ContentDetail": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "contentId",
+          "merchantId",
+          "productId",
+          "title",
+          "copy",
+          "videoUrl",
+          "targetAudience",
+          "style",
+          "duration",
+          "status",
+          "generationRequestId",
+          "generationStatus",
+          "generationErrorCode",
+          "contentVersion",
+          "submittedAt",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "contentId": {
+            "$ref": "#/components/schemas/ContentId"
+          },
+          "merchantId": {
+            "$ref": "#/components/schemas/MerchantId"
+          },
+          "productId": {
+            "$ref": "#/components/schemas/ProductId"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "copy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "videoUrl": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "targetAudience": {
+            "type": "string"
+          },
+          "style": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "status": {
+            "$ref": "#/components/schemas/ContentStatus"
+          },
+          "generationRequestId": {
+            "$ref": "#/components/schemas/GenerationRequestId"
+          },
+          "generationStatus": {
+            "$ref": "#/components/schemas/ContentGenerationStatus"
+          },
+          "generationErrorCode": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ErrorCode"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "contentVersion": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "submittedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ContentGenerationStatusResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "contentId",
+          "generationRequestId",
+          "status",
+          "errorCode",
+          "errorMessage",
+          "updatedAt"
+        ],
+        "properties": {
+          "contentId": {
+            "$ref": "#/components/schemas/ContentId"
+          },
+          "generationRequestId": {
+            "$ref": "#/components/schemas/GenerationRequestId"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ContentGenerationStatus"
+          },
+          "errorCode": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ErrorCode"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "errorMessage": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "UpdateContentInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "contentVersion"
+        ],
+        "properties": {
+          "contentVersion": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "title": {
+            "type": "string"
+          },
+          "copy": {
+            "type": "string"
+          },
+          "videoUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "targetAudience": {
+            "type": "string"
+          },
+          "style": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      },
+      "RegenerateContentInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "contentVersion"
+        ],
+        "properties": {
+          "contentVersion": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "targetAudience": {
+            "type": "string"
+          },
+          "sellingPoints": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "style": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      },
+      "SubmitReviewInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "contentVersion"
+        ],
+        "properties": {
+          "contentVersion": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      },
+      "ReviewRecord": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "reviewId",
+          "contentId",
+          "decision",
+          "reasonCode",
+          "comment",
+          "reviewerId",
+          "reviewerName",
+          "reviewedAt",
+          "contentVersion",
+          "previousStatus",
+          "nextStatus"
+        ],
+        "properties": {
+          "reviewId": {
+            "$ref": "#/components/schemas/ReviewId"
+          },
+          "contentId": {
+            "$ref": "#/components/schemas/ContentId"
+          },
+          "decision": {
+            "$ref": "#/components/schemas/ReviewDecision"
+          },
+          "reasonCode": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RejectionReasonCode"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "comment": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reviewerId": {
+            "type": "string"
+          },
+          "reviewerName": {
+            "type": "string"
+          },
+          "reviewedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "contentVersion": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "previousStatus": {
+            "$ref": "#/components/schemas/ContentStatus"
+          },
+          "nextStatus": {
+            "$ref": "#/components/schemas/ContentStatus"
+          }
+        }
+      },
+      "ReviewContentSummary": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "contentId",
+          "merchantId",
+          "merchantName",
+          "productId",
+          "productTitle",
+          "title",
+          "status",
+          "contentVersion",
+          "submittedAt"
+        ],
+        "properties": {
+          "contentId": {
+            "$ref": "#/components/schemas/ContentId"
+          },
+          "merchantId": {
+            "$ref": "#/components/schemas/MerchantId"
+          },
+          "merchantName": {
+            "type": "string"
+          },
+          "productId": {
+            "$ref": "#/components/schemas/ProductId"
+          },
+          "productTitle": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ContentStatus"
+          },
+          "contentVersion": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "submittedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ReviewContentDetail": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "contentId",
+          "merchantId",
+          "merchantName",
+          "productId",
+          "productTitle",
+          "title",
+          "status",
+          "contentVersion",
+          "submittedAt",
+          "copy",
+          "videoUrl",
+          "sellingPoints",
+          "targetAudience",
+          "reviewHistory"
+        ],
+        "properties": {
+          "contentId": {
+            "$ref": "#/components/schemas/ContentId"
+          },
+          "merchantId": {
+            "$ref": "#/components/schemas/MerchantId"
+          },
+          "merchantName": {
+            "type": "string"
+          },
+          "productId": {
+            "$ref": "#/components/schemas/ProductId"
+          },
+          "productTitle": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ContentStatus"
+          },
+          "contentVersion": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "submittedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "copy": {
+            "type": "string"
+          },
+          "videoUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "sellingPoints": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "targetAudience": {
+            "type": "string"
+          },
+          "reviewHistory": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReviewRecord"
+            }
+          }
+        }
+      },
+      "ApproveReviewInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "contentVersion"
+        ],
+        "properties": {
+          "contentVersion": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "comment": {
+            "type": "string"
+          }
+        }
+      },
+      "RejectReviewInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "contentVersion",
+          "comment"
+        ],
+        "properties": {
+          "contentVersion": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "reasonCode": {
+            "$ref": "#/components/schemas/RejectionReasonCode"
+          },
+          "comment": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "ReviewDecisionResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "content",
+          "review"
+        ],
+        "properties": {
+          "content": {
+            "$ref": "#/components/schemas/ReviewContentSummary"
+          },
+          "review": {
+            "$ref": "#/components/schemas/ReviewRecord"
+          }
+        }
+      },
+      "AuthorizedAccount": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "accountId",
+          "channel",
+          "displayLabel",
+          "available"
+        ],
+        "properties": {
+          "accountId": {
+            "$ref": "#/components/schemas/AccountId"
+          },
+          "channel": {
+            "$ref": "#/components/schemas/Channel"
+          },
+          "displayLabel": {
+            "type": "string"
+          },
+          "available": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CreatePublicationInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "contentId",
+          "accountId",
+          "channel",
+          "idempotencyKey"
+        ],
+        "properties": {
+          "contentId": {
+            "$ref": "#/components/schemas/ContentId"
+          },
+          "accountId": {
+            "$ref": "#/components/schemas/AccountId"
+          },
+          "channel": {
+            "$ref": "#/components/schemas/Channel"
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8
+          }
+        }
+      },
+      "RetryPublicationInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "idempotencyKey"
+        ],
+        "properties": {
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8
+          }
+        }
+      },
+      "Publication": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "publicationId",
+          "merchantId",
+          "contentId",
+          "productId",
+          "channel",
+          "accountId",
+          "idempotencyKey",
+          "status",
+          "externalTaskId",
+          "externalWorkId",
+          "externalUrl",
+          "errorCode",
+          "errorMessage",
+          "requestedBy",
+          "publishedAt",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "publicationId": {
+            "$ref": "#/components/schemas/PublicationId"
+          },
+          "merchantId": {
+            "$ref": "#/components/schemas/MerchantId"
+          },
+          "contentId": {
+            "$ref": "#/components/schemas/ContentId"
+          },
+          "productId": {
+            "$ref": "#/components/schemas/ProductId"
+          },
+          "channel": {
+            "$ref": "#/components/schemas/Channel"
+          },
+          "accountId": {
+            "$ref": "#/components/schemas/AccountId"
+          },
+          "idempotencyKey": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/PublicationStatus"
+          },
+          "externalTaskId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "externalWorkId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "externalUrl": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "errorCode": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ErrorCode"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "errorMessage": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "requestedBy": {
+            "type": "string"
+          },
+          "publishedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PublicationCallbackAck": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "accepted",
+          "duplicate"
+        ],
+        "properties": {
+          "accepted": {
+            "type": "boolean"
+          },
+          "duplicate": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PublicSourceAttribution": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "merchantId",
+          "productId",
+          "contentId",
+          "publicationId",
+          "channel",
+          "externalWorkId",
+          "referrer"
+        ],
+        "properties": {
+          "merchantId": {
+            "$ref": "#/components/schemas/MerchantId"
+          },
+          "productId": {
+            "$ref": "#/components/schemas/ProductId"
+          },
+          "contentId": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ContentId"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "publicationId": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PublicationId"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "channel": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Channel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "externalWorkId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "referrer": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "SourceAttribution": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "merchantId",
+          "productId",
+          "contentId",
+          "publicationId",
+          "channel",
+          "accountId",
+          "externalWorkId",
+          "referrer"
+        ],
+        "properties": {
+          "merchantId": {
+            "$ref": "#/components/schemas/MerchantId"
+          },
+          "productId": {
+            "$ref": "#/components/schemas/ProductId"
+          },
+          "contentId": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ContentId"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "publicationId": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PublicationId"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "channel": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Channel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "accountId": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AccountId"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "externalWorkId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "referrer": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "FeedItem": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "publicationId",
+          "contentId",
+          "productId",
+          "merchantId",
+          "channel",
+          "externalWorkId",
+          "externalUrl",
+          "videoUrl",
+          "title",
+          "productName",
+          "merchantName",
+          "sellingPoints",
+          "publishedAt"
+        ],
+        "properties": {
+          "publicationId": {
+            "$ref": "#/components/schemas/PublicationId"
+          },
+          "contentId": {
+            "$ref": "#/components/schemas/ContentId"
+          },
+          "productId": {
+            "$ref": "#/components/schemas/ProductId"
+          },
+          "merchantId": {
+            "$ref": "#/components/schemas/MerchantId"
+          },
+          "channel": {
+            "$ref": "#/components/schemas/Channel"
+          },
+          "externalWorkId": {
+            "type": "string"
+          },
+          "externalUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "videoUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "title": {
+            "type": "string"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "merchantName": {
+            "type": "string"
+          },
+          "sellingPoints": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "publishedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "StorefrontProduct": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "productId",
+          "merchantId",
+          "merchantName",
+          "name",
+          "summary",
+          "sellingPoints",
+          "images",
+          "parameters",
+          "priceMode",
+          "price",
+          "available",
+          "attribution"
+        ],
+        "properties": {
+          "productId": {
+            "$ref": "#/components/schemas/ProductId"
+          },
+          "merchantId": {
+            "$ref": "#/components/schemas/MerchantId"
+          },
+          "merchantName": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "sellingPoints": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductImage"
+            }
+          },
+          "parameters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductParameter"
+            }
+          },
+          "priceMode": {
+            "$ref": "#/components/schemas/PriceMode"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "available": {
+            "type": "boolean"
+          },
+          "attribution": {
+            "$ref": "#/components/schemas/PublicSourceAttribution"
+          }
+        }
+      },
+      "StorefrontMerchant": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "merchantId",
+          "name",
+          "summary",
+          "primaryBusiness"
+        ],
+        "properties": {
+          "merchantId": {
+            "$ref": "#/components/schemas/MerchantId"
+          },
+          "name": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "primaryBusiness": {
+            "type": "string"
+          }
+        }
+      },
+      "StorefrontPublication": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "publicationId",
+          "merchantId",
+          "productId",
+          "contentId",
+          "channel",
+          "externalWorkId",
+          "externalUrl",
+          "publishedAt"
+        ],
+        "properties": {
+          "publicationId": {
+            "$ref": "#/components/schemas/PublicationId"
+          },
+          "merchantId": {
+            "$ref": "#/components/schemas/MerchantId"
+          },
+          "productId": {
+            "$ref": "#/components/schemas/ProductId"
+          },
+          "contentId": {
+            "$ref": "#/components/schemas/ContentId"
+          },
+          "channel": {
+            "$ref": "#/components/schemas/Channel"
+          },
+          "externalWorkId": {
+            "type": "string"
+          },
+          "externalUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "publishedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreateInquiryInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "productId",
+          "buyerName",
+          "contact",
+          "message"
+        ],
+        "properties": {
+          "productId": {
+            "$ref": "#/components/schemas/ProductId"
+          },
+          "publicationId": {
+            "$ref": "#/components/schemas/PublicationId"
+          },
+          "buyerName": {
+            "type": "string"
+          },
+          "contact": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "referrer": {
+            "type": "string"
+          }
+        }
+      },
+      "InquiryCreated": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "inquiryId",
+          "status",
+          "createdAt"
+        ],
+        "properties": {
+          "inquiryId": {
+            "$ref": "#/components/schemas/InquiryId"
+          },
+          "status": {
+            "type": "string",
+            "const": "NEW"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Inquiry": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "inquiryId",
+          "merchantId",
+          "productId",
+          "buyerName",
+          "contact",
+          "quantity",
+          "message",
+          "status",
+          "attribution",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "inquiryId": {
+            "$ref": "#/components/schemas/InquiryId"
+          },
+          "merchantId": {
+            "$ref": "#/components/schemas/MerchantId"
+          },
+          "productId": {
+            "$ref": "#/components/schemas/ProductId"
+          },
+          "buyerName": {
+            "type": "string"
+          },
+          "contact": {
+            "type": "string"
+          },
+          "quantity": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/InquiryStatus"
+          },
+          "attribution": {
+            "$ref": "#/components/schemas/SourceAttribution"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "InquiryStatusChange": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "fromStatus",
+          "toStatus",
+          "changedBy",
+          "changedAt",
+          "comment"
+        ],
+        "properties": {
+          "fromStatus": {
+            "$ref": "#/components/schemas/InquiryStatus"
+          },
+          "toStatus": {
+            "$ref": "#/components/schemas/InquiryStatus"
+          },
+          "changedBy": {
+            "type": "string"
+          },
+          "changedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "comment": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "InquiryDetail": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "inquiryId",
+          "merchantId",
+          "productId",
+          "buyerName",
+          "contact",
+          "quantity",
+          "message",
+          "status",
+          "attribution",
+          "createdAt",
+          "updatedAt",
+          "statusHistory"
+        ],
+        "properties": {
+          "inquiryId": {
+            "$ref": "#/components/schemas/InquiryId"
+          },
+          "merchantId": {
+            "$ref": "#/components/schemas/MerchantId"
+          },
+          "productId": {
+            "$ref": "#/components/schemas/ProductId"
+          },
+          "buyerName": {
+            "type": "string"
+          },
+          "contact": {
+            "type": "string"
+          },
+          "quantity": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/InquiryStatus"
+          },
+          "attribution": {
+            "$ref": "#/components/schemas/SourceAttribution"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "statusHistory": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InquiryStatusChange"
+            }
+          }
+        }
+      },
+      "UpdateInquiryStatusInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/InquiryStatus"
+          },
+          "comment": {
+            "type": "string"
+          }
+        }
+      },
+      "ProductPage": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items",
+          "page",
+          "pageSize",
+          "total"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductSummary"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "pageSize": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "PendingReviewsPage": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items",
+          "page",
+          "pageSize",
+          "total"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReviewContentSummary"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "pageSize": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "PublicationPage": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items",
+          "page",
+          "pageSize",
+          "total"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Publication"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "pageSize": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "FeedPage": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items",
+          "page",
+          "pageSize",
+          "total"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FeedItem"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "pageSize": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "InquiryPage": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "items",
+          "page",
+          "pageSize",
+          "total"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Inquiry"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "pageSize": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "errorCode",
+          "message",
+          "requestId"
+        ],
+        "properties": {
+          "errorCode": {
+            "$ref": "#/components/schemas/ErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "requestId": {
+            "type": "string",
+            "pattern": "^req_[A-Za-z0-9_-]+$"
+          },
+          "details": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "ProviderCallback": {
+        "type": "object",
+        "additionalProperties": true,
+        "description": "Provider-specific callback body; verified and normalized by the publishing adapter."
+      }
+    }
+  }
+}

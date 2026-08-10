@@ -1,0 +1,32 @@
+{
+  "operationId": "sys05.asset.createUploadSession",
+  "method": "POST",
+  "path": "/api/v1/content/assets/uploads",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "ASSET_UPLOAD:{enterpriseId}:{fileHash}"
+    },
+    "body": {
+      "fileName": "cover.jpg",
+      "mediaType": "IMAGE",
+      "contentType": "image/jpeg",
+      "sizeBytes": 102400,
+      "fileHash": "4444444444444444444444444444444444444444444444444444444444444444",
+      "rightsStatus": "OWNED"
+    }
+  },
+  "status": 201,
+  "response": {
+    "data": {
+      "assetId": "ast_001",
+      "uploadSessionId": "upl_001",
+      "uploadUrlRef": "url_001",
+      "expiresAt": "2026-08-10T02:15:00Z",
+      "scanStatus": "PENDING"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

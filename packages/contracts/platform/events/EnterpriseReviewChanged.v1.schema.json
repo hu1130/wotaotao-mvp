@@ -1,0 +1,247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.wotaotao.com/events/platform.enterprise.review-changed.v1/envelope.schema.json",
+  "title": "EnterpriseReviewChanged envelope v1",
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable evt_ identifier",
+      "pattern": "^evt_[A-Za-z0-9_-]+$"
+    },
+    "eventType": {
+      "type": "string",
+      "const": "EnterpriseReviewChanged"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Business occurrence time"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Outbox publication time"
+    },
+    "producer": {
+      "type": "string",
+      "const": "SYS-01"
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "DEV",
+        "TEST",
+        "STAGING",
+        "PROD"
+      ]
+    },
+    "audience": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SYS-03",
+          "SYS-04",
+          "SYS-05"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "enterpriseId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "aggregateType": {
+      "type": "string",
+      "const": "EnterpriseReviewSubmission"
+    },
+    "aggregateId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable aggregate identifier"
+    },
+    "aggregateVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonic aggregate version"
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causationId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable evt_ identifier",
+          "pattern": "^evt_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "correlationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable business idempotency key; unchanged on retry"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "reviewSubmissionId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ers_ identifier",
+          "pattern": "^ers_[A-Za-z0-9_-]+$"
+        },
+        "enterpriseId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        "profileVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "changeType": {
+          "type": "string",
+          "enum": [
+            "SUBMITTED",
+            "RESUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ]
+        },
+        "reviewStatus": {
+          "type": "string",
+          "enum": [
+            "PENDING",
+            "APPROVED",
+            "REJECTED"
+          ]
+        },
+        "decisionVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "reasonCode": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "changedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "reviewSubmissionId",
+        "enterpriseId",
+        "profileVersion",
+        "changeType",
+        "reviewStatus",
+        "decisionVersion",
+        "reasonCode",
+        "changedAt"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://contracts.wotaotao.com/events/platform.enterprise.review-changed.v1/payload.schema.json",
+      "title": "EnterpriseReviewChanged payload v1"
+    }
+  },
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "occurredAt",
+    "publishedAt",
+    "producer",
+    "environment",
+    "audience",
+    "enterpriseId",
+    "aggregateType",
+    "aggregateId",
+    "aggregateVersion",
+    "traceId",
+    "causationId",
+    "correlationId",
+    "idempotencyKey",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "description": "reviewSubmissionId + decisionVersion",
+  "examples": [
+    {
+      "eventId": "evt_enterprisereviewchanged_001",
+      "eventType": "EnterpriseReviewChanged",
+      "schemaVersion": 1,
+      "occurredAt": "2026-08-10T02:00:00Z",
+      "publishedAt": "2026-08-10T02:00:01Z",
+      "producer": "SYS-01",
+      "environment": "DEV",
+      "audience": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-05"
+      ],
+      "enterpriseId": "ent_contract_001",
+      "aggregateType": "EnterpriseReviewSubmission",
+      "aggregateId": "ers_contract_001",
+      "aggregateVersion": 1,
+      "traceId": "trace_contract_fixture_001",
+      "causationId": null,
+      "correlationId": "corr_contract_fixture_001",
+      "idempotencyKey": "ENTERPRISE_REVIEW:ers_contract_001:1",
+      "payload": {
+        "reviewSubmissionId": "ers_contract_001",
+        "enterpriseId": "ent_contract_001",
+        "profileVersion": 2,
+        "changeType": "APPROVED",
+        "reviewStatus": "APPROVED",
+        "decisionVersion": 1,
+        "reasonCode": null,
+        "changedAt": "2026-08-10T02:10:00Z"
+      }
+    }
+  ],
+  "x-topic": "platform.enterprise.review-changed.v1",
+  "x-producer": "SYS-01",
+  "x-consumers": [
+    "SYS-03",
+    "SYS-04",
+    "SYS-05"
+  ],
+  "x-idempotency-key-format": "ENTERPRISE_REVIEW:{reviewSubmissionId}:{decisionVersion}"
+}

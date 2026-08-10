@@ -1,0 +1,29 @@
+{
+  "operationId": "sys01.agents.createRun",
+  "method": "POST",
+  "path": "/api/v1/agent-runs",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "AGENT_RUN:{enterpriseId}:{clientRequestId}"
+    },
+    "body": {
+      "clientRequestId": "req_agent_001",
+      "agentCode": "CONTENT_PUBLISHING",
+      "goal": "发布商品宣传内容",
+      "businessRefs": [
+        "product:prd_001"
+      ]
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

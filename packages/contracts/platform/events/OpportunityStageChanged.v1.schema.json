@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.wotaotao.com/events/crm.opportunity.stage-changed.v1/envelope.schema.json",
+  "title": "OpportunityStageChanged envelope v1",
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable evt_ identifier",
+      "pattern": "^evt_[A-Za-z0-9_-]+$"
+    },
+    "eventType": {
+      "type": "string",
+      "const": "OpportunityStageChanged"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Business occurrence time"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Outbox publication time"
+    },
+    "producer": {
+      "type": "string",
+      "const": "SYS-04"
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "DEV",
+        "TEST",
+        "STAGING",
+        "PROD"
+      ]
+    },
+    "audience": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SYS-01",
+          "SYS-06"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "enterpriseId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "aggregateType": {
+      "type": "string",
+      "const": "Opportunity"
+    },
+    "aggregateId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable aggregate identifier"
+    },
+    "aggregateVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonic aggregate version"
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causationId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable evt_ identifier",
+          "pattern": "^evt_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "correlationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable business idempotency key; unchanged on retry"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "opportunityId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable opp_ identifier",
+          "pattern": "^opp_[A-Za-z0-9_-]+$"
+        },
+        "enterpriseId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        "customerId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable cus_ identifier",
+          "pattern": "^cus_[A-Za-z0-9_-]+$"
+        },
+        "oldStage": {
+          "type": "string",
+          "minLength": 1
+        },
+        "newStage": {
+          "type": "string",
+          "minLength": 1
+        },
+        "opportunityVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "reasonCode": {
+          "type": "string",
+          "minLength": 1
+        },
+        "changedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "opportunityId",
+        "enterpriseId",
+        "customerId",
+        "oldStage",
+        "newStage",
+        "opportunityVersion",
+        "reasonCode",
+        "changedAt"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://contracts.wotaotao.com/events/crm.opportunity.stage-changed.v1/payload.schema.json",
+      "title": "OpportunityStageChanged payload v1"
+    }
+  },
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "occurredAt",
+    "publishedAt",
+    "producer",
+    "environment",
+    "audience",
+    "enterpriseId",
+    "aggregateType",
+    "aggregateId",
+    "aggregateVersion",
+    "traceId",
+    "causationId",
+    "correlationId",
+    "idempotencyKey",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "description": "opportunityId + opportunityVersion",
+  "examples": [
+    {
+      "eventId": "evt_opportunitystagechanged_001",
+      "eventType": "OpportunityStageChanged",
+      "schemaVersion": 1,
+      "occurredAt": "2026-08-10T02:00:00Z",
+      "publishedAt": "2026-08-10T02:00:01Z",
+      "producer": "SYS-04",
+      "environment": "DEV",
+      "audience": [
+        "SYS-01",
+        "SYS-06"
+      ],
+      "enterpriseId": "ent_contract_001",
+      "aggregateType": "Opportunity",
+      "aggregateId": "opp_contract_001",
+      "aggregateVersion": 2,
+      "traceId": "trace_contract_fixture_001",
+      "causationId": null,
+      "correlationId": "corr_contract_fixture_001",
+      "idempotencyKey": "CRM_OPPORTUNITY_STAGE:opp_contract_001:2",
+      "payload": {
+        "opportunityId": "opp_contract_001",
+        "enterpriseId": "ent_contract_001",
+        "customerId": "cus_contract_001",
+        "oldStage": "QUALIFIED",
+        "newStage": "QUOTED",
+        "opportunityVersion": 2,
+        "reasonCode": "QUOTE_CONFIRMED",
+        "changedAt": "2026-08-10T02:00:00Z"
+      }
+    }
+  ],
+  "x-topic": "crm.opportunity.stage-changed.v1",
+  "x-producer": "SYS-04",
+  "x-consumers": [
+    "SYS-01",
+    "SYS-06"
+  ],
+  "x-idempotency-key-format": "CRM_OPPORTUNITY_STAGE:{opportunityId}:{opportunityVersion}"
+}

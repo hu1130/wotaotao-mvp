@@ -1,0 +1,32 @@
+{
+  "operationId": "sys02.payment.create",
+  "method": "POST",
+  "path": "/api/v1/mall/orders/{orderId}/payments",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "MALL_PAYMENT:{orderId}:{channel}:{clientRequestId}"
+    },
+    "params": {
+      "orderId": "ord_001"
+    },
+    "body": {
+      "channel": "WECHAT",
+      "clientRequestId": "req_payment_001"
+    }
+  },
+  "status": 201,
+  "response": {
+    "data": {
+      "paymentId": "pay_001",
+      "status": "PENDING",
+      "paymentParameters": {
+        "prepayId": "<provider-prepay-reference>"
+      },
+      "expiresAt": "2026-08-10T02:30:00Z"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

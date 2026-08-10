@@ -1,0 +1,286 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.wotaotao.com/events/platform.agent.run-status-changed.v1/envelope.schema.json",
+  "title": "AgentRunStatusChanged envelope v1",
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable evt_ identifier",
+      "pattern": "^evt_[A-Za-z0-9_-]+$"
+    },
+    "eventType": {
+      "type": "string",
+      "const": "AgentRunStatusChanged"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Business occurrence time"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Outbox publication time"
+    },
+    "producer": {
+      "type": "string",
+      "const": "SYS-01"
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "DEV",
+        "TEST",
+        "STAGING",
+        "PROD"
+      ]
+    },
+    "audience": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SYS-04",
+          "SYS-05",
+          "SYS-06"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "enterpriseId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "aggregateType": {
+      "type": "string",
+      "const": "AgentRun"
+    },
+    "aggregateId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable aggregate identifier"
+    },
+    "aggregateVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonic aggregate version"
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causationId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable evt_ identifier",
+          "pattern": "^evt_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "correlationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable business idempotency key; unchanged on retry"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "agentRunId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable arun_ identifier",
+          "pattern": "^arun_[A-Za-z0-9_-]+$"
+        },
+        "enterpriseId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        "agentCode": {
+          "type": "string",
+          "minLength": 1
+        },
+        "oldStatus": {
+          "type": "string",
+          "enum": [
+            "CREATED",
+            "RUNNING",
+            "PARTIAL",
+            "SUCCEEDED",
+            "FAILED",
+            "CANCELLED"
+          ]
+        },
+        "newStatus": {
+          "type": "string",
+          "enum": [
+            "CREATED",
+            "RUNNING",
+            "PARTIAL",
+            "SUCCEEDED",
+            "FAILED",
+            "CANCELLED"
+          ]
+        },
+        "agentRunVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "completedToolCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "failedToolCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "businessRefs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "minLength": 1
+              },
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "version": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Monotonically increasing source version"
+              }
+            },
+            "required": [
+              "type",
+              "id",
+              "version"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0
+        },
+        "changedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "agentRunId",
+        "enterpriseId",
+        "agentCode",
+        "oldStatus",
+        "newStatus",
+        "agentRunVersion",
+        "completedToolCount",
+        "failedToolCount",
+        "businessRefs",
+        "changedAt"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://contracts.wotaotao.com/events/platform.agent.run-status-changed.v1/payload.schema.json",
+      "title": "AgentRunStatusChanged payload v1"
+    }
+  },
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "occurredAt",
+    "publishedAt",
+    "producer",
+    "environment",
+    "audience",
+    "enterpriseId",
+    "aggregateType",
+    "aggregateId",
+    "aggregateVersion",
+    "traceId",
+    "causationId",
+    "correlationId",
+    "idempotencyKey",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "description": "agentRunId + agentRunVersion; SYS-01 is the only run-status aggregator",
+  "examples": [
+    {
+      "eventId": "evt_agentrunstatuschanged_001",
+      "eventType": "AgentRunStatusChanged",
+      "schemaVersion": 1,
+      "occurredAt": "2026-08-10T02:00:00Z",
+      "publishedAt": "2026-08-10T02:00:01Z",
+      "producer": "SYS-01",
+      "environment": "DEV",
+      "audience": [
+        "SYS-04",
+        "SYS-05",
+        "SYS-06"
+      ],
+      "enterpriseId": "ent_contract_001",
+      "aggregateType": "AgentRun",
+      "aggregateId": "arun_contract_001",
+      "aggregateVersion": 2,
+      "traceId": "trace_contract_fixture_001",
+      "causationId": null,
+      "correlationId": "corr_contract_fixture_001",
+      "idempotencyKey": "AGENT_RUN_STATUS:arun_contract_001:2",
+      "payload": {
+        "agentRunId": "arun_contract_001",
+        "enterpriseId": "ent_contract_001",
+        "agentCode": "CONTENT_PUBLISHING_AGENT",
+        "oldStatus": "RUNNING",
+        "newStatus": "SUCCEEDED",
+        "agentRunVersion": 2,
+        "completedToolCount": 1,
+        "failedToolCount": 0,
+        "businessRefs": [
+          {
+            "type": "ChannelPublication",
+            "id": "cpub_contract_001",
+            "version": 1
+          }
+        ],
+        "changedAt": "2026-08-10T02:00:00Z"
+      }
+    }
+  ],
+  "x-topic": "platform.agent.run-status-changed.v1",
+  "x-producer": "SYS-01",
+  "x-consumers": [
+    "SYS-04",
+    "SYS-05",
+    "SYS-06"
+  ],
+  "x-idempotency-key-format": "AGENT_RUN_STATUS:{agentRunId}:{agentRunVersion}"
+}

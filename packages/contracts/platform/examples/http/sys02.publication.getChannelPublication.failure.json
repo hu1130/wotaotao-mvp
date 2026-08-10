@@ -1,0 +1,26 @@
+{
+  "operationId": "sys02.publication.getChannelPublication",
+  "method": "GET",
+  "path": "/internal/v1/mall/channel-publications/{channelPublicationId}",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001"
+    },
+    "params": {
+      "channelPublicationId": "chp_001"
+    },
+    "query": {
+      "publicationVersion": 1,
+      "expectedHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    }
+  },
+  "status": 403,
+  "response": {
+    "code": "FORBIDDEN",
+    "message": "The authenticated actor is not allowed to perform the action.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

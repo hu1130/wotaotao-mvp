@@ -1,0 +1,33 @@
+{
+  "operationId": "sys05.review.submitOrDecide",
+  "method": "POST",
+  "path": "/api/v1/content/channel-versions/{channelVersionId}/reviews",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "CONTENT_REVIEW:{channelVersionId}:{expectedVersion}:{action}"
+    },
+    "params": {
+      "channelVersionId": "cnv_001"
+    },
+    "body": {
+      "action": "APPROVE",
+      "reviewId": "crv_001",
+      "expectedVersion": 1,
+      "comment": "内容审核通过",
+      "evidenceRefs": [
+        "evd_001"
+      ]
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

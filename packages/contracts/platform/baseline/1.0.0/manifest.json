@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "immutable": true,
+  "sha256": {
+    "openapi.json": "30fe2b966647114611951b5bbd9ca808fd397d5879bf645c2afa19da1df4819e",
+    "asyncapi.json": "aae2bb003dfbefe7d9fb72b2309b5162acab51d44ebe38866537f211a10f461f",
+    "registry.json": "213bc72f89855f44b90006a99f1e98ff4e7b9e66ffa5893bcf51d15e14a60a67",
+    "provider-consumer-matrix.json": "d1aca760fd2bfd81b171c4c86a644fd0363bb6e6521cb92bf35792bc6acac151"
+  }
+}

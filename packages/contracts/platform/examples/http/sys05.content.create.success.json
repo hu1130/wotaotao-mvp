@@ -1,0 +1,36 @@
+{
+  "operationId": "sys05.content.create",
+  "method": "POST",
+  "path": "/api/v1/content/items",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "CONTENT_CREATE:{enterpriseId}:{clientRequestId}"
+    },
+    "body": {
+      "clientRequestId": "req_content_001",
+      "title": "示例商品内容",
+      "factRefs": [
+        "fact_001"
+      ],
+      "assetRefs": [
+        "ast_001"
+      ],
+      "productRefs": [
+        "prd_001"
+      ]
+    }
+  },
+  "status": 201,
+  "response": {
+    "data": {
+      "contentId": "cnt_001",
+      "masterVersionId": "mcv_001",
+      "masterVersion": 1,
+      "status": "DRAFT"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

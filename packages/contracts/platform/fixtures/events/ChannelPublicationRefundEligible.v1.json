@@ -1,0 +1,37 @@
+{
+  "eventId": "evt_channelpublicationrefundeligible_001",
+  "eventType": "ChannelPublicationRefundEligible",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-05",
+  "environment": "DEV",
+  "audience": [
+    "SYS-06",
+    "SYS-08"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "PublicationLiability",
+  "aggregateId": "lia_contract_001",
+  "aggregateVersion": 1,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "LIABILITY_REFUND_ELIGIBLE:vpub_contract_001:PLATFORM_RESPONSIBILITY_REMOVAL:1",
+  "payload": {
+    "liabilityEventId": "lia_contract_001",
+    "enterpriseId": "ent_contract_001",
+    "publicationPlanId": "pplan_contract_001",
+    "channelPublicationId": "cpub_contract_001",
+    "validPublicationId": "vpub_contract_001",
+    "chargeReservationId": "pcr_contract_001",
+    "douyinExecutionMode": "PLATFORM_OPERATED",
+    "firstVisibleAt": "2026-08-10T02:00:00Z",
+    "removedAt": "2026-08-12T02:00:00Z",
+    "refundReasonCode": "PLATFORM_RESPONSIBILITY_REMOVAL",
+    "responsibilityVersion": 1,
+    "eligibilityAt": "2026-08-12T02:05:00Z",
+    "evidenceSnapshotRef": "evidence_contract_003",
+    "evidenceHash": "1111111111111111111111111111111111111111111111111111111111111111"
+  }
+}

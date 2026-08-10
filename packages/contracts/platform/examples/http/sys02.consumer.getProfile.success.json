@@ -1,0 +1,22 @@
+{
+  "operationId": "sys02.consumer.getProfile",
+  "method": "GET",
+  "path": "/api/v1/mall/me/profile",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>"
+    }
+  },
+  "status": 200,
+  "response": {
+    "data": {
+      "consumerProfileId": "cpr_001",
+      "userId": "usr_001",
+      "displayNameMasked": "张*",
+      "status": "ACTIVE"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

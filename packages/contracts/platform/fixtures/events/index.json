@@ -1,0 +1,488 @@
+{
+  "contractVersion": "1.0.0",
+  "events": [
+    {
+      "eventType": "UserRegistered",
+      "topic": "platform.identity.user.registered.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/UserRegistered.v1.schema.json",
+      "fixture": "UserRegistered.v1.json"
+    },
+    {
+      "eventType": "EnterpriseInitialized",
+      "topic": "platform.enterprise.initialized.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/EnterpriseInitialized.v1.schema.json",
+      "fixture": "EnterpriseInitialized.v1.json"
+    },
+    {
+      "eventType": "EnterpriseProfileUpdated",
+      "topic": "platform.enterprise.profile_updated.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/EnterpriseProfileUpdated.v1.schema.json",
+      "fixture": "EnterpriseProfileUpdated.v1.json"
+    },
+    {
+      "eventType": "EnterpriseReviewChanged",
+      "topic": "platform.enterprise.review-changed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/EnterpriseReviewChanged.v1.schema.json",
+      "fixture": "EnterpriseReviewChanged.v1.json"
+    },
+    {
+      "eventType": "EnterpriseWhitelistChanged",
+      "topic": "platform.enterprise.whitelist-changed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/EnterpriseWhitelistChanged.v1.schema.json",
+      "fixture": "EnterpriseWhitelistChanged.v1.json"
+    },
+    {
+      "eventType": "EnterpriseMemberChanged",
+      "topic": "platform.enterprise.member_changed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/EnterpriseMemberChanged.v1.schema.json",
+      "fixture": "EnterpriseMemberChanged.v1.json"
+    },
+    {
+      "eventType": "FeatureFlagChanged",
+      "topic": "platform.feature-flag.changed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/FeatureFlagChanged.v1.schema.json",
+      "fixture": "FeatureFlagChanged.v1.json"
+    },
+    {
+      "eventType": "AgentToolExecutionReported",
+      "topic": "platform.agent.tool-execution-reported.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/AgentToolExecutionReported.v1.schema.json",
+      "fixture": "AgentToolExecutionReported.v1.json"
+    },
+    {
+      "eventType": "AgentRunStatusChanged",
+      "topic": "platform.agent.run-status-changed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/AgentRunStatusChanged.v1.schema.json",
+      "fixture": "AgentRunStatusChanged.v1.json"
+    },
+    {
+      "eventType": "ConsumerTrialAccessChanged",
+      "topic": "commerce.consumer.trial-access-changed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/ConsumerTrialAccessChanged.v1.schema.json",
+      "fixture": "ConsumerTrialAccessChanged.v1.json"
+    },
+    {
+      "eventType": "ProductPublished",
+      "topic": "commerce.product.published.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/ProductPublished.v1.schema.json",
+      "fixture": "ProductPublished.v1.json"
+    },
+    {
+      "eventType": "InventoryChanged",
+      "topic": "commerce.inventory.changed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/InventoryChanged.v1.schema.json",
+      "fixture": "InventoryChanged.v1.json"
+    },
+    {
+      "eventType": "InventoryReservationCreated",
+      "topic": "commerce.inventory-reservation.created.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/InventoryReservationCreated.v1.schema.json",
+      "fixture": "InventoryReservationCreated.v1.json"
+    },
+    {
+      "eventType": "InventoryReservationCommitted",
+      "topic": "commerce.inventory-reservation.committed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/InventoryReservationCommitted.v1.schema.json",
+      "fixture": "InventoryReservationCommitted.v1.json"
+    },
+    {
+      "eventType": "InventoryReservationReleased",
+      "topic": "commerce.inventory-reservation.released.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/InventoryReservationReleased.v1.schema.json",
+      "fixture": "InventoryReservationReleased.v1.json"
+    },
+    {
+      "eventType": "ContentProductClicked",
+      "topic": "commerce.content.product-clicked.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/ContentProductClicked.v1.schema.json",
+      "fixture": "ContentProductClicked.v1.json"
+    },
+    {
+      "eventType": "OrderAttributionFrozen",
+      "topic": "commerce.order.attribution-frozen.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/OrderAttributionFrozen.v1.schema.json",
+      "fixture": "OrderAttributionFrozen.v1.json"
+    },
+    {
+      "eventType": "OrderAttributionAdjusted",
+      "topic": "commerce.order.attribution-adjusted.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/OrderAttributionAdjusted.v1.schema.json",
+      "fixture": "OrderAttributionAdjusted.v1.json"
+    },
+    {
+      "eventType": "OrderPaid",
+      "topic": "commerce.order.paid.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/OrderPaid.v1.schema.json",
+      "fixture": "OrderPaid.v1.json"
+    },
+    {
+      "eventType": "OrderCancelled",
+      "topic": "commerce.order.cancelled.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/OrderCancelled.v1.schema.json",
+      "fixture": "OrderCancelled.v1.json"
+    },
+    {
+      "eventType": "OrderShipmentRegistered",
+      "topic": "commerce.order.shipment-registered.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/OrderShipmentRegistered.v1.schema.json",
+      "fixture": "OrderShipmentRegistered.v1.json"
+    },
+    {
+      "eventType": "OrderReceived",
+      "topic": "commerce.order.received.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/OrderReceived.v1.schema.json",
+      "fixture": "OrderReceived.v1.json"
+    },
+    {
+      "eventType": "OrderSettlementEligible",
+      "topic": "commerce.order.settlement-eligible.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/OrderSettlementEligible.v1.schema.json",
+      "fixture": "OrderSettlementEligible.v1.json"
+    },
+    {
+      "eventType": "AftersaleStatusChanged",
+      "topic": "commerce.aftersale.status-changed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/AftersaleStatusChanged.v1.schema.json",
+      "fixture": "AftersaleStatusChanged.v1.json"
+    },
+    {
+      "eventType": "RefundRequested",
+      "topic": "commerce.refund.requested.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/RefundRequested.v1.schema.json",
+      "fixture": "RefundRequested.v1.json"
+    },
+    {
+      "eventType": "RefundStatusChanged",
+      "topic": "commerce.refund.status-changed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/RefundStatusChanged.v1.schema.json",
+      "fixture": "RefundStatusChanged.v1.json"
+    },
+    {
+      "eventType": "OrderRefunded",
+      "topic": "commerce.order.refunded.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/OrderRefunded.v1.schema.json",
+      "fixture": "OrderRefunded.v1.json"
+    },
+    {
+      "eventType": "ReviewReplyChanged",
+      "topic": "commerce.review.reply-changed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/ReviewReplyChanged.v1.schema.json",
+      "fixture": "ReviewReplyChanged.v1.json"
+    },
+    {
+      "eventType": "ReviewGovernanceChanged",
+      "topic": "commerce.review.governance-changed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/ReviewGovernanceChanged.v1.schema.json",
+      "fixture": "ReviewGovernanceChanged.v1.json"
+    },
+    {
+      "eventType": "LeadCreated",
+      "topic": "crm.lead.created.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/LeadCreated.v1.schema.json",
+      "fixture": "LeadCreated.v1.json"
+    },
+    {
+      "eventType": "LeadStatusChanged",
+      "topic": "crm.lead.status_changed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/LeadStatusChanged.v1.schema.json",
+      "fixture": "LeadStatusChanged.v1.json"
+    },
+    {
+      "eventType": "CustomerUpdated",
+      "topic": "crm.customer.updated.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/CustomerUpdated.v1.schema.json",
+      "fixture": "CustomerUpdated.v1.json"
+    },
+    {
+      "eventType": "CustomerAssigned",
+      "topic": "crm.customer.assigned.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/CustomerAssigned.v1.schema.json",
+      "fixture": "CustomerAssigned.v1.json"
+    },
+    {
+      "eventType": "OpportunityStageChanged",
+      "topic": "crm.opportunity.stage-changed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/OpportunityStageChanged.v1.schema.json",
+      "fixture": "OpportunityStageChanged.v1.json"
+    },
+    {
+      "eventType": "CallCompleted",
+      "topic": "crm.call.completed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/CallCompleted.v1.schema.json",
+      "fixture": "CallCompleted.v1.json"
+    },
+    {
+      "eventType": "WeChatHandoffRequested",
+      "topic": "crm.wechat.handoff-requested.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/WeChatHandoffRequested.v1.schema.json",
+      "fixture": "WeChatHandoffRequested.v1.json"
+    },
+    {
+      "eventType": "GlobalMarketingRefusalChanged",
+      "topic": "crm.marketing.global-refusal-changed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/GlobalMarketingRefusalChanged.v1.schema.json",
+      "fixture": "GlobalMarketingRefusalChanged.v1.json"
+    },
+    {
+      "eventType": "ContactSuppressionChanged",
+      "topic": "crm.marketing.contact-suppression-changed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/ContactSuppressionChanged.v1.schema.json",
+      "fixture": "ContactSuppressionChanged.v1.json"
+    },
+    {
+      "eventType": "ContentVersionSubmitted",
+      "topic": "content.version.submitted.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/ContentVersionSubmitted.v1.schema.json",
+      "fixture": "ContentVersionSubmitted.v1.json"
+    },
+    {
+      "eventType": "ContentReviewCompleted",
+      "topic": "content.review.completed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/ContentReviewCompleted.v1.schema.json",
+      "fixture": "ContentReviewCompleted.v1.json"
+    },
+    {
+      "eventType": "PublicationConfirmed",
+      "topic": "publication.confirmed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/PublicationConfirmed.v1.schema.json",
+      "fixture": "PublicationConfirmed.v1.json"
+    },
+    {
+      "eventType": "PublicationServiceOrderChanged",
+      "topic": "ledger.publication-service-order.changed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/PublicationServiceOrderChanged.v1.schema.json",
+      "fixture": "PublicationServiceOrderChanged.v1.json"
+    },
+    {
+      "eventType": "ChannelPublicationReserved",
+      "topic": "ledger.publication.charge-reserved.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/ChannelPublicationReserved.v1.schema.json",
+      "fixture": "ChannelPublicationReserved.v1.json"
+    },
+    {
+      "eventType": "ChannelPublicationFirstVisible",
+      "topic": "publication.channel.first_visible.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/ChannelPublicationFirstVisible.v1.schema.json",
+      "fixture": "ChannelPublicationFirstVisible.v1.json"
+    },
+    {
+      "eventType": "ChannelPublicationEffective",
+      "topic": "publication.channel.effective.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/ChannelPublicationEffective.v1.schema.json",
+      "fixture": "ChannelPublicationEffective.v1.json"
+    },
+    {
+      "eventType": "ChannelPublicationFailed",
+      "topic": "publication.channel.failed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/ChannelPublicationFailed.v1.schema.json",
+      "fixture": "ChannelPublicationFailed.v1.json"
+    },
+    {
+      "eventType": "ChannelPublicationRefundEligible",
+      "topic": "publication.channel.refund-eligible.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/ChannelPublicationRefundEligible.v1.schema.json",
+      "fixture": "ChannelPublicationRefundEligible.v1.json"
+    },
+    {
+      "eventType": "ChannelPublicationChargeReleased",
+      "topic": "ledger.publication.charge-released.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/ChannelPublicationChargeReleased.v1.schema.json",
+      "fixture": "ChannelPublicationChargeReleased.v1.json"
+    },
+    {
+      "eventType": "AccountAssignmentRequested",
+      "topic": "publication.account-assignment.requested.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/AccountAssignmentRequested.v1.schema.json",
+      "fixture": "AccountAssignmentRequested.v1.json"
+    },
+    {
+      "eventType": "AccountAssignmentCompleted",
+      "topic": "opc.account-assignment.completed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/AccountAssignmentCompleted.v1.schema.json",
+      "fixture": "AccountAssignmentCompleted.v1.json"
+    },
+    {
+      "eventType": "AccountAssignmentUnavailable",
+      "topic": "opc.account-assignment.unavailable.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/AccountAssignmentUnavailable.v1.schema.json",
+      "fixture": "AccountAssignmentUnavailable.v1.json"
+    },
+    {
+      "eventType": "AccountAssignmentReleaseRequested",
+      "topic": "publication.account-assignment.release-requested.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/AccountAssignmentReleaseRequested.v1.schema.json",
+      "fixture": "AccountAssignmentReleaseRequested.v1.json"
+    },
+    {
+      "eventType": "AccountAssignmentReleased",
+      "topic": "opc.account-assignment.released.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/AccountAssignmentReleased.v1.schema.json",
+      "fixture": "AccountAssignmentReleased.v1.json"
+    },
+    {
+      "eventType": "OpcAccountStatusChanged",
+      "topic": "opc.account.status-changed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/OpcAccountStatusChanged.v1.schema.json",
+      "fixture": "OpcAccountStatusChanged.v1.json"
+    },
+    {
+      "eventType": "RequestOpcEarningSettlement",
+      "topic": "ledger.command.request-opc-earning-settlement.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/RequestOpcEarningSettlement.v1.schema.json",
+      "fixture": "RequestOpcEarningSettlement.v1.json"
+    },
+    {
+      "eventType": "OpcEarningSettled",
+      "topic": "ledger.opc-earning.settled.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/OpcEarningSettled.v1.schema.json",
+      "fixture": "OpcEarningSettled.v1.json"
+    },
+    {
+      "eventType": "OpcEarningReversed",
+      "topic": "ledger.opc-earning.reversed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/OpcEarningReversed.v1.schema.json",
+      "fixture": "OpcEarningReversed.v1.json"
+    },
+    {
+      "eventType": "MembershipChanged",
+      "topic": "ledger.membership.changed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/MembershipChanged.v1.schema.json",
+      "fixture": "MembershipChanged.v1.json"
+    },
+    {
+      "eventType": "BenefitQuotaChanged",
+      "topic": "ledger.benefit-quota.changed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/BenefitQuotaChanged.v1.schema.json",
+      "fixture": "BenefitQuotaChanged.v1.json"
+    },
+    {
+      "eventType": "ProfitBaseFrozen",
+      "topic": "ledger.profit-base.frozen.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/ProfitBaseFrozen.v1.schema.json",
+      "fixture": "ProfitBaseFrozen.v1.json"
+    },
+    {
+      "eventType": "ProfitBaseAllocated",
+      "topic": "ledger.profit-base.allocated.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/ProfitBaseAllocated.v1.schema.json",
+      "fixture": "ProfitBaseAllocated.v1.json"
+    },
+    {
+      "eventType": "ProfitBaseReversed",
+      "topic": "ledger.profit-base.reversed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/ProfitBaseReversed.v1.schema.json",
+      "fixture": "ProfitBaseReversed.v1.json"
+    },
+    {
+      "eventType": "MerchantSettlementChanged",
+      "topic": "ledger.merchant-settlement.changed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/MerchantSettlementChanged.v1.schema.json",
+      "fixture": "MerchantSettlementChanged.v1.json"
+    },
+    {
+      "eventType": "PointsLedgerEntryPosted",
+      "topic": "ledger.points-entry.posted.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/PointsLedgerEntryPosted.v1.schema.json",
+      "fixture": "PointsLedgerEntryPosted.v1.json"
+    },
+    {
+      "eventType": "PointsBalanceChanged",
+      "topic": "ledger.points-balance.changed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/PointsBalanceChanged.v1.schema.json",
+      "fixture": "PointsBalanceChanged.v1.json"
+    },
+    {
+      "eventType": "WithdrawalStatusChanged",
+      "topic": "ledger.withdrawal.status-changed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/WithdrawalStatusChanged.v1.schema.json",
+      "fixture": "WithdrawalStatusChanged.v1.json"
+    },
+    {
+      "eventType": "CashLedgerEntryPosted",
+      "topic": "ledger.cash-entry.posted.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/CashLedgerEntryPosted.v1.schema.json",
+      "fixture": "CashLedgerEntryPosted.v1.json"
+    },
+    {
+      "eventType": "EnterpriseBalanceChanged",
+      "topic": "ledger.enterprise-balance.changed.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/EnterpriseBalanceChanged.v1.schema.json",
+      "fixture": "EnterpriseBalanceChanged.v1.json"
+    },
+    {
+      "eventType": "LedgerAnomalyDetected",
+      "topic": "ledger.anomaly.detected.v1",
+      "schemaVersion": 1,
+      "schema": "../../events/LedgerAnomalyDetected.v1.schema.json",
+      "fixture": "LedgerAnomalyDetected.v1.json"
+    }
+  ]
+}

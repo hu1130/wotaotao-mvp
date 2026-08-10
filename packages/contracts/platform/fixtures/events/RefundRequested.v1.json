@@ -1,0 +1,33 @@
+{
+  "eventId": "evt_refundrequested_001",
+  "eventType": "RefundRequested",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-02",
+  "environment": "DEV",
+  "audience": [
+    "SYS-03",
+    "SYS-06",
+    "SYS-08"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "Refund",
+  "aggregateId": "rfd_contract_001",
+  "aggregateVersion": 1,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "REFUND_REQUEST:rfd_contract_001:1",
+  "payload": {
+    "refundId": "rfd_contract_001",
+    "aftersaleId": "afs_contract_001",
+    "orderId": "ord_contract_001",
+    "enterpriseId": "ent_contract_001",
+    "paymentId": "pay_contract_001",
+    "amountFen": 2900,
+    "requestVersion": 1,
+    "approvalRef": "approval_contract_002",
+    "requestedAt": "2026-08-10T02:00:00Z"
+  }
+}

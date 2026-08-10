@@ -1,0 +1,33 @@
+{
+  "operationId": "sys03.inventory.command",
+  "method": "POST",
+  "path": "/api/v1/commerce/inventories/{inventoryId}/commands",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "INVENTORY_COMMAND:{inventoryId}:{businessKey}"
+    },
+    "params": {
+      "inventoryId": "inv_001"
+    },
+    "body": {
+      "commandType": "SET",
+      "quantity": 100,
+      "businessKey": "MANUAL_STOCKTAKE:20260810",
+      "expectedVersion": 3,
+      "reason": "盘点调整"
+    }
+  },
+  "status": 200,
+  "response": {
+    "data": {
+      "inventoryId": "inv_001",
+      "availableQuantity": 100,
+      "reservedQuantity": 0,
+      "version": 4
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

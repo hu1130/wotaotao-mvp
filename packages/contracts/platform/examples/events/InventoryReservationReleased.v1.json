@@ -1,0 +1,32 @@
+{
+  "eventId": "evt_inventoryreservationreleased_001",
+  "eventType": "InventoryReservationReleased",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-03",
+  "environment": "DEV",
+  "audience": [
+    "SYS-02"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "InventoryReservation",
+  "aggregateId": "ires_contract_001",
+  "aggregateVersion": 2,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "INVENTORY_RELEASE:ires_contract_001:USER_CANCEL",
+  "payload": {
+    "commandId": "cmd_inventory_release_001",
+    "reservationId": "ires_contract_001",
+    "orderId": "ord_contract_001",
+    "enterpriseId": "ent_contract_001",
+    "reason": "USER_CANCEL",
+    "orderVersion": 2,
+    "releaseVersion": 2,
+    "result": "RELEASED",
+    "releasedAt": "2026-08-10T02:05:00Z",
+    "traceId": "trace_contract_fixture_001"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "eventId": "evt_wechathandoffrequested_001",
+  "eventType": "WeChatHandoffRequested",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-04",
+  "environment": "DEV",
+  "audience": [
+    "SYS-06"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "WeChatHandoff",
+  "aggregateId": "whf_contract_001",
+  "aggregateVersion": 1,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "WECHAT_HANDOFF:whf_contract_001:1",
+  "payload": {
+    "handoffRef": "whf_contract_001",
+    "conversationId": "conv_contract_001",
+    "enterpriseId": "ent_contract_001",
+    "customerId": "cus_contract_001",
+    "reasonCode": "CUSTOMER_REQUESTED_HUMAN",
+    "status": "REQUESTED",
+    "handoffVersion": 1,
+    "analyticsSnapshotRef": "mas_contract_handoff_001",
+    "analyticsSnapshotVersion": 1,
+    "analyticsSnapshotHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "requestedAt": "2026-08-10T02:00:00Z"
+  }
+}

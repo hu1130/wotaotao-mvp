@@ -1,0 +1,36 @@
+{
+  "operationId": "sys08.publicationCharge.reserve",
+  "method": "POST",
+  "path": "/internal/v1/ledger/publication-charge-reservations",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "idempotency-key": "PUBLICATION_CHARGE:{channelPublicationId}"
+    },
+    "body": {
+      "publicationPlanId": "ppl_001",
+      "channelPublicationId": "chp_dy_001",
+      "enterpriseId": "ent_001",
+      "channel": "DOUYIN",
+      "douyinExecutionMode": "OPC_RENTED",
+      "sourceType": "QUOTA",
+      "sourceVersion": 1,
+      "quotaBatchId": "qtb_001",
+      "serviceOrderId": null,
+      "paymentId": null,
+      "authorizedBalanceRef": null
+    }
+  },
+  "status": 202,
+  "response": {
+    "data": {
+      "accepted": true,
+      "chargeReservationId": "pcr_001",
+      "status": "RESERVED",
+      "sourceType": "QUOTA",
+      "expiresAt": "2026-08-10T03:00:00Z"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

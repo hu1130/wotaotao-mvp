@@ -1,0 +1,23 @@
+{
+  "operationId": "sys05.assignment.getReleaseEligibility",
+  "method": "GET",
+  "path": "/internal/v1/content/channel-publications/{channelPublicationId}/executions/{executionId}/assignment-release-eligibility",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001"
+    },
+    "params": {
+      "channelPublicationId": "chp_dy_001",
+      "executionId": "exe_001"
+    }
+  },
+  "status": 403,
+  "response": {
+    "code": "FORBIDDEN",
+    "message": "The authenticated actor is not allowed to perform the action.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

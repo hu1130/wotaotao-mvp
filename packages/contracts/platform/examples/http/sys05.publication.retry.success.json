@@ -1,0 +1,31 @@
+{
+  "operationId": "sys05.publication.retry",
+  "method": "POST",
+  "path": "/api/v1/content/channel-publications/{channelPublicationId}/retry",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "x-csrf-token": "csrf_example_token_001",
+      "idempotency-key": "PUBLICATION_RETRY:{channelPublicationId}:{retryRequestId}"
+    },
+    "params": {
+      "channelPublicationId": "chp_dy_001"
+    },
+    "body": {
+      "retryRequestId": "req_retry_001",
+      "reason": "修复外部依赖后重试",
+      "accountPolicyRef": "acp_001"
+    }
+  },
+  "status": 202,
+  "response": {
+    "data": {
+      "channelPublicationId": "chp_dy_001",
+      "executionId": "exe_002",
+      "status": "QUEUED"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

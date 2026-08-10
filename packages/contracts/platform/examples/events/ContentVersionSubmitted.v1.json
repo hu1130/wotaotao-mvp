@@ -1,0 +1,32 @@
+{
+  "eventId": "evt_contentversionsubmitted_001",
+  "eventType": "ContentVersionSubmitted",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-05",
+  "environment": "DEV",
+  "audience": [
+    "SYS-01",
+    "SYS-06"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "ContentChannelVersion",
+  "aggregateId": "cver_contract_001",
+  "aggregateVersion": 2,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "CONTENT_SUBMIT:cver_contract_001:2",
+  "payload": {
+    "contentId": "cnt_contract_001",
+    "channelVersionId": "cver_contract_001",
+    "enterpriseId": "ent_contract_001",
+    "channel": "DOUYIN",
+    "contentVersion": 2,
+    "submissionId": "csub_contract_001",
+    "snapshotHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "submittedBy": "usr_contract_001",
+    "submittedAt": "2026-08-10T02:00:00Z"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "operationId": "sys02.cart.addItem",
+  "method": "POST",
+  "path": "/api/v1/mall/carts/items",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "idempotency-key": "CART_ITEM:{cartOwner}:{skuId}:{clientRequestId}"
+    },
+    "body": {
+      "skuId": "sku_001",
+      "quantity": 1,
+      "expectedCartVersion": null,
+      "clientRequestId": "req_cart_001"
+    }
+  },
+  "status": 400,
+  "response": {
+    "code": "VALIDATION_ERROR",
+    "message": "Request shape or field validation failed.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

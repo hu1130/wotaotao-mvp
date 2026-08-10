@@ -1,0 +1,36 @@
+{
+  "eventId": "evt_enterpriseinitialized_001",
+  "eventType": "EnterpriseInitialized",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-01",
+  "environment": "DEV",
+  "audience": [
+    "SYS-03",
+    "SYS-04",
+    "SYS-05",
+    "SYS-06",
+    "SYS-08"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "Enterprise",
+  "aggregateId": "ent_contract_001",
+  "aggregateVersion": 1,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "INIT_ENTERPRISE_BENEFITS:ent_contract_001",
+  "payload": {
+    "enterpriseId": "ent_contract_001",
+    "profileId": "epr_contract_001",
+    "profileVersion": 1,
+    "initializationVersion": 1,
+    "industryCode": "RETAIL",
+    "primaryProductCodes": [
+      "HOME_GOODS"
+    ],
+    "enterpriseStatus": "ACTIVE",
+    "initializedAt": "2026-08-10T02:00:00Z"
+  }
+}

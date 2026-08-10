@@ -1,0 +1,34 @@
+{
+  "operationId": "sys01.enterprise.decideReview",
+  "method": "POST",
+  "path": "/api/v1/admin/enterprise-review-submissions/{reviewSubmissionId}/decision",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "x-csrf-token": "csrf_example_token_001",
+      "idempotency-key": "ENTERPRISE_REVIEW_DECISION:{reviewSubmissionId}:{expectedVersion}:{decision}"
+    },
+    "params": {
+      "reviewSubmissionId": "ers_001"
+    },
+    "body": {
+      "decision": "APPROVE",
+      "reason": "资料完整",
+      "evidenceRefs": [
+        "evd_002"
+      ],
+      "expectedVersion": 1
+    }
+  },
+  "status": 200,
+  "response": {
+    "data": {
+      "reviewSubmissionId": "ers_001",
+      "reviewStatus": "APPROVED",
+      "decisionVersion": 2
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

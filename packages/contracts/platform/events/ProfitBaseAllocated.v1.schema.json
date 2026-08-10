@@ -1,0 +1,295 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.wotaotao.com/events/ledger.profit-base.allocated.v1/envelope.schema.json",
+  "title": "ProfitBaseAllocated envelope v1",
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable evt_ identifier",
+      "pattern": "^evt_[A-Za-z0-9_-]+$"
+    },
+    "eventType": {
+      "type": "string",
+      "const": "ProfitBaseAllocated"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Business occurrence time"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Outbox publication time"
+    },
+    "producer": {
+      "type": "string",
+      "const": "SYS-08"
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "DEV",
+        "TEST",
+        "STAGING",
+        "PROD"
+      ]
+    },
+    "audience": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SYS-06"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "enterpriseId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "aggregateType": {
+      "type": "string",
+      "const": "ProfitBase"
+    },
+    "aggregateId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable aggregate identifier"
+    },
+    "aggregateVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonic aggregate version"
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causationId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable evt_ identifier",
+          "pattern": "^evt_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "correlationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable business idempotency key; unchanged on retry"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "profitBaseId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable pb_ identifier",
+          "pattern": "^pb_[A-Za-z0-9_-]+$"
+        },
+        "orderId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ord_ identifier",
+          "pattern": "^ord_[A-Za-z0-9_-]+$"
+        },
+        "subOrderId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable subord_ identifier",
+          "pattern": "^subord_[A-Za-z0-9_-]+$"
+        },
+        "attributionVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "beneficiaries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "enterpriseId": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Stable ent_ identifier",
+                "pattern": "^ent_[A-Za-z0-9_-]+$"
+              },
+              "role": {
+                "type": "string",
+                "enum": [
+                  "SELLER",
+                  "PROMOTER",
+                  "MEMBERSHIP_OWNER"
+                ]
+              },
+              "amountFen": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Non-negative integer amount in fen"
+              }
+            },
+            "required": [
+              "enterpriseId",
+              "role",
+              "amountFen"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        },
+        "platformAmountFen": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Non-negative integer amount in fen"
+        },
+        "membershipPlanVersionId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "distributionRuleVersionId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "roundingFen": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "ALLOCATED"
+          ]
+        },
+        "sourceVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "allocatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "profitBaseId",
+        "orderId",
+        "subOrderId",
+        "attributionVersion",
+        "beneficiaries",
+        "platformAmountFen",
+        "membershipPlanVersionId",
+        "distributionRuleVersionId",
+        "roundingFen",
+        "status",
+        "sourceVersion",
+        "allocatedAt"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://contracts.wotaotao.com/events/ledger.profit-base.allocated.v1/payload.schema.json",
+      "title": "ProfitBaseAllocated payload v1"
+    }
+  },
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "occurredAt",
+    "publishedAt",
+    "producer",
+    "environment",
+    "audience",
+    "enterpriseId",
+    "aggregateType",
+    "aggregateId",
+    "aggregateVersion",
+    "traceId",
+    "causationId",
+    "correlationId",
+    "idempotencyKey",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "description": "Non-cash operational projection only; SYS-06 cash metrics use ledger entries.",
+  "examples": [
+    {
+      "eventId": "evt_profitbaseallocated_001",
+      "eventType": "ProfitBaseAllocated",
+      "schemaVersion": 1,
+      "occurredAt": "2026-08-10T02:00:00Z",
+      "publishedAt": "2026-08-10T02:00:01Z",
+      "producer": "SYS-08",
+      "environment": "DEV",
+      "audience": [
+        "SYS-06"
+      ],
+      "enterpriseId": null,
+      "aggregateType": "ProfitBase",
+      "aggregateId": "pb_contract_001",
+      "aggregateVersion": 2,
+      "traceId": "trace_contract_fixture_001",
+      "causationId": null,
+      "correlationId": "corr_contract_fixture_001",
+      "idempotencyKey": "PROFIT_ALLOCATE:pb_contract_001:mpv_contract_001",
+      "payload": {
+        "profitBaseId": "pb_contract_001",
+        "orderId": "ord_contract_001",
+        "subOrderId": "subord_contract_001",
+        "attributionVersion": 1,
+        "beneficiaries": [
+          {
+            "enterpriseId": "ent_contract_001",
+            "role": "SELLER",
+            "amountFen": 1800
+          },
+          {
+            "enterpriseId": "ent_contract_002",
+            "role": "PROMOTER",
+            "amountFen": 600
+          }
+        ],
+        "platformAmountFen": 600,
+        "membershipPlanVersionId": "mpv_contract_001",
+        "distributionRuleVersionId": "dru_contract_001",
+        "roundingFen": 0,
+        "status": "ALLOCATED",
+        "sourceVersion": 2,
+        "allocatedAt": "2026-08-17T02:01:00Z"
+      }
+    }
+  ],
+  "x-topic": "ledger.profit-base.allocated.v1",
+  "x-producer": "SYS-08",
+  "x-consumers": [
+    "SYS-06"
+  ],
+  "x-idempotency-key-format": "PROFIT_ALLOCATE:{profitBaseId}:{targetPlanVersionId}"
+}

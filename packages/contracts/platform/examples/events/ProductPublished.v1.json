@@ -1,0 +1,43 @@
+{
+  "eventId": "evt_productpublished_001",
+  "eventType": "ProductPublished",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-03",
+  "environment": "DEV",
+  "audience": [
+    "SYS-02",
+    "SYS-04",
+    "SYS-05",
+    "SYS-06"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "Product",
+  "aggregateId": "prd_contract_001",
+  "aggregateVersion": 3,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "PRODUCT_PUBLISHED:prd_contract_001:3",
+  "payload": {
+    "productId": "prd_contract_001",
+    "productVersion": 3,
+    "enterpriseId": "ent_contract_001",
+    "storeId": "store_contract_001",
+    "salesModel": "MERCHANT",
+    "sellerEnterpriseId": "ent_contract_001",
+    "supplierId": null,
+    "payeeType": "MERCHANT",
+    "skuVersionRefs": [
+      {
+        "skuId": "sku_contract_001",
+        "skuVersion": 2
+      }
+    ],
+    "publicStatus": "PUBLISHED",
+    "publishedProductSnapshotRef": "pps_contract_001",
+    "snapshotHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "publishedAt": "2026-08-10T02:00:00Z"
+  }
+}

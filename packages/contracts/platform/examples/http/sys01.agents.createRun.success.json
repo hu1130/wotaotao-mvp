@@ -1,0 +1,31 @@
+{
+  "operationId": "sys01.agents.createRun",
+  "method": "POST",
+  "path": "/api/v1/agent-runs",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "AGENT_RUN:{enterpriseId}:{clientRequestId}"
+    },
+    "body": {
+      "clientRequestId": "req_agent_001",
+      "agentCode": "CONTENT_PUBLISHING",
+      "goal": "发布商品宣传内容",
+      "businessRefs": [
+        "product:prd_001"
+      ]
+    }
+  },
+  "status": 201,
+  "response": {
+    "data": {
+      "agentRunId": "agr_001",
+      "status": "PREVIEW_READY",
+      "previewVersion": 1,
+      "quoteRef": "pqt_001"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

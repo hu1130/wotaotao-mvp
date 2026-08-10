@@ -1,0 +1,33 @@
+{
+  "operationId": "sys01.enterprise.updateProfile",
+  "method": "PUT",
+  "path": "/api/v1/enterprises/{enterpriseId}/profile",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "ENTERPRISE_PROFILE:{enterpriseId}:{expectedVersion}:{requestId}"
+    },
+    "params": {
+      "enterpriseId": "ent_001"
+    },
+    "body": {
+      "expectedVersion": 3,
+      "industryCode": "RETAIL",
+      "mainProducts": [
+        "茶叶",
+        "茶具"
+      ],
+      "reason": "新增主营产品"
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

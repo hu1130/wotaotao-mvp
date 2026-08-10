@@ -1,0 +1,35 @@
+{
+  "operationId": "sys01.auth.createPhoneSession",
+  "method": "POST",
+  "path": "/api/v1/auth/phone/session",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "idempotency-key": "PHONE_SESSION:{phoneHash}:{clientType}:{clientRequestId}"
+    },
+    "body": {
+      "phone": "+8613800000000",
+      "code": "123456",
+      "clientType": "MALL",
+      "returnUrl": "/mall/orders",
+      "clientRequestId": "req_login_001"
+    }
+  },
+  "status": 201,
+  "response": {
+    "data": {
+      "user": {
+        "userId": "usr_001",
+        "phoneMasked": "138****0000"
+      },
+      "session": {
+        "accessToken": "<access-token>",
+        "refreshToken": "<refresh-token>",
+        "expiresAt": "2026-08-10T04:00:00Z"
+      },
+      "nextRoute": "/mall/orders"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "operationId": "sys06.analytics.createExport",
+  "method": "POST",
+  "path": "/api/v1/analytics/exports",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "x-csrf-token": "csrf_example_token_001",
+      "idempotency-key": "ANALYTICS_EXPORT:{actorId}:{querySnapshotRef}:{fieldSetHash}"
+    },
+    "body": {
+      "querySnapshotRef": "qsn_001",
+      "metricIds": [
+        "met_sales_paid"
+      ],
+      "fields": [
+        "sourceEntityId",
+        "paidFen",
+        "occurredAt"
+      ],
+      "format": "XLSX",
+      "reason": "月度经营复盘"
+    }
+  },
+  "status": 202,
+  "response": {
+    "data": {
+      "exportId": "exp_001",
+      "status": "QUEUED",
+      "querySnapshotRef": "qsn_001",
+      "expiresAt": "2026-08-11T02:00:00Z"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "operationId": "sys05.publication.createVisibilityCheck",
+  "method": "POST",
+  "path": "/api/v1/content/channel-publications/{channelPublicationId}/visibility-checks",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "x-csrf-token": "csrf_example_token_001",
+      "idempotency-key": "VISIBILITY_CHECK:{channelPublicationId}:{checkpoint}:{evidenceHash}"
+    },
+    "params": {
+      "channelPublicationId": "chp_dy_001"
+    },
+    "body": {
+      "checkpoint": "PLUS_24H",
+      "checkedAt": "2026-08-11T02:00:00Z",
+      "result": "VISIBLE",
+      "method": "MANUAL",
+      "evidenceRefs": [
+        "evd_101"
+      ],
+      "evidenceHash": "5555555555555555555555555555555555555555555555555555555555555555",
+      "reviewAction": "CONFIRM",
+      "expectedVersion": 4
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

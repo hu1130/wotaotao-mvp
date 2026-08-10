@@ -1,0 +1,30 @@
+{
+  "operationId": "sys07.opc.updateProfile",
+  "method": "PUT",
+  "path": "/api/v1/opc/me/profile",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "x-csrf-token": "csrf_example_token_001",
+      "idempotency-key": "OPC_PROFILE:{providerId}:{expectedVersion}:{clientRequestId}"
+    },
+    "body": {
+      "expectedVersion": 3,
+      "clientRequestId": "req_opc_profile_001",
+      "identityEvidenceRefs": [
+        "evd_001"
+      ],
+      "contactRef": "ctc_001"
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

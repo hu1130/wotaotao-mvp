@@ -1,0 +1,28 @@
+{
+  "operationId": "sys08.enterprise.createWithdrawal",
+  "method": "POST",
+  "path": "/api/v1/withdrawals",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "x-csrf-token": "csrf_example_token_001",
+      "idempotency-key": "ENTERPRISE_WITHDRAWAL:{enterpriseId}:{clientRequestId}"
+    },
+    "body": {
+      "clientRequestId": "req_enterprise_withdraw_001",
+      "amountFen": 100000,
+      "payoutProfileRef": "ppr_ent_001",
+      "reason": "企业经营款提现"
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

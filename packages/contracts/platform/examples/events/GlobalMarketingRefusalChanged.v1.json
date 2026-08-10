@@ -1,0 +1,30 @@
+{
+  "eventId": "evt_globalmarketingrefusalchanged_001",
+  "eventType": "GlobalMarketingRefusalChanged",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-04",
+  "environment": "DEV",
+  "audience": [
+    "SYS-01",
+    "SYS-06"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "Customer",
+  "aggregateId": "cus_contract_001",
+  "aggregateVersion": 2,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "CRM_GLOBAL_REFUSAL:cus_contract_001:2",
+  "payload": {
+    "customerId": "cus_contract_001",
+    "enterpriseId": "ent_contract_001",
+    "status": "RELEASED",
+    "reasonCode": "NEW_CONSENT_VERIFIED",
+    "refusalVersion": 2,
+    "approvalRef": "approval_contract_004",
+    "changedAt": "2026-08-10T02:00:00Z"
+  }
+}

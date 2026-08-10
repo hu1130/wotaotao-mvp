@@ -1,0 +1,33 @@
+{
+  "eventId": "evt_accountassignmentrequested_001",
+  "eventType": "AccountAssignmentRequested",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-05",
+  "environment": "DEV",
+  "audience": [
+    "SYS-07"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "ChannelPublication",
+  "aggregateId": "cpub_contract_001",
+  "aggregateVersion": 1,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "ACCOUNT_ASSIGNMENT_REQUEST:cpub_contract_001:1",
+  "payload": {
+    "enterpriseId": "ent_contract_001",
+    "publicationPlanId": "pplan_contract_001",
+    "channelPublicationId": "cpub_contract_001",
+    "channel": "DOUYIN",
+    "requiredAccountOwnershipType": "OPC_RENTED",
+    "constraints": {
+      "industryCode": "RETAIL"
+    },
+    "assignmentRequestVersion": 1,
+    "sourceVersion": 2,
+    "requestedAt": "2026-08-10T02:00:00Z"
+  }
+}

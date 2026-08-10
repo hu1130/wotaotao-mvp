@@ -1,0 +1,28 @@
+{
+  "operationId": "sys02.payment.create",
+  "method": "POST",
+  "path": "/api/v1/mall/orders/{orderId}/payments",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "MALL_PAYMENT:{orderId}:{channel}:{clientRequestId}"
+    },
+    "params": {
+      "orderId": "ord_001"
+    },
+    "body": {
+      "channel": "WECHAT",
+      "clientRequestId": "req_payment_001"
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

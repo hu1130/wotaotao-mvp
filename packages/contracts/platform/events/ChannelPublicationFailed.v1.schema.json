@@ -1,0 +1,276 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.wotaotao.com/events/publication.channel.failed.v1/envelope.schema.json",
+  "title": "ChannelPublicationFailed envelope v1",
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable evt_ identifier",
+      "pattern": "^evt_[A-Za-z0-9_-]+$"
+    },
+    "eventType": {
+      "type": "string",
+      "const": "ChannelPublicationFailed"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Business occurrence time"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Outbox publication time"
+    },
+    "producer": {
+      "type": "string",
+      "const": "SYS-05"
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "DEV",
+        "TEST",
+        "STAGING",
+        "PROD"
+      ]
+    },
+    "audience": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SYS-06",
+          "SYS-07",
+          "SYS-08"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "enterpriseId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "aggregateType": {
+      "type": "string",
+      "const": "ChannelPublication"
+    },
+    "aggregateId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable aggregate identifier"
+    },
+    "aggregateVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonic aggregate version"
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causationId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable evt_ identifier",
+          "pattern": "^evt_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "correlationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable business idempotency key; unchanged on retry"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "enterpriseId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        "publicationPlanId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable pplan_ identifier",
+          "pattern": "^pplan_[A-Za-z0-9_-]+$"
+        },
+        "channelPublicationId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable cpub_ identifier",
+          "pattern": "^cpub_[A-Za-z0-9_-]+$"
+        },
+        "executionId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "description": "Stable exec_ identifier",
+              "pattern": "^exec_[A-Za-z0-9_-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "failureStage": {
+          "type": "string",
+          "minLength": 1
+        },
+        "failureCode": {
+          "type": "string",
+          "minLength": 1
+        },
+        "terminal": {
+          "type": "boolean"
+        },
+        "chargeReservationId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "description": "Stable pcr_ identifier",
+              "pattern": "^pcr_[A-Za-z0-9_-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "accountAssignmentId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "description": "Stable aasg_ identifier",
+              "pattern": "^aasg_[A-Za-z0-9_-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sourceVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "failedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "enterpriseId",
+        "publicationPlanId",
+        "channelPublicationId",
+        "executionId",
+        "failureStage",
+        "failureCode",
+        "terminal",
+        "chargeReservationId",
+        "accountAssignmentId",
+        "sourceVersion",
+        "failedAt"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://contracts.wotaotao.com/events/publication.channel.failed.v1/payload.schema.json",
+      "title": "ChannelPublicationFailed payload v1"
+    }
+  },
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "occurredAt",
+    "publishedAt",
+    "producer",
+    "environment",
+    "audience",
+    "enterpriseId",
+    "aggregateType",
+    "aggregateId",
+    "aggregateVersion",
+    "traceId",
+    "causationId",
+    "correlationId",
+    "idempotencyKey",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "description": "channelPublicationId + sourceVersion; late failure cannot overwrite an effective publication",
+  "examples": [
+    {
+      "eventId": "evt_channelpublicationfailed_001",
+      "eventType": "ChannelPublicationFailed",
+      "schemaVersion": 1,
+      "occurredAt": "2026-08-10T02:00:00Z",
+      "publishedAt": "2026-08-10T02:00:01Z",
+      "producer": "SYS-05",
+      "environment": "DEV",
+      "audience": [
+        "SYS-06",
+        "SYS-07",
+        "SYS-08"
+      ],
+      "enterpriseId": "ent_contract_001",
+      "aggregateType": "ChannelPublication",
+      "aggregateId": "cpub_contract_001",
+      "aggregateVersion": 4,
+      "traceId": "trace_contract_fixture_001",
+      "causationId": null,
+      "correlationId": "corr_contract_fixture_001",
+      "idempotencyKey": "PUBLICATION_FAILED:cpub_contract_001:4",
+      "payload": {
+        "enterpriseId": "ent_contract_001",
+        "publicationPlanId": "pplan_contract_001",
+        "channelPublicationId": "cpub_contract_001",
+        "executionId": "exec_contract_001",
+        "failureStage": "VISIBILITY_24H",
+        "failureCode": "WORK_NOT_VISIBLE",
+        "terminal": true,
+        "chargeReservationId": "pcr_contract_001",
+        "accountAssignmentId": "aasg_contract_001",
+        "sourceVersion": 4,
+        "failedAt": "2026-08-11T02:00:00Z"
+      }
+    }
+  ],
+  "x-topic": "publication.channel.failed.v1",
+  "x-producer": "SYS-05",
+  "x-consumers": [
+    "SYS-06",
+    "SYS-07",
+    "SYS-08"
+  ],
+  "x-idempotency-key-format": "PUBLICATION_FAILED:{channelPublicationId}:{sourceVersion}"
+}

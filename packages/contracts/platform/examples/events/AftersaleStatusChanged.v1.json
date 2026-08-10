@@ -1,0 +1,35 @@
+{
+  "eventId": "evt_aftersalestatuschanged_001",
+  "eventType": "AftersaleStatusChanged",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-02",
+  "environment": "DEV",
+  "audience": [
+    "SYS-03",
+    "SYS-06",
+    "SYS-08"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "Aftersale",
+  "aggregateId": "afs_contract_001",
+  "aggregateVersion": 2,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "AFTERSALE_STATUS:afs_contract_001:2",
+  "payload": {
+    "aftersaleId": "afs_contract_001",
+    "orderId": "ord_contract_001",
+    "subOrderId": "subord_contract_001",
+    "enterpriseId": "ent_contract_001",
+    "status": "APPROVED",
+    "responsibleParty": "MERCHANT",
+    "approvedFen": 2900,
+    "version": 2,
+    "decisionVersion": 1,
+    "approvalRef": "approval_contract_002",
+    "changedAt": "2026-08-10T02:00:00Z"
+  }
+}

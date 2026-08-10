@@ -5,12 +5,28 @@
   "packageManager": "pnpm@11.9.0",
   "scripts": {
     "dev": "pnpm --parallel --filter @wotao/review-api --filter @wotao/review-web dev",
-    "build": "pnpm -r build",
-    "typecheck": "pnpm -r typecheck",
-    "test": "pnpm --filter @wotao/contracts test && pnpm --filter @wotao/review-api test",
+    "build": "pnpm prisma:generate && pnpm -r build",
+    "typecheck": "pnpm prisma:generate && pnpm -r typecheck",
+    "test": "pnpm prisma:generate && pnpm contracts:generate:check && pnpm sdk:generate:check && pnpm sdk:package:test && pnpm --filter @wotao/contracts test && pnpm --filter @wotao/mock-api test && pnpm --filter @wotao/platform-contract-mock test && pnpm --filter @wotao/platform-sdk test && pnpm --filter @wotao/review-api test",
+    "openapi:generate": "tsx scripts/generate-openapi.ts",
+    "openapi:check": "tsx scripts/generate-openapi.ts --check",
+    "contracts:generate": "pnpm openapi:generate && tsx scripts/generate-platform-contracts.ts",
+    "contracts:generate:check": "pnpm openapi:check && tsx scripts/generate-platform-contracts.ts --check",
+    "sdk:generate": "pnpm --filter @wotao/platform-sdk generate",
+    "sdk:generate:check": "node scripts/check-generated-sdk.mjs",
+    "sdk:package:test": "node scripts/test-sdk-package.mjs",
+    "contracts:test:provider": "pnpm --filter @wotao/contracts exec vitest run tests/platform-provider-contract.test.ts && pnpm --filter @wotao/platform-contract-mock test",
+    "contracts:test:consumer": "pnpm --filter @wotao/contracts exec vitest run tests/platform-consumer-contract.test.ts && pnpm --filter @wotao/platform-sdk test",
+    "contracts:breaking": "node scripts/run-contract-gates.mjs",
+    "contracts:breaking:selftest": "node scripts/test-contract-breaking.mjs && node scripts/test-baseline-integrity.mjs && node scripts/test-gate-arguments.mjs",
+    "contracts:baseline:check": "node scripts/check-baseline-integrity.mjs",
+    "contracts:baseline:freeze": "node scripts/freeze-platform-baseline.mjs",
+    "dev:contracts": "pnpm --filter @wotao/platform-contract-mock start",
+    "prisma:generate": "pnpm --filter @wotao/review-api db:generate",
     "db:setup": "pnpm --filter @wotao/review-api db:setup"
   },
   "devDependencies": {
+    "tsx": "4.20.6",
     "typescript": "5.9.3"
   }
 }

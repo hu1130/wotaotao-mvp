@@ -1,0 +1,24 @@
+{
+  "operationId": "sys01.auth.sendPhoneCode",
+  "method": "POST",
+  "path": "/api/v1/auth/phone/code",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "idempotency-key": "PHONE_CODE:{phoneHash}:{purpose}:{timeWindow}"
+    },
+    "body": {
+      "phone": "+8613800000000",
+      "purpose": "LOGIN"
+    }
+  },
+  "status": 202,
+  "response": {
+    "data": {
+      "retryAfterSeconds": 60,
+      "expiresAt": "2026-08-10T02:05:00Z"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

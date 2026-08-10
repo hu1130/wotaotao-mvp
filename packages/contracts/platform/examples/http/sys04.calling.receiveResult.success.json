@@ -1,0 +1,36 @@
+{
+  "operationId": "sys04.calling.receiveResult",
+  "method": "POST",
+  "path": "/callbacks/v1/ai-calling/results",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "x-provider-signature": "<provider-signature>",
+      "x-provider-timestamp": "2026-08-10T02:00:00Z",
+      "x-provider-nonce": "provider_nonce_001"
+    },
+    "body": {
+      "callId": "cal_001",
+      "callTaskId": "clt_001",
+      "providerTaskRef": "ptk_001",
+      "providerAccountId": "pac_001",
+      "resultVersion": 1,
+      "status": "COMPLETED",
+      "connected": true,
+      "durationSeconds": 120,
+      "intentLevel": "HIGH",
+      "humanFollowupRequired": true,
+      "completedAt": "2026-08-10T02:00:00Z"
+    }
+  },
+  "status": 200,
+  "response": {
+    "data": {
+      "accepted": true,
+      "callId": "cal_001",
+      "resultVersion": 1
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

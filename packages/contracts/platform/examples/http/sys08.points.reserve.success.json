@@ -1,0 +1,32 @@
+{
+  "operationId": "sys08.points.reserve",
+  "method": "POST",
+  "path": "/api/v1/points/reservations",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "POINTS_RESERVE:{agentRunId}:{chargeCode}"
+    },
+    "body": {
+      "agentRunId": "agr_001",
+      "toolCallId": "atc_001",
+      "quoteId": "pqt_001",
+      "quoteVersion": 1,
+      "chargeCode": "CONTENT_GENERATION",
+      "points": 20
+    }
+  },
+  "status": 201,
+  "response": {
+    "data": {
+      "reservationId": "ptr_001",
+      "status": "RESERVED",
+      "reservedPoints": 20,
+      "expiresAt": "2026-08-10T02:30:00Z",
+      "reservationVersion": 1
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

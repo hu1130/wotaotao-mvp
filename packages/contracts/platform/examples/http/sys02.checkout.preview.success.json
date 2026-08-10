@@ -1,0 +1,32 @@
+{
+  "operationId": "sys02.checkout.preview",
+  "method": "POST",
+  "path": "/api/v1/mall/checkout/preview",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "CHECKOUT_PREVIEW:{consumerProfileId}:{cartVersion}:{addressRef}"
+    },
+    "body": {
+      "cartId": "crt_001",
+      "cartVersion": 1,
+      "addressRef": "adr_001"
+    }
+  },
+  "status": 200,
+  "response": {
+    "data": {
+      "previewVersion": "cpv_001",
+      "salesModel": "MERCHANT",
+      "responsibilityLabel": "商家销售并履约",
+      "itemAmountFen": 9900,
+      "shippingFen": 0,
+      "payableFen": 9900,
+      "currency": "CNY",
+      "expiresAt": "2026-08-10T02:15:00Z"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

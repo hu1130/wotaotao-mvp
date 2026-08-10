@@ -1,0 +1,315 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.wotaotao.com/events/commerce.product.published.v1/envelope.schema.json",
+  "title": "ProductPublished envelope v1",
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable evt_ identifier",
+      "pattern": "^evt_[A-Za-z0-9_-]+$"
+    },
+    "eventType": {
+      "type": "string",
+      "const": "ProductPublished"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Business occurrence time"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Outbox publication time"
+    },
+    "producer": {
+      "type": "string",
+      "const": "SYS-03"
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "DEV",
+        "TEST",
+        "STAGING",
+        "PROD"
+      ]
+    },
+    "audience": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SYS-02",
+          "SYS-04",
+          "SYS-05",
+          "SYS-06"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "enterpriseId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "aggregateType": {
+      "type": "string",
+      "const": "Product"
+    },
+    "aggregateId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable aggregate identifier"
+    },
+    "aggregateVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonic aggregate version"
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causationId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable evt_ identifier",
+          "pattern": "^evt_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "correlationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable business idempotency key; unchanged on retry"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "productId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable prd_ identifier",
+          "pattern": "^prd_[A-Za-z0-9_-]+$"
+        },
+        "productVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "enterpriseId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        "storeId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable store_ identifier",
+          "pattern": "^store_[A-Za-z0-9_-]+$"
+        },
+        "salesModel": {
+          "type": "string",
+          "enum": [
+            "SELF_OPERATED",
+            "MERCHANT",
+            "SUPPLIER"
+          ]
+        },
+        "sellerEnterpriseId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        "supplierId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "payeeType": {
+          "type": "string",
+          "enum": [
+            "PLATFORM",
+            "MERCHANT",
+            "SUPPLIER"
+          ]
+        },
+        "skuVersionRefs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "skuId": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Stable sku_ identifier",
+                "pattern": "^sku_[A-Za-z0-9_-]+$"
+              },
+              "skuVersion": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Monotonically increasing source version"
+              }
+            },
+            "required": [
+              "skuId",
+              "skuVersion"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        },
+        "publicStatus": {
+          "type": "string",
+          "enum": [
+            "PUBLISHED",
+            "UNPUBLISHED"
+          ]
+        },
+        "publishedProductSnapshotRef": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable pps_ identifier",
+          "pattern": "^pps_[A-Za-z0-9_-]+$"
+        },
+        "snapshotHash": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Lower-case SHA-256 digest",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "publishedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "productId",
+        "productVersion",
+        "enterpriseId",
+        "storeId",
+        "salesModel",
+        "sellerEnterpriseId",
+        "supplierId",
+        "payeeType",
+        "skuVersionRefs",
+        "publicStatus",
+        "publishedProductSnapshotRef",
+        "snapshotHash",
+        "publishedAt"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://contracts.wotaotao.com/events/commerce.product.published.v1/payload.schema.json",
+      "title": "ProductPublished payload v1"
+    }
+  },
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "occurredAt",
+    "publishedAt",
+    "producer",
+    "environment",
+    "audience",
+    "enterpriseId",
+    "aggregateType",
+    "aggregateId",
+    "aggregateVersion",
+    "traceId",
+    "causationId",
+    "correlationId",
+    "idempotencyKey",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "description": "Consumers must read the immutable trading snapshot by ref/version/hash and must not infer salesModel.",
+  "examples": [
+    {
+      "eventId": "evt_productpublished_001",
+      "eventType": "ProductPublished",
+      "schemaVersion": 1,
+      "occurredAt": "2026-08-10T02:00:00Z",
+      "publishedAt": "2026-08-10T02:00:01Z",
+      "producer": "SYS-03",
+      "environment": "DEV",
+      "audience": [
+        "SYS-02",
+        "SYS-04",
+        "SYS-05",
+        "SYS-06"
+      ],
+      "enterpriseId": "ent_contract_001",
+      "aggregateType": "Product",
+      "aggregateId": "prd_contract_001",
+      "aggregateVersion": 3,
+      "traceId": "trace_contract_fixture_001",
+      "causationId": null,
+      "correlationId": "corr_contract_fixture_001",
+      "idempotencyKey": "PRODUCT_PUBLISHED:prd_contract_001:3",
+      "payload": {
+        "productId": "prd_contract_001",
+        "productVersion": 3,
+        "enterpriseId": "ent_contract_001",
+        "storeId": "store_contract_001",
+        "salesModel": "MERCHANT",
+        "sellerEnterpriseId": "ent_contract_001",
+        "supplierId": null,
+        "payeeType": "MERCHANT",
+        "skuVersionRefs": [
+          {
+            "skuId": "sku_contract_001",
+            "skuVersion": 2
+          }
+        ],
+        "publicStatus": "PUBLISHED",
+        "publishedProductSnapshotRef": "pps_contract_001",
+        "snapshotHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "publishedAt": "2026-08-10T02:00:00Z"
+      }
+    }
+  ],
+  "x-topic": "commerce.product.published.v1",
+  "x-producer": "SYS-03",
+  "x-consumers": [
+    "SYS-02",
+    "SYS-04",
+    "SYS-05",
+    "SYS-06"
+  ],
+  "x-idempotency-key-format": "PRODUCT_PUBLISHED:{productId}:{productVersion}"
+}

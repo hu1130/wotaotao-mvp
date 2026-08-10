@@ -1,0 +1,314 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.wotaotao.com/events/ledger.publication.charge-released.v1/envelope.schema.json",
+  "title": "ChannelPublicationChargeReleased envelope v1",
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable evt_ identifier",
+      "pattern": "^evt_[A-Za-z0-9_-]+$"
+    },
+    "eventType": {
+      "type": "string",
+      "const": "ChannelPublicationChargeReleased"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Business occurrence time"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Outbox publication time"
+    },
+    "producer": {
+      "type": "string",
+      "const": "SYS-08"
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "DEV",
+        "TEST",
+        "STAGING",
+        "PROD"
+      ]
+    },
+    "audience": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SYS-05",
+          "SYS-06"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "enterpriseId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "aggregateType": {
+      "type": "string",
+      "const": "PublicationChargeRelease"
+    },
+    "aggregateId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable aggregate identifier"
+    },
+    "aggregateVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonic aggregate version"
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causationId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable evt_ identifier",
+          "pattern": "^evt_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "correlationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable business idempotency key; unchanged on retry"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "releaseId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable pcrel_ identifier",
+          "pattern": "^pcrel_[A-Za-z0-9_-]+$"
+        },
+        "liabilityEventId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "description": "Stable lia_ identifier",
+              "pattern": "^lia_[A-Za-z0-9_-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "enterpriseId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        "channelPublicationId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable cpub_ identifier",
+          "pattern": "^cpub_[A-Za-z0-9_-]+$"
+        },
+        "validPublicationId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "description": "Stable vpub_ identifier",
+              "pattern": "^vpub_[A-Za-z0-9_-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "chargeReservationId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable pcr_ identifier",
+          "pattern": "^pcr_[A-Za-z0-9_-]+$"
+        },
+        "releaseType": {
+          "type": "string",
+          "enum": [
+            "PRE_EFFECTIVE_RELEASE",
+            "RESPONSIBILITY_REFUND"
+          ]
+        },
+        "originalChargeSource": {
+          "type": "string",
+          "enum": [
+            "BENEFIT_QUOTA",
+            "PUBLICATION_SERVICE_ORDER",
+            "AUTHORIZED_BALANCE"
+          ]
+        },
+        "releasedQuotaCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "refundedAmountFen": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Non-negative integer amount in fen"
+        },
+        "refundReasonCode": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "COMPLETED"
+          ]
+        },
+        "ledgerRefs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0
+        },
+        "sourceVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "completedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "releaseId",
+        "liabilityEventId",
+        "enterpriseId",
+        "channelPublicationId",
+        "validPublicationId",
+        "chargeReservationId",
+        "releaseType",
+        "originalChargeSource",
+        "releasedQuotaCount",
+        "refundedAmountFen",
+        "refundReasonCode",
+        "status",
+        "ledgerRefs",
+        "sourceVersion",
+        "completedAt"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://contracts.wotaotao.com/events/ledger.publication.charge-released.v1/payload.schema.json",
+      "title": "ChannelPublicationChargeReleased payload v1"
+    }
+  },
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "occurredAt",
+    "publishedAt",
+    "producer",
+    "environment",
+    "audience",
+    "enterpriseId",
+    "aggregateType",
+    "aggregateId",
+    "aggregateVersion",
+    "traceId",
+    "causationId",
+    "correlationId",
+    "idempotencyKey",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "description": "releaseId + sourceVersion; same liability/evidence/reservation must be stable",
+  "examples": [
+    {
+      "eventId": "evt_channelpublicationchargereleased_001",
+      "eventType": "ChannelPublicationChargeReleased",
+      "schemaVersion": 1,
+      "occurredAt": "2026-08-10T02:00:00Z",
+      "publishedAt": "2026-08-10T02:00:01Z",
+      "producer": "SYS-08",
+      "environment": "DEV",
+      "audience": [
+        "SYS-05",
+        "SYS-06"
+      ],
+      "enterpriseId": "ent_contract_001",
+      "aggregateType": "PublicationChargeRelease",
+      "aggregateId": "pcrel_contract_001",
+      "aggregateVersion": 1,
+      "traceId": "trace_contract_fixture_001",
+      "causationId": null,
+      "correlationId": "corr_contract_fixture_001",
+      "idempotencyKey": "PUB_CHARGE_REFUND:vpub_contract_001:PLATFORM_RESPONSIBILITY_REMOVAL:1",
+      "payload": {
+        "releaseId": "pcrel_contract_001",
+        "liabilityEventId": "lia_contract_001",
+        "enterpriseId": "ent_contract_001",
+        "channelPublicationId": "cpub_contract_001",
+        "validPublicationId": "vpub_contract_001",
+        "chargeReservationId": "pcr_contract_001",
+        "releaseType": "RESPONSIBILITY_REFUND",
+        "originalChargeSource": "PUBLICATION_SERVICE_ORDER",
+        "releasedQuotaCount": 0,
+        "refundedAmountFen": 500,
+        "refundReasonCode": "PLATFORM_RESPONSIBILITY_REMOVAL",
+        "status": "COMPLETED",
+        "ledgerRefs": [
+          "le_contract_refund_001"
+        ],
+        "sourceVersion": 1,
+        "completedAt": "2026-08-12T02:10:00Z"
+      }
+    }
+  ],
+  "x-topic": "ledger.publication.charge-released.v1",
+  "x-producer": "SYS-08",
+  "x-consumers": [
+    "SYS-05",
+    "SYS-06"
+  ],
+  "x-idempotency-key-format": "PUB_CHARGE_REFUND:{validPublicationId}:{refundReasonCode}:{responsibilityVersion}"
+}

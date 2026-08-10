@@ -1,0 +1,35 @@
+{
+  "operationId": "sys08.admin.finalReviewWithdrawal",
+  "method": "POST",
+  "path": "/api/v1/admin/withdrawals/{withdrawalId}/final-review",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "x-csrf-token": "csrf_example_token_001",
+      "idempotency-key": "WITHDRAWAL_FINAL_REVIEW:{withdrawalId}:{expectedVersion}:{decision}"
+    },
+    "params": {
+      "withdrawalId": "wdr_001"
+    },
+    "body": {
+      "decision": "APPROVE",
+      "expectedVersion": 2,
+      "reason": "复核通过",
+      "evidenceRefs": [
+        "evd_201"
+      ],
+      "approvalRef": "apr_201"
+    }
+  },
+  "status": 200,
+  "response": {
+    "data": {
+      "withdrawalId": "wdr_001",
+      "status": "APPROVED_FOR_PAYOUT",
+      "version": 3
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

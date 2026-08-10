@@ -1,0 +1,23 @@
+{
+  "operationId": "sys02.mall.getHome",
+  "method": "GET",
+  "path": "/api/v1/mall/home",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001"
+    },
+    "query": {
+      "cursor": null,
+      "regionCode": "CN-11"
+    }
+  },
+  "status": 400,
+  "response": {
+    "code": "VALIDATION_ERROR",
+    "message": "Request shape or field validation failed.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

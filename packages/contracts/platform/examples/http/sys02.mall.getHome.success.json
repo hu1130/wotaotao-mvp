@@ -1,0 +1,36 @@
+{
+  "operationId": "sys02.mall.getHome",
+  "method": "GET",
+  "path": "/api/v1/mall/home",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001"
+    },
+    "query": {
+      "cursor": null,
+      "regionCode": "CN-11"
+    }
+  },
+  "status": 200,
+  "response": {
+    "data": {
+      "placements": [],
+      "categories": [
+        {
+          "categoryCode": "TEA",
+          "name": "茶叶"
+        }
+      ],
+      "products": [
+        {
+          "productId": "prd_001",
+          "title": "示例茶叶"
+        }
+      ],
+      "contents": [],
+      "nextCursor": null
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

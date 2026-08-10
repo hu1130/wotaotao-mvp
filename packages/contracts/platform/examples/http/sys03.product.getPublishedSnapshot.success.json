@@ -1,0 +1,52 @@
+{
+  "operationId": "sys03.product.getPublishedSnapshot",
+  "method": "GET",
+  "path": "/internal/v1/commerce/published-product-snapshots/{snapshotRef}",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001"
+    },
+    "params": {
+      "snapshotRef": "pps_001"
+    },
+    "query": {
+      "productVersion": 3,
+      "expectedHash": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    }
+  },
+  "status": 200,
+  "response": {
+    "data": {
+      "publishedProductSnapshotRef": "pps_001",
+      "snapshotHash": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "productId": "prd_001",
+      "productVersion": 3,
+      "enterpriseId": "ent_001",
+      "storeId": "sto_001",
+      "salesModel": "MERCHANT",
+      "sellerEnterpriseId": "ent_001",
+      "supplierId": null,
+      "payeeType": "MERCHANT",
+      "title": "示例茶叶",
+      "skuSnapshots": [
+        {
+          "skuId": "sku_001",
+          "skuVersion": 2,
+          "status": "ACTIVE"
+        }
+      ],
+      "priceSnapshots": [
+        {
+          "skuId": "sku_001",
+          "salePriceFen": 9900,
+          "currency": "CNY"
+        }
+      ],
+      "publicStatus": "PUBLISHED",
+      "aftersalePolicyRef": "afp_001",
+      "publishedAt": "2026-08-10T02:00:00Z"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

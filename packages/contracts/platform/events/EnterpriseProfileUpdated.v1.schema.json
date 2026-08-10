@@ -1,0 +1,247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.wotaotao.com/events/platform.enterprise.profile_updated.v1/envelope.schema.json",
+  "title": "EnterpriseProfileUpdated envelope v1",
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable evt_ identifier",
+      "pattern": "^evt_[A-Za-z0-9_-]+$"
+    },
+    "eventType": {
+      "type": "string",
+      "const": "EnterpriseProfileUpdated"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Business occurrence time"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Outbox publication time"
+    },
+    "producer": {
+      "type": "string",
+      "const": "SYS-01"
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "DEV",
+        "TEST",
+        "STAGING",
+        "PROD"
+      ]
+    },
+    "audience": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SYS-03",
+          "SYS-04",
+          "SYS-05",
+          "SYS-06"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "enterpriseId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "aggregateType": {
+      "type": "string",
+      "const": "EnterpriseProfile"
+    },
+    "aggregateId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable aggregate identifier"
+    },
+    "aggregateVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonic aggregate version"
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causationId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable evt_ identifier",
+          "pattern": "^evt_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "correlationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable business idempotency key; unchanged on retry"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "enterpriseId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        "profileId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable epr_ identifier",
+          "pattern": "^epr_[A-Za-z0-9_-]+$"
+        },
+        "profileVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "industryCode": {
+          "type": "string",
+          "minLength": 1
+        },
+        "primaryProductCodes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "profileStatus": {
+          "type": "string",
+          "enum": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ]
+        },
+        "snapshotHash": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Lower-case SHA-256 digest",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "enterpriseId",
+        "profileId",
+        "profileVersion",
+        "industryCode",
+        "primaryProductCodes",
+        "profileStatus",
+        "snapshotHash",
+        "updatedAt"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://contracts.wotaotao.com/events/platform.enterprise.profile_updated.v1/payload.schema.json",
+      "title": "EnterpriseProfileUpdated payload v1"
+    }
+  },
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "occurredAt",
+    "publishedAt",
+    "producer",
+    "environment",
+    "audience",
+    "enterpriseId",
+    "aggregateType",
+    "aggregateId",
+    "aggregateVersion",
+    "traceId",
+    "causationId",
+    "correlationId",
+    "idempotencyKey",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "description": "enterpriseId + profileVersion; old versions remain addressable",
+  "examples": [
+    {
+      "eventId": "evt_enterpriseprofileupdated_001",
+      "eventType": "EnterpriseProfileUpdated",
+      "schemaVersion": 1,
+      "occurredAt": "2026-08-10T02:00:00Z",
+      "publishedAt": "2026-08-10T02:00:01Z",
+      "producer": "SYS-01",
+      "environment": "DEV",
+      "audience": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-05",
+        "SYS-06"
+      ],
+      "enterpriseId": "ent_contract_001",
+      "aggregateType": "EnterpriseProfile",
+      "aggregateId": "epr_contract_001",
+      "aggregateVersion": 2,
+      "traceId": "trace_contract_fixture_001",
+      "causationId": null,
+      "correlationId": "corr_contract_fixture_001",
+      "idempotencyKey": "ENTERPRISE_PROFILE:ent_contract_001:2",
+      "payload": {
+        "enterpriseId": "ent_contract_001",
+        "profileId": "epr_contract_001",
+        "profileVersion": 2,
+        "industryCode": "RETAIL",
+        "primaryProductCodes": [
+          "HOME_GOODS",
+          "LIFESTYLE"
+        ],
+        "profileStatus": "APPROVED",
+        "snapshotHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "updatedAt": "2026-08-10T02:05:00Z"
+      }
+    }
+  ],
+  "x-topic": "platform.enterprise.profile_updated.v1",
+  "x-producer": "SYS-01",
+  "x-consumers": [
+    "SYS-03",
+    "SYS-04",
+    "SYS-05",
+    "SYS-06"
+  ],
+  "x-idempotency-key-format": "ENTERPRISE_PROFILE:{enterpriseId}:{profileVersion}"
+}

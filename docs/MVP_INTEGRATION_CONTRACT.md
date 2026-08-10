@@ -426,6 +426,12 @@ pnpm build
 - `isSuccessResponse`、`isErrorResponse`、`isPage`、`isIsoUtcDateTime`：
   模块接口测试的最小运行时断言。
 - `packages/contracts/tests/contract-manifest.test.ts`：冻结上述约定。
+- `scripts/generate-openapi.ts`：从 `MVP_API_CONTRACTS` 和共享枚举生成 OpenAPI；
+  `pnpm openapi:check` 阻止生成物漂移。
+- `apps/mock-api`：从生成后的 OpenAPI 读取路由、角色、ID 前缀和状态流转，不再
+  维护模块私有的公共常量。
+- `packages/contracts/tests/openapi-consistency.test.ts`：校验 TypeScript manifest、
+  OpenAPI 元数据、响应信封、枚举、状态流转和 ID 前缀一致。
 - `apps/api/tests/review-api.test.ts`：模块 04 已接入公共信封和分页断言，作为后续
   模块测试样例。
 

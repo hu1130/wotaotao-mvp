@@ -1,0 +1,27 @@
+{
+  "operationId": "sys07.assignment.getStatus",
+  "method": "GET",
+  "path": "/internal/v1/opc/assignments/{accountAssignmentId}/status",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001"
+    },
+    "params": {
+      "accountAssignmentId": "aas_001"
+    }
+  },
+  "status": 200,
+  "response": {
+    "data": {
+      "accountAssignmentId": "aas_001",
+      "assignmentStatus": "ACTIVE",
+      "authorizationStatus": "VALID",
+      "healthStatus": "HEALTHY",
+      "activeSessionGrantCount": 0,
+      "assignmentVersion": 2,
+      "checkedAt": "2026-08-10T02:00:00Z"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

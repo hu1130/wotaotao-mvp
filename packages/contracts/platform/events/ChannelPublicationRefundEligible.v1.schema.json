@@ -1,0 +1,275 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.wotaotao.com/events/publication.channel.refund-eligible.v1/envelope.schema.json",
+  "title": "ChannelPublicationRefundEligible envelope v1",
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable evt_ identifier",
+      "pattern": "^evt_[A-Za-z0-9_-]+$"
+    },
+    "eventType": {
+      "type": "string",
+      "const": "ChannelPublicationRefundEligible"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Business occurrence time"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Outbox publication time"
+    },
+    "producer": {
+      "type": "string",
+      "const": "SYS-05"
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "DEV",
+        "TEST",
+        "STAGING",
+        "PROD"
+      ]
+    },
+    "audience": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SYS-06",
+          "SYS-08"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "enterpriseId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "aggregateType": {
+      "type": "string",
+      "const": "PublicationLiability"
+    },
+    "aggregateId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable aggregate identifier"
+    },
+    "aggregateVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonic aggregate version"
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causationId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable evt_ identifier",
+          "pattern": "^evt_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "correlationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable business idempotency key; unchanged on retry"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "liabilityEventId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable lia_ identifier",
+          "pattern": "^lia_[A-Za-z0-9_-]+$"
+        },
+        "enterpriseId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        "publicationPlanId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable pplan_ identifier",
+          "pattern": "^pplan_[A-Za-z0-9_-]+$"
+        },
+        "channelPublicationId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable cpub_ identifier",
+          "pattern": "^cpub_[A-Za-z0-9_-]+$"
+        },
+        "validPublicationId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable vpub_ identifier",
+          "pattern": "^vpub_[A-Za-z0-9_-]+$"
+        },
+        "chargeReservationId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable pcr_ identifier",
+          "pattern": "^pcr_[A-Za-z0-9_-]+$"
+        },
+        "douyinExecutionMode": {
+          "type": "string",
+          "enum": [
+            "PLATFORM_OPERATED"
+          ]
+        },
+        "firstVisibleAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "removedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "refundReasonCode": {
+          "type": "string",
+          "minLength": 1
+        },
+        "responsibilityVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "eligibilityAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "evidenceSnapshotRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidenceHash": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Lower-case SHA-256 digest",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "liabilityEventId",
+        "enterpriseId",
+        "publicationPlanId",
+        "channelPublicationId",
+        "validPublicationId",
+        "chargeReservationId",
+        "douyinExecutionMode",
+        "firstVisibleAt",
+        "removedAt",
+        "refundReasonCode",
+        "responsibilityVersion",
+        "eligibilityAt",
+        "evidenceSnapshotRef",
+        "evidenceHash"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://contracts.wotaotao.com/events/publication.channel.refund-eligible.v1/payload.schema.json",
+      "title": "ChannelPublicationRefundEligible payload v1"
+    }
+  },
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "occurredAt",
+    "publishedAt",
+    "producer",
+    "environment",
+    "audience",
+    "enterpriseId",
+    "aggregateType",
+    "aggregateId",
+    "aggregateVersion",
+    "traceId",
+    "causationId",
+    "correlationId",
+    "idempotencyKey",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "description": "Eligibility never means that quota or money has been returned.",
+  "examples": [
+    {
+      "eventId": "evt_channelpublicationrefundeligible_001",
+      "eventType": "ChannelPublicationRefundEligible",
+      "schemaVersion": 1,
+      "occurredAt": "2026-08-10T02:00:00Z",
+      "publishedAt": "2026-08-10T02:00:01Z",
+      "producer": "SYS-05",
+      "environment": "DEV",
+      "audience": [
+        "SYS-06",
+        "SYS-08"
+      ],
+      "enterpriseId": "ent_contract_001",
+      "aggregateType": "PublicationLiability",
+      "aggregateId": "lia_contract_001",
+      "aggregateVersion": 1,
+      "traceId": "trace_contract_fixture_001",
+      "causationId": null,
+      "correlationId": "corr_contract_fixture_001",
+      "idempotencyKey": "LIABILITY_REFUND_ELIGIBLE:vpub_contract_001:PLATFORM_RESPONSIBILITY_REMOVAL:1",
+      "payload": {
+        "liabilityEventId": "lia_contract_001",
+        "enterpriseId": "ent_contract_001",
+        "publicationPlanId": "pplan_contract_001",
+        "channelPublicationId": "cpub_contract_001",
+        "validPublicationId": "vpub_contract_001",
+        "chargeReservationId": "pcr_contract_001",
+        "douyinExecutionMode": "PLATFORM_OPERATED",
+        "firstVisibleAt": "2026-08-10T02:00:00Z",
+        "removedAt": "2026-08-12T02:00:00Z",
+        "refundReasonCode": "PLATFORM_RESPONSIBILITY_REMOVAL",
+        "responsibilityVersion": 1,
+        "eligibilityAt": "2026-08-12T02:05:00Z",
+        "evidenceSnapshotRef": "evidence_contract_003",
+        "evidenceHash": "1111111111111111111111111111111111111111111111111111111111111111"
+      }
+    }
+  ],
+  "x-topic": "publication.channel.refund-eligible.v1",
+  "x-producer": "SYS-05",
+  "x-consumers": [
+    "SYS-06",
+    "SYS-08"
+  ],
+  "x-idempotency-key-format": "LIABILITY_REFUND_ELIGIBLE:{validPublicationId}:{refundReasonCode}:{responsibilityVersion}"
+}

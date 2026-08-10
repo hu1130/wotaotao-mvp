@@ -1,0 +1,38 @@
+{
+  "operationId": "sys05.content.update",
+  "method": "PATCH",
+  "path": "/api/v1/content/items/{contentId}",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "CONTENT_UPDATE:{contentId}:{expectedVersion}:{clientRequestId}"
+    },
+    "params": {
+      "contentId": "cnt_001"
+    },
+    "body": {
+      "expectedVersion": 1,
+      "clientRequestId": "req_content_update_001",
+      "title": "示例商品内容（新版）",
+      "factRefs": [
+        "fact_001"
+      ],
+      "assetRefs": [
+        "ast_001"
+      ],
+      "productRefs": [
+        "prd_001"
+      ]
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

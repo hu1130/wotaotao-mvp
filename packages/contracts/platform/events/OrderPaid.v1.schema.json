@@ -1,0 +1,355 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.wotaotao.com/events/commerce.order.paid.v1/envelope.schema.json",
+  "title": "OrderPaid envelope v1",
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable evt_ identifier",
+      "pattern": "^evt_[A-Za-z0-9_-]+$"
+    },
+    "eventType": {
+      "type": "string",
+      "const": "OrderPaid"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Business occurrence time"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Outbox publication time"
+    },
+    "producer": {
+      "type": "string",
+      "const": "SYS-02"
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "DEV",
+        "TEST",
+        "STAGING",
+        "PROD"
+      ]
+    },
+    "audience": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SYS-03",
+          "SYS-04",
+          "SYS-06",
+          "SYS-08"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "enterpriseId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "aggregateType": {
+      "type": "string",
+      "const": "Order"
+    },
+    "aggregateId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable aggregate identifier"
+    },
+    "aggregateVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonic aggregate version"
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causationId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable evt_ identifier",
+          "pattern": "^evt_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "correlationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable business idempotency key; unchanged on retry"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ord_ identifier",
+          "pattern": "^ord_[A-Za-z0-9_-]+$"
+        },
+        "subOrderId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable subord_ identifier",
+          "pattern": "^subord_[A-Za-z0-9_-]+$"
+        },
+        "paymentId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable pay_ identifier",
+          "pattern": "^pay_[A-Za-z0-9_-]+$"
+        },
+        "sellerEnterpriseId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        "storeId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable store_ identifier",
+          "pattern": "^store_[A-Za-z0-9_-]+$"
+        },
+        "salesModel": {
+          "type": "string",
+          "enum": [
+            "SELF_OPERATED",
+            "MERCHANT",
+            "SUPPLIER"
+          ]
+        },
+        "supplierId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "payeeType": {
+          "type": "string",
+          "enum": [
+            "PLATFORM",
+            "MERCHANT",
+            "SUPPLIER"
+          ]
+        },
+        "attributionId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable atr_ identifier",
+          "pattern": "^atr_[A-Za-z0-9_-]+$"
+        },
+        "buyerMatchRef": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "paidFen": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Non-negative integer amount in fen"
+        },
+        "currency": {
+          "type": "string",
+          "enum": [
+            "CNY"
+          ]
+        },
+        "orderVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "outcomeVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "merchantOrderSnapshotRef": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable mos_ identifier",
+          "pattern": "^mos_[A-Za-z0-9_-]+$"
+        },
+        "merchantOrderSnapshotVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "merchantOrderSnapshotHash": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Lower-case SHA-256 digest",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "analyticsSnapshotRef": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable oas_ identifier",
+          "pattern": "^oas_[A-Za-z0-9_-]+$"
+        },
+        "analyticsSnapshotVersion": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "analyticsSnapshotHash": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Lower-case SHA-256 digest",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "paidAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "orderId",
+        "subOrderId",
+        "paymentId",
+        "sellerEnterpriseId",
+        "storeId",
+        "salesModel",
+        "supplierId",
+        "payeeType",
+        "attributionId",
+        "buyerMatchRef",
+        "paidFen",
+        "currency",
+        "orderVersion",
+        "outcomeVersion",
+        "merchantOrderSnapshotRef",
+        "merchantOrderSnapshotVersion",
+        "merchantOrderSnapshotHash",
+        "analyticsSnapshotRef",
+        "analyticsSnapshotVersion",
+        "analyticsSnapshotHash",
+        "paidAt"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://contracts.wotaotao.com/events/commerce.order.paid.v1/payload.schema.json",
+      "title": "OrderPaid payload v1"
+    }
+  },
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "occurredAt",
+    "publishedAt",
+    "producer",
+    "environment",
+    "audience",
+    "enterpriseId",
+    "aggregateType",
+    "aggregateId",
+    "aggregateVersion",
+    "traceId",
+    "causationId",
+    "correlationId",
+    "idempotencyKey",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "description": "paymentId + outcomeVersion; payment channel transaction is independently unique",
+  "examples": [
+    {
+      "eventId": "evt_orderpaid_001",
+      "eventType": "OrderPaid",
+      "schemaVersion": 1,
+      "occurredAt": "2026-08-10T02:00:00Z",
+      "publishedAt": "2026-08-10T02:00:01Z",
+      "producer": "SYS-02",
+      "environment": "DEV",
+      "audience": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "enterpriseId": null,
+      "aggregateType": "Order",
+      "aggregateId": "ord_contract_001",
+      "aggregateVersion": 2,
+      "traceId": "trace_contract_fixture_001",
+      "causationId": null,
+      "correlationId": "corr_contract_fixture_001",
+      "idempotencyKey": "PAYMENT_SUCCESS:pay_contract_001:txn_contract_001",
+      "payload": {
+        "orderId": "ord_contract_001",
+        "subOrderId": "subord_contract_001",
+        "paymentId": "pay_contract_001",
+        "sellerEnterpriseId": "ent_contract_001",
+        "storeId": "store_contract_001",
+        "salesModel": "MERCHANT",
+        "supplierId": null,
+        "payeeType": "MERCHANT",
+        "attributionId": "atr_contract_001",
+        "buyerMatchRef": "buyer_match_contract_001",
+        "paidFen": 12900,
+        "currency": "CNY",
+        "orderVersion": 2,
+        "outcomeVersion": 1,
+        "merchantOrderSnapshotRef": "mos_contract_001",
+        "merchantOrderSnapshotVersion": 1,
+        "merchantOrderSnapshotHash": "3333333333333333333333333333333333333333333333333333333333333333",
+        "analyticsSnapshotRef": "oas_contract_001",
+        "analyticsSnapshotVersion": 1,
+        "analyticsSnapshotHash": "4444444444444444444444444444444444444444444444444444444444444444",
+        "paidAt": "2026-08-10T02:00:00Z"
+      }
+    }
+  ],
+  "x-topic": "commerce.order.paid.v1",
+  "x-producer": "SYS-02",
+  "x-consumers": [
+    "SYS-03",
+    "SYS-04",
+    "SYS-06",
+    "SYS-08"
+  ],
+  "x-idempotency-key-format": "PAYMENT_SUCCESS:{paymentId}:{channelTransactionId}"
+}

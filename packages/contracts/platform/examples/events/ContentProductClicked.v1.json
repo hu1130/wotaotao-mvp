@@ -1,0 +1,31 @@
+{
+  "eventId": "evt_contentproductclicked_001",
+  "eventType": "ContentProductClicked",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-02",
+  "environment": "DEV",
+  "audience": [
+    "SYS-04",
+    "SYS-06"
+  ],
+  "enterpriseId": null,
+  "aggregateType": "AttributionCandidate",
+  "aggregateId": "atc_contract_001",
+  "aggregateVersion": 1,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "CONTENT_PRODUCT_CLICK:atc_contract_001",
+  "payload": {
+    "attributionCandidateId": "atc_contract_001",
+    "contentId": "cnt_contract_001",
+    "channelPublicationId": "cpub_contract_001",
+    "productId": "prd_contract_001",
+    "promoterEnterpriseId": "ent_contract_002",
+    "customerId": null,
+    "anonymousId": "anon_contract_001",
+    "clickedAt": "2026-08-10T02:00:00Z"
+  }
+}

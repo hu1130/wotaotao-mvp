@@ -1,0 +1,33 @@
+{
+  "operationId": "sys08.membership.createOrder",
+  "method": "POST",
+  "path": "/api/v1/membership/orders",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "x-csrf-token": "csrf_example_token_001",
+      "idempotency-key": "MEMBERSHIP_ORDER:{enterpriseId}:{planVersionId}:{clientRequestId}"
+    },
+    "body": {
+      "planVersionId": "mpv_pro_003",
+      "channel": "WECHAT",
+      "clientRequestId": "req_membership_001"
+    }
+  },
+  "status": 201,
+  "response": {
+    "data": {
+      "membershipOrderId": "mso_001",
+      "paymentId": "pay_100",
+      "amountFen": 29900,
+      "currency": "CNY",
+      "status": "PENDING_PAYMENT",
+      "paymentParameters": {
+        "prepayId": "<provider-prepay-reference>"
+      }
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

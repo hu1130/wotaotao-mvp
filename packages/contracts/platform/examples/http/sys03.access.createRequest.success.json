@@ -1,0 +1,30 @@
+{
+  "operationId": "sys03.access.createRequest",
+  "method": "POST",
+  "path": "/api/v1/commerce/access-requests",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "COMMERCE_ACCESS:{enterpriseId}:{clientRequestId}"
+    },
+    "body": {
+      "clientRequestId": "req_commerce_access_001",
+      "requestedScope": "FULL_COMMERCE",
+      "contactRef": "ctc_001",
+      "evidenceRefs": [
+        "evd_001"
+      ]
+    }
+  },
+  "status": 201,
+  "response": {
+    "data": {
+      "commerceAccessId": "cma_001",
+      "status": "SUBMITTED",
+      "version": 1
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

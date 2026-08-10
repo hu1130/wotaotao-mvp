@@ -1,0 +1,31 @@
+{
+  "operationId": "sys01.authorization.createDelegation",
+  "method": "POST",
+  "path": "/api/v1/authorization/delegations",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "x-csrf-token": "csrf_example_token_001",
+      "idempotency-key": "USER_DELEGATION:{sessionId}:{commandId}:{payloadHash}"
+    },
+    "body": {
+      "aud": "SYS-02",
+      "action": "shipment.register",
+      "objectType": "Order",
+      "objectId": "ord_001",
+      "approvalRef": null,
+      "commandId": "cmd_ship_001",
+      "payloadHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

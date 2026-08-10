@@ -1,0 +1,30 @@
+{
+  "operationId": "sys04.lead.create",
+  "method": "POST",
+  "path": "/api/v1/marketing/leads",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "idempotency-key": "LEAD_CREATE:{enterpriseId}:{sourceRecordId}:{clientRequestId}"
+    },
+    "body": {
+      "clientRequestId": "req_lead_001",
+      "sourceRecordId": "src_001",
+      "sourceType": "MANUAL",
+      "contactRef": "ctc_001",
+      "consentStatus": "GRANTED",
+      "consentEvidenceRef": "evd_001",
+      "ownerUserId": "usr_sales_001"
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

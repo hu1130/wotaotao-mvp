@@ -1,0 +1,29 @@
+{
+  "operationId": "sys06.analytics.retrySyncJob",
+  "method": "POST",
+  "path": "/api/v1/analytics/sync-jobs/{syncJobId}/retry",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>",
+      "x-csrf-token": "csrf_example_token_001",
+      "idempotency-key": "SYNC_JOB_RETRY:{syncJobId}:{checkpointVersion}"
+    },
+    "params": {
+      "syncJobId": "syj_001"
+    },
+    "body": {
+      "checkpointVersion": 3,
+      "reason": "依赖恢复后从检查点重试"
+    }
+  },
+  "status": 401,
+  "response": {
+    "code": "AUTH_REQUIRED",
+    "message": "A valid user session is required.",
+    "retryable": false,
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001",
+    "fieldErrors": []
+  }
+}

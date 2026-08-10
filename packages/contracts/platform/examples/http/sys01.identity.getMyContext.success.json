@@ -1,0 +1,28 @@
+{
+  "operationId": "sys01.identity.getMyContext",
+  "method": "GET",
+  "path": "/api/v1/me/context",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>"
+    }
+  },
+  "status": 200,
+  "response": {
+    "data": {
+      "userId": "usr_001",
+      "enterpriseId": "ent_001",
+      "profileVersion": 3,
+      "roles": [
+        "ENTERPRISE_ADMIN"
+      ],
+      "permissions": [
+        "enterprise.profile.read"
+      ],
+      "nextRoute": "/workbench"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

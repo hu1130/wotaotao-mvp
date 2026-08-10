@@ -1,0 +1,42 @@
+{
+  "eventId": "evt_channelpublicationeffective_001",
+  "eventType": "ChannelPublicationEffective",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-05",
+  "environment": "DEV",
+  "audience": [
+    "SYS-06",
+    "SYS-07",
+    "SYS-08"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "ValidPublication",
+  "aggregateId": "vpub_contract_001",
+  "aggregateVersion": 1,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "PUBLICATION_EFFECTIVE:vpub_contract_001",
+  "payload": {
+    "validPublicationId": "vpub_contract_001",
+    "enterpriseId": "ent_contract_001",
+    "publicationPlanId": "pplan_contract_001",
+    "channelPublicationId": "cpub_contract_001",
+    "executionId": "exec_contract_001",
+    "externalWorkRef": "douyin_work_safe_contract_001",
+    "chargeReservationId": "pcr_contract_001",
+    "douyinExecutionMode": "OPC_RENTED",
+    "accountOwnershipType": "OPC_RENTED",
+    "accountAssignmentId": "aasg_contract_001",
+    "providerId": "prov_contract_001",
+    "opcAccountId": "opca_contract_001",
+    "channelAccountId": "chacc_contract_001",
+    "firstVisibleAt": "2026-08-10T02:00:00Z",
+    "effectiveAt": "2026-08-11T02:00:00Z",
+    "evidenceSnapshotRef": "evidence_contract_002",
+    "evidenceHash": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "sourceVersion": 3
+  }
+}

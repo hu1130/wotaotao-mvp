@@ -1,0 +1,30 @@
+{
+  "eventId": "evt_ordercancelled_001",
+  "eventType": "OrderCancelled",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-02",
+  "environment": "DEV",
+  "audience": [
+    "SYS-03",
+    "SYS-06"
+  ],
+  "enterpriseId": null,
+  "aggregateType": "Order",
+  "aggregateId": "ord_contract_001",
+  "aggregateVersion": 2,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "ORDER_CANCEL:ord_contract_001",
+  "payload": {
+    "orderId": "ord_contract_001",
+    "subOrderId": "subord_contract_001",
+    "sellerEnterpriseId": "ent_contract_001",
+    "orderVersion": 2,
+    "reason": "BUYER_CANCELLED",
+    "paymentStatus": "UNPAID",
+    "cancelledAt": "2026-08-10T02:00:00Z"
+  }
+}

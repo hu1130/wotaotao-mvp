@@ -1,0 +1,33 @@
+{
+  "eventId": "evt_profitbasefrozen_001",
+  "eventType": "ProfitBaseFrozen",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-08",
+  "environment": "DEV",
+  "audience": [
+    "SYS-06"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "ProfitBase",
+  "aggregateId": "pb_contract_001",
+  "aggregateVersion": 1,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "PROFIT_FREEZE:subord_contract_001:1",
+  "payload": {
+    "profitBaseId": "pb_contract_001",
+    "orderId": "ord_contract_001",
+    "subOrderId": "subord_contract_001",
+    "enterpriseId": "ent_contract_001",
+    "frozenAmountFen": 3000,
+    "currency": "CNY",
+    "status": "FROZEN",
+    "membershipPlanVersionId": "mpv_contract_001",
+    "distributionRuleVersionId": "dru_contract_001",
+    "sourceVersion": 1,
+    "frozenAt": "2026-08-17T02:00:00Z"
+  }
+}

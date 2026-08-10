@@ -1,0 +1,247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.wotaotao.com/events/platform.enterprise.whitelist-changed.v1/envelope.schema.json",
+  "title": "EnterpriseWhitelistChanged envelope v1",
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable evt_ identifier",
+      "pattern": "^evt_[A-Za-z0-9_-]+$"
+    },
+    "eventType": {
+      "type": "string",
+      "const": "EnterpriseWhitelistChanged"
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Business occurrence time"
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Outbox publication time"
+    },
+    "producer": {
+      "type": "string",
+      "const": "SYS-01"
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "DEV",
+        "TEST",
+        "STAGING",
+        "PROD"
+      ]
+    },
+    "audience": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SYS-03",
+          "SYS-04",
+          "SYS-05",
+          "SYS-06",
+          "SYS-08"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "enterpriseId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "aggregateType": {
+      "type": "string",
+      "const": "EnterpriseWhitelist"
+    },
+    "aggregateId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable aggregate identifier"
+    },
+    "aggregateVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonic aggregate version"
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "causationId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable evt_ identifier",
+          "pattern": "^evt_[A-Za-z0-9_-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "correlationId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable business idempotency key; unchanged on retry"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "scopeRef": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable wls_ identifier",
+          "pattern": "^wls_[A-Za-z0-9_-]+$"
+        },
+        "enterpriseId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable ent_ identifier",
+          "pattern": "^ent_[A-Za-z0-9_-]+$"
+        },
+        "abilityCode": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "ACTIVE",
+            "EXPIRED",
+            "REVOKED"
+          ]
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing source version"
+        },
+        "effectiveAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "expiresAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reasonCode": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "scopeRef",
+        "enterpriseId",
+        "abilityCode",
+        "status",
+        "version",
+        "effectiveAt",
+        "expiresAt",
+        "reasonCode"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://contracts.wotaotao.com/events/platform.enterprise.whitelist-changed.v1/payload.schema.json",
+      "title": "EnterpriseWhitelistChanged payload v1"
+    }
+  },
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "occurredAt",
+    "publishedAt",
+    "producer",
+    "environment",
+    "audience",
+    "enterpriseId",
+    "aggregateType",
+    "aggregateId",
+    "aggregateVersion",
+    "traceId",
+    "causationId",
+    "correlationId",
+    "idempotencyKey",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "description": "scopeRef + version; active enterprise/user/ability scope is unique",
+  "examples": [
+    {
+      "eventId": "evt_enterprisewhitelistchanged_001",
+      "eventType": "EnterpriseWhitelistChanged",
+      "schemaVersion": 1,
+      "occurredAt": "2026-08-10T02:00:00Z",
+      "publishedAt": "2026-08-10T02:00:01Z",
+      "producer": "SYS-01",
+      "environment": "DEV",
+      "audience": [
+        "SYS-03",
+        "SYS-04",
+        "SYS-05",
+        "SYS-06",
+        "SYS-08"
+      ],
+      "enterpriseId": "ent_contract_001",
+      "aggregateType": "EnterpriseWhitelist",
+      "aggregateId": "wls_contract_001",
+      "aggregateVersion": 1,
+      "traceId": "trace_contract_fixture_001",
+      "causationId": null,
+      "correlationId": "corr_contract_fixture_001",
+      "idempotencyKey": "ENTERPRISE_WHITELIST:wls_contract_001:1",
+      "payload": {
+        "scopeRef": "wls_contract_001",
+        "enterpriseId": "ent_contract_001",
+        "abilityCode": "DOUYIN_PUBLISH",
+        "status": "ACTIVE",
+        "version": 1,
+        "effectiveAt": "2026-08-10T02:00:00Z",
+        "expiresAt": "2026-09-10T02:00:00Z",
+        "reasonCode": "PILOT_APPROVED"
+      }
+    }
+  ],
+  "x-topic": "platform.enterprise.whitelist-changed.v1",
+  "x-producer": "SYS-01",
+  "x-consumers": [
+    "SYS-03",
+    "SYS-04",
+    "SYS-05",
+    "SYS-06",
+    "SYS-08"
+  ],
+  "x-idempotency-key-format": "ENTERPRISE_WHITELIST:{scopeRef}:{version}"
+}

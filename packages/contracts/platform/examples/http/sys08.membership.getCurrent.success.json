@@ -1,0 +1,28 @@
+{
+  "operationId": "sys08.membership.getCurrent",
+  "method": "GET",
+  "path": "/api/v1/membership/current",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>"
+    }
+  },
+  "status": 200,
+  "response": {
+    "data": {
+      "enterpriseId": "ent_001",
+      "planCode": "FREE",
+      "planVersion": 1,
+      "status": "ACTIVE",
+      "startsAt": "2026-07-31T16:00:00Z",
+      "endsAt": null,
+      "frozenProfitFen": 5000,
+      "benefitSummary": {
+        "douyinQuotaAvailable": 5
+      }
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "eventId": "evt_publicationserviceorderchanged_001",
+  "eventType": "PublicationServiceOrderChanged",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-08",
+  "environment": "DEV",
+  "audience": [
+    "SYS-01",
+    "SYS-05"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "PublicationServiceOrder",
+  "aggregateId": "pso_contract_001",
+  "aggregateVersion": 2,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "PUBLICATION_SERVICE_ORDER:cpub_contract_001:2",
+  "payload": {
+    "serviceOrderId": "pso_contract_001",
+    "enterpriseId": "ent_contract_001",
+    "publicationPlanId": "pplan_contract_001",
+    "channelPublicationId": "cpub_contract_001",
+    "paymentId": "pay_service_contract_001",
+    "priceFen": 500,
+    "status": "PAID",
+    "sourceVersion": 2,
+    "changedAt": "2026-08-10T02:00:00Z"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "operationId": "sys02.consumer.mergeAnonymousSubject",
+  "method": "POST",
+  "path": "/internal/v1/mall/anonymous-subjects/{anonymousId}/merge",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "idempotency-key": "ANON_MERGE:{anonymousId}:{userId}:{mergePurpose}"
+    },
+    "params": {
+      "anonymousId": "ano_001"
+    },
+    "body": {
+      "userId": "usr_001",
+      "mergePurpose": "LOGIN",
+      "expectedMergeVersion": 1,
+      "cartDecision": "KEEP_USER"
+    }
+  },
+  "status": 200,
+  "response": {
+    "data": {
+      "consumerProfileId": "cpr_001",
+      "mergeVersion": 2,
+      "cartMergeStatus": "MERGED",
+      "attributionMergeStatus": "MERGED"
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}

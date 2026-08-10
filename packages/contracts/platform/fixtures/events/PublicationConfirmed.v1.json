@@ -1,0 +1,43 @@
+{
+  "eventId": "evt_publicationconfirmed_001",
+  "eventType": "PublicationConfirmed",
+  "schemaVersion": 1,
+  "occurredAt": "2026-08-10T02:00:00Z",
+  "publishedAt": "2026-08-10T02:00:01Z",
+  "producer": "SYS-05",
+  "environment": "DEV",
+  "audience": [
+    "SYS-01",
+    "SYS-06",
+    "SYS-08"
+  ],
+  "enterpriseId": "ent_contract_001",
+  "aggregateType": "PublicationPlan",
+  "aggregateId": "pplan_contract_001",
+  "aggregateVersion": 1,
+  "traceId": "trace_contract_fixture_001",
+  "causationId": null,
+  "correlationId": "corr_contract_fixture_001",
+  "idempotencyKey": "PUBLICATION_CONFIRM:pcfm_contract_001",
+  "payload": {
+    "confirmationId": "pcfm_contract_001",
+    "publicationPlanId": "pplan_contract_001",
+    "enterpriseId": "ent_contract_001",
+    "planVersion": 1,
+    "channelPublications": [
+      {
+        "channelPublicationId": "cpub_wotao_contract_001",
+        "channel": "WOTAO",
+        "contentVersionId": "cver_wotao_contract_001"
+      },
+      {
+        "channelPublicationId": "cpub_contract_001",
+        "channel": "DOUYIN",
+        "contentVersionId": "cver_contract_001"
+      }
+    ],
+    "confirmedBy": "usr_contract_001",
+    "confirmationRef": "confirmation_contract_001",
+    "confirmedAt": "2026-08-10T02:00:00Z"
+  }
+}

@@ -6,6 +6,7 @@
 - 商品、内容、审核、发布、公开页和询盘的输入输出类型；
 - `MvpApiOperationMap` 编译期 operation 输入输出映射；
 - `MVP_API_CONTRACTS` 和 `MVP_MODULES` 运行时清单；
+- 从上述清单生成的 `openapi.json`，供 Mock Server 和其他语言消费者使用；
 - 最小响应、分页、UTC 时间和接口清单校验器。
 
 完整业务语义、Mock 边界、验收清单和 PR 规则见
@@ -38,6 +39,8 @@ import {
 ```bash
 pnpm --filter @wotao/contracts typecheck
 pnpm --filter @wotao/contracts test
+pnpm openapi:check
 ```
 
-契约变更必须同时更新类型、`MVP_API_CONTRACTS`、集成文档和契约测试。
+契约变更必须同时更新类型、`MVP_API_CONTRACTS`、OpenAPI schema 生成器、
+集成文档和契约测试。禁止直接手工维护另一套 OpenAPI 路径或枚举。

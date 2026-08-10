@@ -1,0 +1,28 @@
+{
+  "operationId": "sys08.publicationService.getOrder",
+  "method": "GET",
+  "path": "/api/v1/publication-service-orders/{serviceOrderId}",
+  "request": {
+    "headers": {
+      "x-trace-id": "trace_contract_example_001",
+      "authorization": "Bearer <access-token>"
+    },
+    "params": {
+      "serviceOrderId": "pso_001"
+    }
+  },
+  "status": 200,
+  "response": {
+    "data": {
+      "serviceOrderId": "pso_001",
+      "publicationPlanId": "ppl_001",
+      "channelPublicationId": "chp_dy_001",
+      "paymentId": "pay_200",
+      "amountFen": 500,
+      "status": "PAID",
+      "version": 2
+    },
+    "requestId": "request_contract_example_001",
+    "traceId": "trace_contract_example_001"
+  }
+}
